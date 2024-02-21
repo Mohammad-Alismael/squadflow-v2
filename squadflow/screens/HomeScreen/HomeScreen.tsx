@@ -1,17 +1,18 @@
-import { View, Text, Button } from "react-native";
-
+import { View, Text } from "react-native";
+import SearchBar from "../../Components/SearchBar";
+import { Button } from "tamagui";
+// import { Plus } from "@tamagui/lucide-icons";
 function HomeScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={{ marginHorizontal: 5 }}>
+      <SearchBar />
       <Text>Home Screen</Text>
       <Button
-        title="Go to Login"
-        onPress={() => navigation.navigate("Login")}
-      />
-      <Button
-        title="Go to profile"
-        onPress={() => navigation.navigate("Profile")}
-      />
+        // icon={<Plus size="$4" />}
+        onPress={() => navigation.replace("Login")}
+      >
+        Go to Login
+      </Button>
     </View>
   );
 }

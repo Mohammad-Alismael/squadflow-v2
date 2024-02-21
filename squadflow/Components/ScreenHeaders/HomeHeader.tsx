@@ -4,13 +4,16 @@ import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View, Text } from "react-native";
 import { Avatar, Stack, XStack } from "tamagui";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useAuth } from "../../utils/context/AuthContext";
 
 HomeHeader.propTypes = {};
 
 function HomeHeader(props) {
+  const { user } = useAuth();
+
   const navigation = useNavigation();
 
-  // const { user } = useContext(UserContext);
+  // const { user } = useContext(AuthContext);
   // console.log(user)
   const redirect = (to: string) => {
     navigation.navigate(to);
@@ -45,7 +48,7 @@ function HomeHeader(props) {
               paddingVertical: 0,
             }}
           >
-            mohammed alismael
+            {user?.username}
           </Text>
         </Stack>
       </XStack>
