@@ -27,8 +27,7 @@ function ProfileScreen({ navigation }) {
               onPress={() => {
                 navigation.navigate(ROUTES.EDIT_PROFILE);
               }}
-              backgroundColor="$Button3/BackgroundColor"
-              borderColor="$Button3/BorderColor"
+              backgroundColor="$green11"
               borderWidth={3}
               borderRadius="$2"
               marginTop="$3"
@@ -47,15 +46,11 @@ function ProfileScreen({ navigation }) {
             text="Manege Community"
             iconAfter="chevron-right"
             to={ROUTES.JOIN_A_TEAM}
-            textColor="$Button3/TextColor"
-            borderColor="$Button3/BorderColor"
           />
           <SettingsItem
             text="Settings"
             iconAfter="chevron-right"
             to={ROUTES.SETTINGS_SCREEN}
-            textColor="$Button3/TextColor"
-            borderColor="$Button3/BorderColor"
           />
           {/*<SettingsItem*/}
           {/*  text="My Tasks"*/}

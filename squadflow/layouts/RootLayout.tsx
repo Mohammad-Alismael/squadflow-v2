@@ -7,12 +7,20 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "../screens/HomeScreen/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import LoginScreen from "../screens/LoginScreen/LoginScreen";
-import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
+import {
+  DefaultTheme,
+  NavigationContainer,
+  useNavigation,
+} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../utils/context/AuthContext";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import { Text } from "tamagui";
+import CommunityScreen from "../screens/CommunityScreen/CommunityScreen";
+import ChatsScreen from "../screens/ChatsScreen/ChatsScreen";
+import ProjectsScreen from "../screens/ProjectsScreen/ProjectsScreen";
+import ProfileRightHeader from "../Components/ScreenHeaders/ProfileRightHeader";
 
 RootLayout.propTypes = {};
 const Tab = createBottomTabNavigator();
@@ -26,15 +34,19 @@ function RootLayout(props) {
       background: "#F2F0EB",
     },
   };
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) return <Text>loading ....</Text>;
   return (
     <NavigationContainer theme={MyTheme}>
       <Stack.Navigator
         initialRouteName={user ? ROUTES.HOME : ROUTES.LOGIN}
-        screenOptions={{
-          headerShown: false,
-          // contentStyle: { paddingHorizontal: 10 },
-        }}
+        screenOptions={
+          {
+            // headerShown: false,
+            // contentStyle: { paddingHorizontal: 10 },
+          }
+        }
         // initialRouteName="homeStack"
         // screenOptions={{
         //   headerStyle: {
@@ -48,6 +60,7 @@ function RootLayout(props) {
       >
         <Stack.Screen
           name={ROUTES.HOME}
+          options={{ headerShown: false }}
           component={(props) => (
             <Tab.Navigator
               screenOptions={({ route }) => ({
@@ -105,31 +118,38 @@ function RootLayout(props) {
                 options={{
                   headerRight: (props) => (
                     <TouchableOpacity>
-                      <SimpleLineIcons name="plus" size={35} />
+                      <SimpleLineIcons name="plus" size={30} />
                     </TouchableOpacity>
                   ),
+                  headerRightContainerStyle: {
+                    paddingRight: 10,
+                  },
                 }}
-                component={ProfileScreen}
+                component={ProjectsScreen}
               />
+              {/*<Tab.Screen*/}
+              {/*  name="Add"*/}
+              {/*  component={HomeScreenAddDrawer}*/}
+              {/*  options={{ tabBarButton: CustomTabBarButton }}*/}
+              {/*/>*/}
               <Tab.Screen
                 name={ROUTES.CHAT}
                 options={{
                   headerRight: (props) => (
                     <TouchableOpacity>
-                      <SimpleLineIcons name="plus" size={35} />
+                      <SimpleLineIcons name="plus" size={30} />
                     </TouchableOpacity>
                   ),
+                  headerRightContainerStyle: {
+                    paddingRight: 10,
+                  },
                 }}
-                component={ProfileScreen}
+                component={ChatsScreen}
               />
               <Tab.Screen
                 name={ROUTES.PROFILE}
                 options={{
-                  headerRight: (props) => (
-                    <TouchableOpacity>
-                      <Text>Sign out</Text>
-                    </TouchableOpacity>
-                  ),
+                  // headerRight: (props) => <ProfileRightHeader {...props} />,
                   headerRightContainerStyle: {
                     paddingRight: 10,
                   },
@@ -139,7 +159,19 @@ function RootLayout(props) {
             </Tab.Navigator>
           )}
         />
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen
+          name="Login"
+          options={{ headerShown: false }}
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          name={ROUTES.JOIN_A_TEAM}
+          options={{
+            headerTitle: "Manege Community",
+            headerTitleAlign: "center",
+          }}
+          component={CommunityScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

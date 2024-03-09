@@ -9,7 +9,7 @@ function SearchBar(props) {
   return (
     <Input
       marginVertical="$2"
-      size="$4"
+      size="$5"
       placeholder="search..."
       onChangeText={setKeyword}
       secureTextEntry={true}

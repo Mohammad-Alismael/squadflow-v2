@@ -24,8 +24,8 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const userCredential = await handleLogin(email, password);
-      await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify(userCredential));
       console.log(userCredential);
+      await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify(userCredential));
       setUser(userCredential);
       return true;
     } catch (error) {
@@ -77,10 +77,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = async () => {
-    setIsLoading(true);
     await SecureStore.setItemAsync(TOKEN_KEY, null);
     setUser(null);
-    setIsLoading(false);
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -97,13 +95,15 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
-    // const fetchDataWithDelay = () => {
-    //   setTimeout(() => {
-    //     fetchData();
-    //   }, 1500); // Delay fetching data for 1500 milliseconds
-    // };
-    fetchData();
-    // fetchDataWithDelay(); // Start fetching data with a delay
+    const fetchDataWithDelay = () => {
+      setIsLoading(true);
+      setTimeout(() => {
+        fetchData();
+        setIsLoading(false);
+      }, 1500); // Delay fetching data for 1500 milliseconds
+    };
+    // fetchData();
+    fetchDataWithDelay(); // Start fetching data with a delay
   }, []); // Empty dependency array to run only once on mount
 
   return (
