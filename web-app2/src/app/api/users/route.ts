@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import clientPromise from "@/lib/db";
-import { createUser, listUsers } from "@/lib/mongo/users";
+import clientPromise from "@/lib/mongodb";
+import { createUser, listUsers } from "@/lib/users";
 const registerSchema = z.object({
   username: z.string().min(4).max(52),
   email: z.string().email("please Enter a valid email address"),

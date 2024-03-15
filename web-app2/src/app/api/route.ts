@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/db";
+import clientPromise from "@/lib/mongodb";
 
 export async function GET(request) {
   return NextResponse.json({ message: "Hello World map" }, { status: 200 });
