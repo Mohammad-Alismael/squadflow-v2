@@ -14,11 +14,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    participants: [
-      {
-        user_id: String,
-      },
-    ],
+    participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

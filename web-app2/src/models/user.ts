@@ -14,6 +14,8 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    photoURL: String,
+    communityId: String,
   },
   { timestamps: true }
 );
