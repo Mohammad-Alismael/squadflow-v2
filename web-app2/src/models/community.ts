@@ -1,6 +1,8 @@
 import mongoose, { Schema, models } from "mongoose";
+import { generateRandomId } from "@/lib/community";
+import User from "@/models/user";
 
-const userSchema = new Schema(
+const CommunitySchema = new Schema(
   {
     name: {
       type: String,
@@ -8,16 +10,14 @@ const userSchema = new Schema(
     },
     code: {
       type: String,
-      required: true,
+      default: generateRandomId(10),
     },
-    admin: {
-      type: String,
-      required: true,
-    },
-    participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    admin: { type: Schema.Types.ObjectId, ref: User, required: true },
+    participants: [{ type: Schema.Types.ObjectId, ref: User }],
   },
   { timestamps: true }
 );
 
-const Task = models.Task || mongoose.model("Task", userSchema);
-export default Task;
+const Community =
+  models.Community || mongoose.model("Community", CommunitySchema);
+export default Community;

@@ -2,8 +2,8 @@ import mongoose, { Schema, models } from "mongoose";
 
 const userSchema = new Schema(
   {
-    createdBy: { type: Schema.Types.ObjectId, ref: "user" },
-    updatedBy: { type: Schema.Types.ObjectId, ref: "user" },
+    created_by: { type: Schema.Types.ObjectId, ref: "User" },
+    updated_by: { type: Schema.Types.ObjectId, ref: "User" },
     communityId: String,
     title: {
       type: String,

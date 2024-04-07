@@ -1,7 +1,8 @@
 import clientPromise, { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
-
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 const dbName = "squadflow";
 
 // Initialize MongoDB client
@@ -20,6 +21,11 @@ async function createUser(user) {
     throw error;
   }
 }
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.NEXTAUTH_SECRET, {
+    expiresIn: "6h",
+  });
+}
 async function login(username: string, password: string) {
   await init();
   try {
@@ -28,9 +34,16 @@ async function login(username: string, password: string) {
       return null;
     }
     const passwordsMatch = await bcrypt.compare(password, user.password);
+
     if (!passwordsMatch) {
       return null;
     }
+    cookies().set({
+      name: "jwt",
+      value: generateAccessToken({ id: user._id, email: user.email }),
+      httpOnly: true,
+      path: "/",
+    });
     return user;
   } catch (error) {
     console.error("Error logging user:", error);
@@ -38,7 +51,7 @@ async function login(username: string, password: string) {
   }
 }
 // Read operation for users
-async function findUser(username) {
+async function findUser(username: string) {
   await init();
   try {
     const user = await User.findOne({ username }).select("_id");
@@ -52,7 +65,7 @@ async function findUser(username) {
 async function listUsers() {
   await init();
   try {
-    const users = User.find({}).toArray();
+    const users = User.find({});
     return users;
   } catch (error) {
     console.error("Error listing users:", error);

@@ -18,8 +18,13 @@ const taskSchema = new Schema(
         required: true,
       },
     ],
-    createdBy: { type: Schema.Types.ObjectId, ref: "user" },
-    updatedBy: { type: Schema.Types.ObjectId, ref: "user" },
+    dueDate: String,
+    dueTime: String,
+    priority: String,
+    description: String,
+    attachments: [String],
+    created_by: { type: Schema.Types.ObjectId, ref: "User" },
+    updated_by: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

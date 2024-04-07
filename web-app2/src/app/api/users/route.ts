@@ -23,6 +23,6 @@ export async function POST(request: Request) {
       status: 400,
     });
   }
-  await createUser(body);
+  // await createUser(body);
   return NextResponse.json({ message: "user created!" }, { status: 200 });
 }
