@@ -1,5 +1,7 @@
 import clientPromise, { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/user";
+import { IUser } from "@/utils/@types/user";
+
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
@@ -11,7 +13,7 @@ async function init() {
 }
 
 // Create operation
-async function createUser(user) {
+async function createUser(user: IUser) {
   await init();
   try {
     const result = await User.create(user);
@@ -21,26 +23,35 @@ async function createUser(user) {
     throw error;
   }
 }
-function generateAccessToken(user) {
-  return jwt.sign(user, process.env.NEXTAUTH_SECRET, {
-    expiresIn: "6h",
-  });
+function generateAccessToken(user: IUser) {
+  return jwt.sign(
+    {
+      _id: user._id,
+      email: user.email,
+      communityId: user.communityId,
+      photoURL: user.photoURL,
+    },
+    process.env.NEXTAUTH_SECRET,
+    {
+      expiresIn: "6h",
+    }
+  );
 }
 async function login(username: string, password: string) {
   await init();
   try {
     const user = await User.findOne({ username });
     if (!user) {
-      return null;
+      throw new Error("user not found");
     }
     const passwordsMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordsMatch) {
-      return null;
+      throw new Error("incorrect user name or passoword");
     }
     cookies().set({
       name: "jwt",
-      value: generateAccessToken({ id: user._id, email: user.email }),
+      value: generateAccessToken(user),
       httpOnly: true,
       path: "/",
     });
@@ -62,6 +73,23 @@ async function findUser(username: string) {
   }
 }
 
+async function updateUserCommunityId(userId: string, communityId: string) {
+  await init();
+  try {
+    const user = await User.updateOne({ _id: userId }, { communityId });
+
+    cookies().set({
+      name: "jwt",
+      value: generateAccessToken(user),
+      httpOnly: true,
+      path: "/",
+    });
+  } catch (error) {
+    console.error("Error finding user:", error);
+    throw error;
+  }
+}
+
 async function listUsers() {
   await init();
   try {
@@ -73,4 +101,4 @@ async function listUsers() {
   }
 }
 
-export { createUser, login, listUsers, findUser };
+export { createUser, login, listUsers, findUser, updateUserCommunityId };

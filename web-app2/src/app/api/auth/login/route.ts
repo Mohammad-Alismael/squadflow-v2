@@ -7,18 +7,12 @@ import { createUser, findUser, login } from "@/lib/users";
 export async function POST(request: Request) {
   try {
     const { username, password } = await request.json();
-    try {
-      const user = await login(username, password);
-      return NextResponse.json(user);
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-
-    return NextResponse.json({ message: "User registered." }, { status: 201 });
-  } catch (error) {
+    await login(username, password);
     return NextResponse.json(
-      { message: "An error occurred while registering the user." },
-      { status: 500 }
+      { message: "logged in successful" },
+      { status: 200 }
     );
+  } catch (error) {
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

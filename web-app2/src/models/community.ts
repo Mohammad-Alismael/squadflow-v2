@@ -1,6 +1,5 @@
 import mongoose, { Schema, models } from "mongoose";
 import { generateRandomId } from "@/lib/community";
-import User from "@/models/user";
 
 const CommunitySchema = new Schema(
   {
@@ -12,8 +11,12 @@ const CommunitySchema = new Schema(
       type: String,
       default: generateRandomId(10),
     },
-    admin: { type: Schema.Types.ObjectId, ref: User, required: true },
-    participants: [{ type: Schema.Types.ObjectId, ref: User }],
+    admin: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

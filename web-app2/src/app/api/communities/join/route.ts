@@ -5,13 +5,18 @@ import {
   joinCommunityByCode,
 } from "@/lib/community";
 import { NextResponse } from "next/server";
+import { updateUserCommunityId } from "@/lib/users";
 
 export async function POST(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const userId = request.headers.get("uid");
   try {
-    await joinCommunityByCode(userId as string, code as string);
+    const communityId = await joinCommunityByCode(
+      userId as string,
+      code as string
+    );
+    await updateUserCommunityId(userId, communityId);
     return NextResponse.json({ message: "success" });
   } catch (e) {
     return NextResponse.json({ message: e.message });

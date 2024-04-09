@@ -19,7 +19,8 @@ export async function middleware(request: NextRequest) {
     console.log({ payload });
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("uid", payload?.id);
+    requestHeaders.set("uid", payload?._id);
+    requestHeaders.set("cid", payload?.communityId);
 
     // You can also set request headers in NextResponse.rewrite
     const response = NextResponse.next({
@@ -40,5 +41,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/users/:path*", "/api/community/:path*"],
+  matcher: ["/api/users/:path*", "/api/communities/:path*"],
 };

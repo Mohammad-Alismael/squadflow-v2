@@ -5,15 +5,21 @@ import {
   getCommunityById,
 } from "@/lib/community";
 import Community from "@/models/community";
+import { updateUserCommunityId } from "@/lib/users";
 
 export async function POST(request: Request) {
+  const { name } = await request.json();
+
   const userId = request.headers.get("uid");
   const communityFound = await findCommunityByAdmin(userId as string);
   if (!communityFound) {
-    const community = await createCommunity(userId as string);
+    const community = await createCommunity(userId as string, name as string);
+    await updateUserCommunityId(userId, community._id);
     return NextResponse.json({ communityId: community._id });
   } else
-    return NextResponse.json({ message: "already found created a community" });
+    return NextResponse.json({
+      message: "already found created a communities",
+    });
 }
 
 export async function GET(

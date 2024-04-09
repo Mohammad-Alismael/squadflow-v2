@@ -16,6 +16,7 @@ const userSchema = new Schema(
     },
     photoURL: String,
     communityId: String,
+    community: { type: Schema.Types.ObjectId, ref: "Community" },
   },
   { timestamps: true }
 );

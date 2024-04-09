@@ -19,11 +19,11 @@ async function init() {
   await connectMongoDB();
 }
 
-async function createCommunity(userId: string) {
+async function createCommunity(userId: string, name: string) {
   await init();
   try {
     const result = await Community.create({
-      name: "ya hala",
+      name,
       admin: userId,
       participants: [userId],
     });
@@ -38,8 +38,7 @@ async function createCommunity(userId: string) {
 async function findCommunityByAdmin(userId: string) {
   await init();
   try {
-    const result = await Community.findOne({ admin: userId });
-    return result;
+    return await Community.findOne({ admin: userId });
   } catch (error) {
     console.error("Error creating Community:", error);
     throw error;
@@ -62,11 +61,12 @@ async function joinCommunityByCode(userId: string, code: string) {
     const result = await Community.findOne({ code });
     if (!result) throw new Error("code doesn't exist");
     if (result.participants.includes(userId))
-      throw new Error("already joined this community");
+      throw new Error("already joined this communities");
     await Community.updateOne(
       { _id: result._id },
       { participants: [...result.participants, userId] }
     );
+    return result._id;
   } catch (error) {
     console.error("Error creating Community:", error);
     throw error;
@@ -79,14 +79,12 @@ async function leaveCommunityByCode(userId: string, code: string) {
     const result = await Community.findOne({ code });
     if (!result) throw new Error("code doesn't exist");
     if (!result.participants.includes(userId))
-      throw new Error("already left this community");
+      throw new Error("already left this communities");
     const newParticipants = result.participants.filter(
       (item) =>
         new ObjectId(item).toString() !== new ObjectId(userId).toString()
     );
 
-    console.log("result.participants", result.participants);
-    console.log("newParticipants", newParticipants);
     await Community.updateOne(
       { _id: result._id },
       { participants: newParticipants }
@@ -100,9 +98,8 @@ async function leaveCommunityByCode(userId: string, code: string) {
 async function getCommunityById(communityId: string) {
   await init();
   try {
-    const result = (await Community.findOne({
-      _id: new ObjectId(communityId),
-    })
+    const result = (await Community.findById(new ObjectId(communityId))
+      .select("_id name code participants admin")
       .populate({
         path: "participants",
         select: "_id username email",
@@ -113,7 +110,7 @@ async function getCommunityById(communityId: string) {
       })
       .exec()) as CommunitySchema;
 
-    if (!result) throw new Error("community Id doesn't exists");
+    if (!result) throw new Error("communities Id doesn't exists");
     return result;
   } catch (error) {
     console.error("Error creating Community:", error);
@@ -127,7 +124,7 @@ async function updateCommunity(community: CommunitySchema) {
     // const result = await Community.findOne({
     //   _id: new ObjectId(communityId),
     // }).populate(["participants", "admin"]) as CommunitySchema;
-    // if (!result) throw new Error("community Id doesn't exists");
+    // if (!result) throw new Error("communities Id doesn't exists");
     // return result;
   } catch (error) {
     console.error("Error creating Community:", error);
