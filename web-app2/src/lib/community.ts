@@ -80,11 +80,11 @@ async function leaveCommunityByCode(userId: string, code: string) {
     if (!result) throw new Error("code doesn't exist");
     if (!result.participants.includes(userId))
       throw new Error("already left this communities");
+    // test this part
     const newParticipants = result.participants.filter(
       (item) =>
         new ObjectId(item).toString() !== new ObjectId(userId).toString()
     );
-
     await Community.updateOne(
       { _id: result._id },
       { participants: newParticipants }

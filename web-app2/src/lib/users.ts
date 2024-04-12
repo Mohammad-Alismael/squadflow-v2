@@ -76,18 +76,25 @@ async function findUser(username: string) {
 async function updateUserCommunityId(userId: string, communityId: string) {
   await init();
   try {
-    const user = await User.updateOne({ _id: userId }, { communityId });
-
-    cookies().set({
-      name: "jwt",
-      value: generateAccessToken(user),
-      httpOnly: true,
-      path: "/",
-    });
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { communityId },
+      { new: true }
+    );
+    return user;
   } catch (error) {
     console.error("Error finding user:", error);
     throw error;
   }
+}
+
+async function updateUserToken(user: IUser) {
+  cookies().set({
+    name: "jwt",
+    value: generateAccessToken(user),
+    httpOnly: true,
+    path: "/",
+  });
 }
 
 async function listUsers() {
@@ -101,4 +108,11 @@ async function listUsers() {
   }
 }
 
-export { createUser, login, listUsers, findUser, updateUserCommunityId };
+export {
+  createUser,
+  login,
+  listUsers,
+  findUser,
+  updateUserCommunityId,
+  updateUserToken,
+};
