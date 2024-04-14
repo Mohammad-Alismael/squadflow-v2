@@ -62,7 +62,13 @@ export function removeUserId(
   participants: Array<{ user: Schema.Types.ObjectId | IUser; joined_at: Date }>,
   userId: string
 ) {
-  return participants.filter((item) => !new ObjectId(item.user).equals(userId));
+  const index = participants.findIndex((item) =>
+    new ObjectId(item.user).equals(userId)
+  );
+  if (index !== -1) {
+    participants.splice(index, 1);
+  }
+  return participants;
 }
 
 export function isUserIdInParticipantsList(
