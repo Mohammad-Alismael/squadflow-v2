@@ -62,6 +62,7 @@ export function removeUserId(
   participants: Array<{ user: Schema.Types.ObjectId | IUser; joined_at: Date }>,
   userId: string
 ) {
+  if (!userId) throw new Error("User not found");
   const index = participants.findIndex((item) =>
     new ObjectId(item.user).equals(userId)
   );
@@ -72,8 +73,12 @@ export function removeUserId(
 }
 
 export function isUserIdInParticipantsList(
-  participants: Array<{ user: Schema.Types.ObjectId | IUser; joined_at: Date }>,
+  participants: Array<{ user: Schema.Types.ObjectId; joined_at: Date }>,
   userId: string
 ) {
-  return participants.some((participant) => participant.user.equals(userId));
+  if (!userId) throw new Error("User not found");
+  if (!participants) throw new Error("participants not found");
+  return participants.some((participant) =>
+    new ObjectId(participant.user).equals(userId)
+  );
 }
