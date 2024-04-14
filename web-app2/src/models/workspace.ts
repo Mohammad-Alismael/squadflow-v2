@@ -11,11 +11,18 @@ const userSchema = new Schema(
     participants: [
       {
         user: { type: Schema.Types.ObjectId, ref: "User" },
-        role: String, // Role of the participant
+        role: { type: String },
       },
     ],
-    columns: [{ columnId: String, title: String, color: String }],
-    progress: Number,
+    columns: {
+      type: [{ order: Number, title: String, color: String }],
+      default: [
+        { order: 1, title: "ongoing", color: "red" },
+        { order: 2, title: "urgent", color: "red" },
+        { order: 3, title: "completed", color: "red" },
+      ],
+    },
+    progress: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
