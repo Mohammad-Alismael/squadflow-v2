@@ -5,16 +5,23 @@ import {
   getCommunityById,
 } from "@/lib/community";
 import Community from "@/models/community";
-import { updateUserCommunityId } from "@/lib/users";
+import { updateUserCommunityId, updateUserToken } from "@/lib/users";
 
 export async function POST(request: Request) {
   const { name } = await request.json();
 
   const userId = request.headers.get("uid");
+  const communityId = request.headers.get("cid");
+  if (communityId !== "")
+    return NextResponse.json({
+      message:
+        "you must leave your current community in order to create new one",
+    });
   const communityFound = await findCommunityByAdmin(userId as string);
   if (!communityFound) {
     const community = await createCommunity(userId as string, name as string);
-    await updateUserCommunityId(userId, community._id);
+    const user = await updateUserCommunityId(userId as string, community._id);
+    await updateUserToken(user);
     return NextResponse.json({ communityId: community._id });
   } else
     return NextResponse.json({

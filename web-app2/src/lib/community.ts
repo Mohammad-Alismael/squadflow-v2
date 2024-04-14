@@ -1,20 +1,15 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Community from "@/models/community";
-import { ObjectId } from "mongodb";
 import { CommunitySchema } from "@/utils/@types/CommunitySchema";
+import { ObjectId } from "mongodb";
+import mongoose from "mongoose";
+import {
+  getTheOldestMember,
+  isUserIdInParticipantsList,
+  removeUserId,
+  generateRandomId,
+} from "@/lib/community.helper";
 
-function generateRandomId(length: number): string {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  let randomId = "";
-
-  for (let i = 0; i < length; i++) {
-    randomId += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-
-  return randomId;
-}
 async function init() {
   await connectMongoDB();
 }
@@ -25,7 +20,8 @@ async function createCommunity(userId: string, name: string) {
     const result = await Community.create({
       name,
       admin: userId,
-      participants: [userId],
+      code: generateRandomId(10),
+      participants: [],
     });
     console.log(`Community inserted with _id: ${result}`);
     return result;
@@ -48,7 +44,27 @@ async function findCommunityByAdmin(userId: string) {
 async function findCommunityByCode(code: string) {
   await init();
   try {
-    return await Community.findOne({ code });
+    const community = await Community.findOne({ code });
+
+    if (!community) {
+      throw new Error("Code doesn't exist");
+    }
+    return community;
+  } catch (error) {
+    console.error("Error creating Community:", error);
+    throw error;
+  }
+}
+
+async function deleteCommunityByCode(code: string) {
+  await init();
+  try {
+    const community = await Community.deleteOne({ code });
+
+    if (!community) {
+      throw new Error("Code doesn't exist");
+    }
+    return community;
   } catch (error) {
     console.error("Error creating Community:", error);
     throw error;
@@ -58,39 +74,102 @@ async function findCommunityByCode(code: string) {
 async function joinCommunityByCode(userId: string, code: string) {
   await init();
   try {
-    const result = await Community.findOne({ code });
-    if (!result) throw new Error("code doesn't exist");
-    if (result.participants.includes(userId))
-      throw new Error("already joined this communities");
-    await Community.updateOne(
-      { _id: result._id },
-      { participants: [...result.participants, userId] }
+    const community = await Community.findOne({ code });
+
+    if (!community) {
+      throw new Error("Code doesn't exist");
+    }
+    const alreadyJoined = isUserIdInParticipantsList(
+      community.participants,
+      userId
     );
-    return result._id;
+
+    if (alreadyJoined) {
+      throw new Error("Already joined this community");
+    }
+
+    // Ensure userId is a valid ObjectId
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(userId.trim());
+    if (!isValidObjectId) {
+      throw new Error("Invalid user ID");
+    }
+
+    // Convert userId to ObjectId
+    const userIdObjectId = new mongoose.Types.ObjectId(userId.trim());
+
+    const participantObject = {
+      user: userIdObjectId,
+      joined_at: Date.now(),
+    };
+
+    // Update the document using findOneAndUpdate and $push
+    const updatedCommunity = await Community.findOneAndUpdate(
+      { _id: community._id },
+      { $push: { participants: participantObject } },
+      { new: true } // Return the modified document
+    );
+
+    return updatedCommunity._id;
+  } catch (error) {
+    console.error("Error joining community:", error);
+    throw error;
+  }
+}
+
+async function leaveCommunityForParticipants(
+  communityId: ObjectId,
+  userId: string,
+  participants: CommunitySchema["participants"]
+) {
+  // if the user id ins't an admin
+  await init();
+  try {
+    const alreadyJoined = isUserIdInParticipantsList(participants, userId);
+    if (!alreadyJoined) throw new Error("already left this communities");
+    const newParticipants = removeUserId(participants, userId);
+    await Community.updateOne(
+      { _id: communityId },
+      { participants: newParticipants }
+    );
   } catch (error) {
     console.error("Error creating Community:", error);
     throw error;
   }
 }
 
-async function leaveCommunityByCode(userId: string, code: string) {
+async function replaceAdminByTheOldestMember(
+  communityId: ObjectId,
+  participants: CommunitySchema["participants"]
+) {
+  // if the user id is an admin
   await init();
   try {
-    const result = await Community.findOne({ code });
-    if (!result) throw new Error("code doesn't exist");
-    if (!result.participants.includes(userId))
-      throw new Error("already left this communities");
-    // test this part
-    const newParticipants = result.participants.filter(
-      (item) =>
-        new ObjectId(item).toString() !== new ObjectId(userId).toString()
-    );
+    const oldestMemberUserId = getTheOldestMember(participants);
     await Community.updateOne(
-      { _id: result._id },
-      { participants: newParticipants }
+      { _id: communityId },
+      { admin: oldestMemberUserId }
     );
   } catch (error) {
     console.error("Error creating Community:", error);
+    throw error;
+  }
+}
+
+async function updateCommunityAdmin(
+  userId: string,
+  selectedNewAdminUserId: string
+) {
+  await init();
+  try {
+    const communityFound = await findCommunityByAdmin(userId);
+    if (!communityFound) {
+      throw new Error("Community ID doesn't exist");
+    }
+    communityFound.admin = selectedNewAdminUserId;
+    await communityFound.save();
+    return communityFound;
+  } catch (error) {
+    console.error("Error updating community admin:", error);
     throw error;
   }
 }
@@ -101,8 +180,8 @@ async function getCommunityById(communityId: string) {
     const result = (await Community.findById(new ObjectId(communityId))
       .select("_id name code participants admin")
       .populate({
-        path: "participants",
-        select: "_id username email",
+        path: "participants.user",
+        select: "_id username email joined_community_at",
       })
       .populate({
         path: "admin",
@@ -139,5 +218,8 @@ export {
   findCommunityByCode,
   joinCommunityByCode,
   getCommunityById,
-  leaveCommunityByCode,
+  leaveCommunityForParticipants,
+  updateCommunityAdmin,
+  replaceAdminByTheOldestMember,
+  deleteCommunityByCode,
 };

@@ -9,14 +9,18 @@ const CommunitySchema = new Schema(
     },
     code: {
       type: String,
-      default: generateRandomId(10),
     },
     admin: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    participants: [
+      {
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        joined_at: { type: Date, default: Date.now() },
+      },
+    ],
   },
   { timestamps: true }
 );
