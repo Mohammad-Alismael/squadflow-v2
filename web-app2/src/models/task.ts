@@ -2,7 +2,7 @@ import mongoose, { Schema, models } from "mongoose";
 
 const taskSchema = new Schema(
   {
-    workspaceId: { type: Schema.Types.ObjectId, ref: "Workspace" },
+    workspace: { type: Schema.Types.ObjectId, ref: "Workspace" },
     title: {
       type: String,
       required: true,
@@ -12,10 +12,17 @@ const taskSchema = new Schema(
       required: true,
     },
     participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    labels: [
+    tags: [
       {
         type: String,
         required: true,
+      },
+    ],
+    comments: [
+      {
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        text: String,
+        created_at: { type: Date, default: Date.now() },
       },
     ],
     dueDate: String,

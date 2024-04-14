@@ -2,7 +2,7 @@ import mongoose, { models, Schema } from "mongoose";
 
 const subTaskSchema = new Schema(
   {
-    taskId: { type: Schema.Types.ObjectId, ref: "task" },
+    task: { type: Schema.Types.ObjectId, ref: "task" },
     title: {
       type: String,
       required: true,
