@@ -47,7 +47,7 @@ async function login(username: string, password: string) {
     const passwordsMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordsMatch) {
-      throw new Error("incorrect user name or passoword");
+      throw new Error("incorrect user name or password");
     }
     cookies().set({
       name: "jwt",

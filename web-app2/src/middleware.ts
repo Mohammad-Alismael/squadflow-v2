@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest) {
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
     console.log({ payload });
-    if (payload?._id && payload?.communityId !== null) {
+    if (payload?._id && payload?.communityId) {
       requestHeaders.set("uid", payload?._id);
       requestHeaders.set("cid", payload?.communityId);
     } else
@@ -46,5 +46,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/users/:path*", "/api/communities/:path*"],
+  matcher: [
+    "/api/users/:path*",
+    "/api/communities/:path*",
+    "/api/workspaces/:path*",
+  ],
 };
