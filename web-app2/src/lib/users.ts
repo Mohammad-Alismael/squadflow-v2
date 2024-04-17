@@ -24,11 +24,17 @@ async function createUser(user: IUser) {
   }
 }
 function generateAccessToken(user: IUser) {
+  console.log({
+    _id: user._id,
+    email: user.email,
+    communityId: user["_doc"].communityId,
+    photoURL: user.photoURL,
+  });
   return jwt.sign(
     {
       _id: user._id,
       email: user.email,
-      communityId: user.communityId,
+      communityId: user["_doc"].communityId,
       photoURL: user.photoURL,
     },
     process.env.NEXTAUTH_SECRET,

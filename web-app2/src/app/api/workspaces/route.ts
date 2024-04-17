@@ -1,14 +1,7 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
-import { createWorkspace } from "@/lib/workspace";
 import { z } from "zod";
+import { NextResponse } from "next/server";
+import { createWorkspace } from "@/lib/workspace";
 
-export async function GET(request: Request) {
-  const { name } = await request.json();
-
-  return NextResponse.json({ message: "Hello World map" }, { status: 200 });
-}
 const postSchema = z.object({
   title: z.string("title should be a string"),
   participants: z.array(
@@ -33,7 +26,6 @@ export async function POST(request: Request) {
   }
   const userId = request.headers.get("uid");
   const communityId = request.headers.get("cid");
-  console.log({ communityId, userId });
   if (!communityId || communityId === "")
     return NextResponse.json({
       message: "you must join a community first!",
