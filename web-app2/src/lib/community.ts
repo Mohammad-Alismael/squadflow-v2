@@ -8,7 +8,7 @@ import {
   isUserIdInParticipantsList,
   removeUserId,
   generateRandomId,
-} from "@/lib/community.helper";
+} from "@/lib/helper/community.helper";
 
 async function init() {
   await connectMongoDB();

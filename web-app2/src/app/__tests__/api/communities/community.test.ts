@@ -3,7 +3,7 @@ import {
   getTheOldestMember,
   removeUserId,
   isUserIdInParticipantsList,
-} from "@/lib/community.helper";
+} from "@/lib/helper/community.helper";
 import { ObjectId } from "mongodb";
 
 describe("getTheOldestMember", () => {

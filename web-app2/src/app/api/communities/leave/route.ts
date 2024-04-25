@@ -6,7 +6,10 @@ import {
 } from "@/lib/community";
 import { NextResponse } from "next/server";
 import { updateUserCommunityId, updateUserToken } from "@/lib/users";
-import { isAdminUserId, isNoOneInParticipants } from "@/lib/community.helper";
+import {
+  isAdminUserId,
+  isNoOneInParticipants,
+} from "@/lib/helper/community.helper";
 
 export async function POST(request: Request) {
   const url = new URL(request.url);

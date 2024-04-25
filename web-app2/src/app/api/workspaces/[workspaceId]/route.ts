@@ -6,25 +6,21 @@ import {
   getWorkspaceById,
   updateWorkspace,
 } from "@/lib/workspace";
-import { z } from "zod";
 import {
   isUserIdHasRole,
   isUserWhoCreatedWorkspace,
-} from "@/lib/workspace.helper";
-const getSchema = z.object({
-  workspaceId: z.string().refine((val) => typeof val === "string", {
-    message: "workspaceId should be a string",
-  }),
-});
+} from "@/lib/helper/workspace.helper";
+import { validateCommunity, validateSchema } from "@/lib/helper/route.helper";
+import {
+  deleteSchema,
+  getSchema,
+  putSchema,
+} from "@/app/api/workspaces/[workspaceId]/schema";
+
 export async function GET(request: Request, context: any) {
   const { params } = await context;
   const { workspaceId } = params;
-  const validation = getSchema.safeParse({ workspaceId });
-  if (!validation.success) {
-    return NextResponse.json(validation.error.format(), {
-      status: 400,
-    });
-  }
+  validateSchema(getSchema, { workspaceId });
   try {
     const workspace = await getWorkspaceById(workspaceId);
     return NextResponse.json(workspace, { status: 200 });
@@ -38,39 +34,14 @@ export async function GET(request: Request, context: any) {
   }
 }
 
-const putSchema = z.object({
-  workspaceId: z.string().refine((val) => true, {
-    message: "workspaceId should be a string",
-  }),
-  title: z.string("title should be a string"),
-  participants: z.array(
-    z
-      .object({
-        user: z.string(),
-        role: z.enum(["admin", "editor", "viewer"]),
-      })
-      .refine((value) => ["admin", "editor", "viewer"].includes(value.role), {
-        message: "role should be either admin or editor or viewer",
-      })
-  ),
-});
 export async function PUT(request: Request, context: any) {
   const { params } = await context;
   const { workspaceId } = params;
   const { title, participants } = await request.json();
-  putSchema.safeParse({ workspaceId, title, participants });
-  const validation = putSchema.safeParse({ workspaceId, title, participants });
-  if (!validation.success) {
-    return NextResponse.json(validation.error.format(), {
-      status: 400,
-    });
-  }
-  const userId = request.headers.get("uid");
+  validateSchema(putSchema, { workspaceId, title, participants });
+  const userId = request.headers.get("uid") as string;
   const communityId = request.headers.get("cid");
-  if (!communityId || communityId === "")
-    return NextResponse.json({
-      message: "you must join a community first!",
-    });
+  validateCommunity(communityId as string);
   const workspace = await getWorkspaceById(workspaceId);
   if (
     !isUserWhoCreatedWorkspace(userId, workspace.created_by) &&
@@ -87,20 +58,10 @@ export async function PUT(request: Request, context: any) {
   return NextResponse.json({ message: "success!" }, { status: 200 });
 }
 
-const deleteSchema = z.object({
-  workspaceId: z.string().refine((val) => typeof val === "string", {
-    message: "workspaceId should be a string",
-  }),
-});
-export async function DELETE(request: Request, context) {
+export async function DELETE(request: Request, context: any) {
   const { params } = await context;
   const { workspaceId } = params;
-  const validation = deleteSchema.safeParse({ workspaceId });
-  if (!validation.success) {
-    return NextResponse.json(validation.error.format(), {
-      status: 400,
-    });
-  }
+  validateSchema(deleteSchema, { workspaceId });
   try {
     await getWorkspaceById(workspaceId);
     await deleteWorkspaceById(workspaceId);
@@ -112,5 +73,5 @@ export async function DELETE(request: Request, context) {
       { status: 500 }
     );
   }
-  return NextResponse.json({ message: "success!" }, { status: 200 });
+  return NextResponse.json({ message: "success" }, { status: 200 });
 }

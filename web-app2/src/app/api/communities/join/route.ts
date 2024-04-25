@@ -1,10 +1,13 @@
 import { joinCommunityByCode } from "@/lib/community";
 import { NextResponse } from "next/server";
 import { updateUserCommunityId, updateUserToken } from "@/lib/users";
+import { validateSchema } from "@/lib/helper/route.helper";
+import { joinPostSchema } from "@/app/api/communities/schema";
 
 export async function POST(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
+  validateSchema(joinPostSchema, { code });
   const userId = request.headers.get("uid");
   const communityId = request.headers.get("cid");
 

@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const community = await createCommunity(userId as string, name as string);
     const user = await updateUserCommunityId(userId as string, community._id);
     await updateUserToken(user);
-    return NextResponse.json({ communityId: community._id });
+    return NextResponse.json({ communityId: community._id }, { status: 201 });
   } else
     return NextResponse.json({
       message: "already found created a communities",

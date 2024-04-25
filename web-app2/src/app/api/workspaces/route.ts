@@ -36,5 +36,5 @@ export async function POST(request: Request) {
     participants,
     created_by: userId,
   });
-  return NextResponse.json({ workspaceId: workspace._id });
+  return NextResponse.json({ workspaceId: workspace._id }, { status: 201 });
 }
