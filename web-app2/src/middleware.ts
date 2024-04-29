@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { SignJWT, jwtVerify } from "jose";
+import { jwtVerify } from "jose";
 
 export async function middleware(request: NextRequest) {
   try {
@@ -17,7 +17,6 @@ export async function middleware(request: NextRequest) {
     });
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
-    console.log({ payload });
     if (payload?._id && payload?.communityId) {
       requestHeaders.set("uid", payload?._id);
       requestHeaders.set("cid", payload?.communityId);
@@ -28,14 +27,12 @@ export async function middleware(request: NextRequest) {
       );
 
     // You can also set request headers in NextResponse.rewrite
-    const response = NextResponse.next({
+    return NextResponse.next({
       request: {
         // New request headers
         headers: requestHeaders,
       },
     });
-
-    return response;
   } catch (error) {
     console.error("Error verifying JWT token:", error);
     // Handle the error, you might want to send a response indicating authentication failure
@@ -50,5 +47,6 @@ export const config = {
     "/api/users/:path*",
     "/api/communities/:path*",
     "/api/workspaces/:path*",
+    "/api/tasks/:path*",
   ],
 };

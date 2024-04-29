@@ -1,16 +1,26 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
-import { Task } from "";
-import { models } from "mongoose";
-
-export async function GET(request) {
-  return NextResponse.json({ message: "Hello World map" }, { status: 200 });
-}
+import { createTask, updateTask } from "@/lib/tasks";
+import { validateCommunity, validateSchema } from "@/lib/helper/route.helper";
+import { postSchema } from "@/app/api/tasks/schema";
 
 export async function POST(request: Request) {
   const data = await request.json();
-  const task = new models.Task(data);
-  // Do whatever you want
-  return NextResponse.json({ message: "Hello World map" }, { status: 200 });
+  validateSchema(postSchema, data);
+  const userId = request.headers.get("uid");
+
+  try {
+    const task = await createTask({
+      ...data,
+      created_by: userId,
+    });
+    return NextResponse.json({ taskId: task._id }, { status: 201 });
+  } catch (e) {
+    return NextResponse.json(
+      {
+        message: e.message,
+      },
+      { status: 500 }
+    );
+  }
 }

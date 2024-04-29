@@ -2,7 +2,6 @@ import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
 import { ObjectId } from "mongodb";
 import { ITask } from "@/utils/@types/task";
-import Workspace from "@/models/workspace";
 
 async function init() {
   await connectMongoDB();
@@ -49,14 +48,17 @@ const createTask = async ({
 
 async function getTaskId(taskId: ObjectId) {
   await init();
-  const task = await Workspace.findOne({ _id: taskId });
+  const task = await Task.findOne({ _id: taskId });
   if (!task) {
-    throw new Error("task id not found");
+    const error = new Error("Task ID not found");
+    error.statusCode = 404;
+    throw error;
   }
   return task;
 }
 
 const updateTask = async (taskId: string, updateData: ITask) => {
+  console.log(updateData);
   try {
     // Find the task by ID and update it
     const updatedTask = await Task.findByIdAndUpdate(taskId, updateData, {
