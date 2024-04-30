@@ -20,9 +20,10 @@ function ProfileScreen({ navigation }) {
             <Avatar.Image src={user.photoURL} />
             <Avatar.Fallback bc="black" />
           </Avatar>
-          <YStack alignItems="center">
+          <YStack alignItems="center" gap="$3" marginTop="$3">
             <Text>@{user.username}</Text>
             <Button
+              width={"100%"}
               height={30}
               onPress={() => {
                 navigation.navigate(ROUTES.EDIT_PROFILE);
@@ -30,7 +31,6 @@ function ProfileScreen({ navigation }) {
               backgroundColor="$green11"
               borderWidth={3}
               borderRadius="$2"
-              marginTop="$3"
             >
               <Text>Edit</Text>
             </Button>
@@ -43,7 +43,7 @@ function ProfileScreen({ navigation }) {
             to={ROUTES.MY_PROJECT_SCREEN}
           />
           <SettingsItem
-            text="Manege Community"
+            text="Manage Community"
             iconAfter="chevron-right"
             to={ROUTES.JOIN_A_TEAM}
           />

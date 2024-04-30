@@ -58,7 +58,6 @@ async function getTaskId(taskId: ObjectId) {
 }
 
 const updateTask = async (taskId: string, updateData: ITask) => {
-  console.log(updateData);
   try {
     // Find the task by ID and update it
     const updatedTask = await Task.findByIdAndUpdate(taskId, updateData, {
