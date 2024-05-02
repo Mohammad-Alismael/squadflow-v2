@@ -1,15 +1,22 @@
 import { z } from "zod";
 
 export const getOrDeleteSchema = z.object({
-  taskId: z.string().refine((val) => true, {
-    message: "taskId should be a string",
-  }),
+  taskId: z
+    .string()
+    .regex(/^[0-9a-f]{24}$/)
+    .refine((val) => true, {
+      message: "taskId should be a string",
+    }),
 });
 
 const TaskComment = z.object({
   user: z.string(),
   text: z.string(),
   created_at: z.date(),
+});
+
+export const postCommentSchema = z.object({
+  text: z.string(),
 });
 
 export const postSchema = z.object({

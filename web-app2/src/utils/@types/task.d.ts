@@ -9,7 +9,7 @@ export interface ITask {
   participants: Schema.Types.ObjectId[] | IUser[];
   tags: string[];
   comments: {
-    user: Schema.Types.ObjectId | IUser;
+    user: Schema.Types.ObjectId | IUser | string;
     text: string;
     created_at: Date;
   }[];

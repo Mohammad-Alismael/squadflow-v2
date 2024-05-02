@@ -2,6 +2,7 @@ import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
 import { ObjectId } from "mongodb";
 import { ITask } from "@/utils/@types/task";
+import { CommunitySchema } from "@/utils/@types/CommunitySchema";
 
 async function init() {
   await connectMongoDB();
@@ -88,4 +89,47 @@ const deleteTask = async (taskId: ObjectId) => {
   }
 };
 
-export { createTask, getTaskId, updateTask, deleteTask };
+async function getCommentsTaskId(taskId: ObjectId) {
+  await init();
+  try {
+    const result = (await Task.findById(taskId)
+      .populate({
+        path: "comments.user",
+        select: "_id username email",
+      })
+      .exec()) as CommunitySchema;
+
+    if (!result) throw new Error("task Id doesn't exists");
+    return result.comments;
+  } catch (error) {
+    console.error("Error creating Community:", error);
+    throw error;
+  }
+}
+
+const addCommentToTask = async (
+  taskId: string,
+  comment: ITask["comments"][0]
+) => {
+  try {
+    const task = await Task.findOneAndUpdate(
+      { _id: taskId },
+      { $push: { comments: comment } },
+      { new: true }
+    );
+    return task._id;
+  } catch (error) {
+    // Handle error
+    console.error("Error deleting task:", error);
+    throw new Error("Failed to delete task");
+  }
+};
+
+export {
+  createTask,
+  getTaskId,
+  updateTask,
+  deleteTask,
+  addCommentToTask,
+  getCommentsTaskId,
+};
