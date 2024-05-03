@@ -37,10 +37,10 @@ export async function GET(request: Request, context: any) {
 export async function PUT(request: Request, context: any) {
   const { params } = await context;
   const { workspaceId } = params;
-  const { title, participants } = await request.json();
-  validateSchema(putSchema, { workspaceId, title, participants });
+  const data = await request.json();
+  validateSchema(putSchema, data);
   const userId = request.headers.get("uid") as string;
-  const communityId = request.headers.get("cid");
+  const communityId = request.headers.get("cid") as string;
   validateCommunity(communityId as string);
   const workspace = await getWorkspaceById(workspaceId);
   if (
@@ -50,9 +50,10 @@ export async function PUT(request: Request, context: any) {
     throw new Error("you are not allowed to change workspace details");
   await updateWorkspace({
     _id: workspaceId,
-    community: communityId,
-    title,
-    participants,
+    community: communityId as string,
+    title: data.title,
+    participants: data.participants,
+    labels: data.labels,
     updated_by: userId,
   });
   return NextResponse.json({ message: "success!" }, { status: 200 });

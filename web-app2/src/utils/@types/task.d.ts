@@ -7,7 +7,7 @@ export interface ITask {
   title: string;
   columnId: string;
   participants: Schema.Types.ObjectId[] | IUser[];
-  tags: string[];
+  labels: string[];
   comments: {
     user: Schema.Types.ObjectId | IUser | string;
     text: string;

@@ -8,5 +8,6 @@ interface IWorkspace {
     role: string;
   }[];
   columns: { order: number; title: string; color: string }[];
+  labels: { color: string; title: string }[];
   progress: number;
 }

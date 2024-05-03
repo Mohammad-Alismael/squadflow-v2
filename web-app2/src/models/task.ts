@@ -12,12 +12,7 @@ const taskSchema = new Schema(
       required: true,
     },
     participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    tags: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    labels: [{ color: String, title: String }],
     comments: [
       {
         user: { type: Schema.Types.ObjectId, ref: "User" },

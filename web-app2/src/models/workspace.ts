@@ -22,6 +22,7 @@ const userSchema = new Schema(
         { order: 3, title: "completed", color: "red" },
       ],
     },
+    labels: [{ color: String, title: String }],
     progress: { type: Number, default: 0 },
   },
   { timestamps: true }

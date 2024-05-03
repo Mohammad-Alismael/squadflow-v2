@@ -1,4 +1,4 @@
-import { CommunitySchema } from "@/utils/@types/CommunitySchema";
+import { ICommunity } from "@/utils/@types/community";
 import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
 import { IUser } from "@/utils/@types/user";
@@ -16,9 +16,7 @@ export function generateRandomId(length: number): string {
   return randomId;
 }
 
-export function getTheOldestMember(
-  participants: CommunitySchema["participants"]
-) {
+export function getTheOldestMember(participants: ICommunity["participants"]) {
   if (participants.length === 0) {
     return null; // or throw an error
   }
@@ -53,7 +51,7 @@ export function isAdminUserId(admin: string, userId: string) {
 }
 
 export function isNoOneInParticipants(
-  participants: CommunitySchema["participants"]
+  participants: ICommunity["participants"]
 ) {
   return participants.length === 0;
 }

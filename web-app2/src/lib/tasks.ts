@@ -2,7 +2,6 @@ import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
 import { ObjectId } from "mongodb";
 import { ITask } from "@/utils/@types/task";
-import { CommunitySchema } from "@/utils/@types/CommunitySchema";
 
 async function init() {
   await connectMongoDB();
@@ -12,7 +11,7 @@ const createTask = async ({
   title,
   columnId,
   participants,
-  tags,
+  labels,
   dueDate,
   dueTime,
   priority,
@@ -24,18 +23,18 @@ const createTask = async ({
   try {
     // Create the task
     const task = await Task.create({
-      workspace: workspace,
-      title: title,
-      columnId: columnId,
-      participants: participants,
-      tags: tags,
-      dueDate: dueDate,
-      dueTime: dueTime,
-      priority: priority,
-      description: description,
-      attachments: attachments,
-      created_by: created_by,
-      updated_by: created_by, // Assuming the creator also updates the task initially
+      workspace,
+      title,
+      columnId,
+      participants,
+      labels,
+      dueDate,
+      dueTime,
+      priority,
+      description,
+      attachments,
+      created_by,
+      updated_by: created_by,
     });
 
     // Return the created task
@@ -56,6 +55,17 @@ async function getTaskId(taskId: ObjectId) {
     throw error;
   }
   return task;
+}
+
+async function getTasksByWorkspaceId(workspaceId: ObjectId) {
+  await init();
+  return Task.find({ workspace: workspaceId });
+}
+
+async function deleteTasksByWorkspaceId(workspaceId: ObjectId) {
+  await init();
+  const { deletedCount } = await Task.deleteMany({ workspace: workspaceId });
+  return deletedCount;
 }
 
 const updateTask = async (taskId: string, updateData: ITask) => {
@@ -97,7 +107,7 @@ async function getCommentsTaskId(taskId: ObjectId) {
         path: "comments.user",
         select: "_id username email",
       })
-      .exec()) as CommunitySchema;
+      .exec()) as ITask;
 
     if (!result) throw new Error("task Id doesn't exists");
     return result.comments;
@@ -132,4 +142,6 @@ export {
   deleteTask,
   addCommentToTask,
   getCommentsTaskId,
+  deleteTasksByWorkspaceId,
+  getTasksByWorkspaceId,
 };

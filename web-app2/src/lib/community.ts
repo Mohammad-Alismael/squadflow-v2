@@ -1,6 +1,6 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Community from "@/models/community";
-import { CommunitySchema } from "@/utils/@types/CommunitySchema";
+import { ICommunity } from "@/utils/@types/community";
 import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 import {
@@ -119,7 +119,7 @@ async function joinCommunityByCode(userId: string, code: string) {
 async function leaveCommunityForParticipants(
   communityId: ObjectId,
   userId: string,
-  participants: CommunitySchema["participants"]
+  participants: ICommunity["participants"]
 ) {
   // if the user id ins't an admin
   await init();
@@ -139,7 +139,7 @@ async function leaveCommunityForParticipants(
 
 async function replaceAdminByTheOldestMember(
   communityId: ObjectId,
-  participants: CommunitySchema["participants"]
+  participants: ICommunity["participants"]
 ) {
   // if the user id is an admin
   await init();
@@ -187,7 +187,7 @@ async function getCommunityById(communityId: string) {
         path: "admin",
         select: "_id username email",
       })
-      .exec()) as CommunitySchema;
+      .exec()) as ICommunity;
 
     if (!result) throw new Error("communities Id doesn't exists");
     return result;
@@ -197,7 +197,7 @@ async function getCommunityById(communityId: string) {
   }
 }
 
-async function updateCommunity(community: CommunitySchema) {
+async function updateCommunity(community: ICommunity) {
   await init();
   try {
     // const result = await Community.findOne({

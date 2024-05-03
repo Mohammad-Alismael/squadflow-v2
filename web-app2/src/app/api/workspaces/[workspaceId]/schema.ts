@@ -21,6 +21,7 @@ export const putSchema = z.object({
         message: "role should be either admin or editor or viewer",
       })
   ),
+  labels: z.array(z.object({ color: z.string(), title: z.string() })),
 });
 
 export const deleteSchema = z.object({

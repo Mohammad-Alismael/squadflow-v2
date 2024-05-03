@@ -2,6 +2,7 @@ import { connectMongoDB } from "@/lib/mongodb";
 import Workspace from "@/models/workspace";
 import User from "@/models/user";
 import { ObjectId } from "mongodb";
+import { deleteTasksByWorkspaceId } from "@/lib/tasks";
 
 async function init() {
   await connectMongoDB();
@@ -32,8 +33,28 @@ async function updateWorkspace(workspace: IWorkspace) {
       {
         title: workspace.title,
         participants: workspace.participants,
+        labels: workspace.labels,
         updated_by: workspace.created_by,
       }
+    );
+    console.log(`Workspace updated with _id: ${result}`);
+    return result;
+  } catch (error) {
+    console.error("Error updating Community:", error);
+    throw error;
+  }
+}
+
+async function updateWorkspaceLabelsList(
+  workspaceId: ObjectId,
+  labels: IWorkspace["labels"][0]
+) {
+  await init();
+  try {
+    const result = await Workspace.findOneAndUpdate(
+      { _id: workspaceId },
+      { $push: { labels: labels } },
+      { new: true }
     );
     console.log(`Workspace updated with _id: ${result}`);
     return result;
@@ -55,6 +76,7 @@ async function getWorkspaceById(workspaceId: ObjectId) {
 async function deleteWorkspaceById(workspaceId: ObjectId) {
   await init();
   await Workspace.deleteOne({ _id: workspaceId });
+  await deleteTasksByWorkspaceId(workspaceId);
 }
 
 export {
@@ -62,4 +84,5 @@ export {
   getWorkspaceById,
   deleteWorkspaceById,
   updateWorkspace,
+  updateWorkspaceLabelsList,
 };
