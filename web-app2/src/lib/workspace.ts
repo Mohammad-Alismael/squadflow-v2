@@ -73,6 +73,22 @@ async function getWorkspaceById(workspaceId: ObjectId) {
   return workspace;
 }
 
+async function deleteLabelFromWorkspace(
+  workspaceId: ObjectId,
+  labelId: ObjectId
+) {
+  await init();
+  try {
+    await Workspace.updateOne(
+      { _id: workspaceId },
+      { $pull: { labels: { _id: labelId } } }
+    );
+  } catch (error) {
+    console.error("Error updating Community:", error);
+    throw error;
+  }
+}
+
 async function deleteWorkspaceById(workspaceId: ObjectId) {
   await init();
   await Workspace.deleteOne({ _id: workspaceId });
@@ -85,4 +101,5 @@ export {
   deleteWorkspaceById,
   updateWorkspace,
   updateWorkspaceLabelsList,
+  deleteLabelFromWorkspace,
 };

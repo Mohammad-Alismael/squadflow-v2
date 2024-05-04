@@ -36,10 +36,8 @@ export async function middleware(request: NextRequest) {
   } catch (error) {
     console.error("Error verifying JWT token:", error);
     // Handle the error, you might want to send a response indicating authentication failure
-    return NextResponse.json({ message: error.name }, { status: 400 });
+    return NextResponse.json({ message: error.message }, { status: 400 });
   }
-
-  return NextResponse.next();
 }
 
 export const config = {

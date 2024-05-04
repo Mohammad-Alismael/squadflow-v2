@@ -11,6 +11,10 @@ export const patchSchema = z.object({
   title: z.string(),
 });
 
+export const deleteLabelSchema = z.object({
+  labelId: z.string(),
+});
+
 export const deleteSchema = z.object({
   workspaceId: z.string().refine((val) => typeof val === "string", {
     message: "workspaceId should be a string",
