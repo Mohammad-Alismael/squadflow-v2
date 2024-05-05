@@ -1,9 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-Page.propTypes = {};
-
-function Page(props) {
+function Page() {
   return <div>hello home v2</div>;
 }
 

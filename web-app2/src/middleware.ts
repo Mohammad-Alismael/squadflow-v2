@@ -18,8 +18,8 @@ export async function middleware(request: NextRequest) {
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
     if (payload?._id && payload?.communityId) {
-      requestHeaders.set("uid", payload?._id);
-      requestHeaders.set("cid", payload?.communityId);
+      requestHeaders.set("uid", <string>payload?._id);
+      requestHeaders.set("cid", <string>payload?.communityId);
     } else
       return NextResponse.json(
         { message: "error happened in user token" },

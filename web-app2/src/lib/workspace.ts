@@ -49,7 +49,7 @@ async function updateWorkspace(workspace: IWorkspace) {
 
 async function updateWorkspaceLabelsList(
   workspaceId: ObjectId,
-  labels: IWorkspace["labels"][0]
+  labels: { color: string; title: string }
 ) {
   await init();
   try {

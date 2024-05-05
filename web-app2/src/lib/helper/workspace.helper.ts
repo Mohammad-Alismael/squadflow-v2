@@ -3,15 +3,15 @@ import { IUser } from "@/utils/@types/user";
 import { ObjectId } from "mongodb";
 
 export const isUserWhoCreatedWorkspace = (
-  userId: Schema.Types.ObjectId,
-  createdBy: Schema.Types.ObjectId
+  userId: string,
+  createdBy: string
 ) => {
-  return createdBy.toString() === userId.toString();
+  return createdBy === userId;
 };
 
 export const isUserIdIncludedInParticipants = (
-  userId: Schema.Types.ObjectId,
-  participants: Array<{ user: Schema.Types.ObjectId | IUser; role: String }>
+  userId: string,
+  participants: IWorkspace["participants"]
 ) => {
   return participants
     .map(({ user }) => user.toString())
@@ -19,8 +19,8 @@ export const isUserIdIncludedInParticipants = (
 };
 
 export const isUserIdHasRole = (
-  participants: Array<{ user: Schema.Types.ObjectId | IUser; role: String }>,
-  userId: Schema.Types.ObjectId,
+  participants: IWorkspace["participants"],
+  userId: string,
   role: string
 ) => {
   if (participants.length === 0) return false;

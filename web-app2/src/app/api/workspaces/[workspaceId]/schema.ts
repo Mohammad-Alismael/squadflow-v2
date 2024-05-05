@@ -10,7 +10,9 @@ export const putSchema = z.object({
   workspaceId: z.string().refine((val) => true, {
     message: "workspaceId should be a string",
   }),
-  title: z.string("title should be a string"),
+  title: z.string().refine((val) => true, {
+    message: "title should be a string",
+  }),
   participants: z.array(
     z
       .object({

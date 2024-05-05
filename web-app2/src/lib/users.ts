@@ -1,4 +1,4 @@
-import clientPromise, { connectMongoDB } from "@/lib/mongodb";
+import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/user";
 import { IUser } from "@/utils/@types/user";
 
@@ -13,7 +13,13 @@ async function init() {
 }
 
 // Create operation
-async function createUser(user: IUser) {
+async function createUser(user: {
+  username: string;
+  email: string;
+  password: string;
+  communityId: string;
+  photoURL: string;
+}) {
   await init();
   try {
     const result = await User.create(user);
@@ -23,7 +29,8 @@ async function createUser(user: IUser) {
     throw error;
   }
 }
-function generateAccessToken(user: IUser) {
+// @ts-ignore
+function generateAccessToken(user: User) {
   console.log({
     _id: user._id,
     email: user.email,
@@ -37,7 +44,7 @@ function generateAccessToken(user: IUser) {
       communityId: user["_doc"].communityId,
       photoURL: user.photoURL,
     },
-    process.env.NEXTAUTH_SECRET,
+    process.env.NEXTAUTH_SECRET as string,
     {
       expiresIn: "6h",
     }

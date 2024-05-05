@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
@@ -12,15 +12,15 @@ export default function LoginForm() {
 
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     try {
-      const res = await signIn("credentials", {
+      const res = (await signIn("credentials", {
         username,
         password,
         redirect: false,
-      });
+      })) as SignInResponse;
 
       if (res.error) {
         setError("Invalid Credentials");

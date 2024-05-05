@@ -1,31 +1,21 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
 import { createWorkspace } from "@/lib/workspace";
-import { validateCommunity } from "@/lib/helper/route.helper";
+import { validateCommunity, validateSchema } from "@/lib/helper/route.helper";
 import { checkUserIdsExist } from "@/lib/users";
+import { postSchema } from "@/app/api/workspaces/schema";
 
-const postSchema = z.object({
-  title: z.string("title should be a string"),
-  participants: z.array(
-    z
-      .object({
-        user: z.string(),
-        role: z.enum(["admin", "editor", "viewer"]),
-      })
-      .refine((value) => ["admin", "editor", "viewer"].includes(value.role), {
-        message: "role should be either admin or editor or viewer",
-      })
-  ),
-});
 export async function POST(request: Request) {
-  const { title, participants } = await request.json();
-  postSchema.safeParse({ title, participants });
-  const validation = postSchema.safeParse({ title, participants });
-  if (!validation.success) {
-    return NextResponse.json(validation.error.format(), {
-      status: 400,
-    });
-  }
+  const data: IWorkspace = await request.json();
+  validateSchema(postSchema, data);
+  const { title, participants } = data;
+  if (!participants)
+    return NextResponse.json(
+      { message: "participants should not be empty" },
+      {
+        status: 400,
+      }
+    );
   const userId = request.headers.get("uid") as string;
   const communityId = request.headers.get("cid") as string;
   validateCommunity(communityId);

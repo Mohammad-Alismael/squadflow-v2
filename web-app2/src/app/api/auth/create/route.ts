@@ -3,10 +3,13 @@ import bcrypt from "bcryptjs";
 import { createUser, findUser } from "@/lib/users";
 import { z } from "zod";
 const postSchema = z.object({
-  username: z.string("title should be a string"),
+  username: z.string().refine((username) => typeof username === "string", {
+    message: "username should be a string",
+  }),
   email: z.string().email("email should be a string"),
   password: z.string().min(6),
 });
+
 export async function POST(request: Request) {
   const { username, email, password } = await request.json();
 

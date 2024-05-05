@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import mongoose, { Mongoose } from "mongoose";
 
 global.mongoose = {

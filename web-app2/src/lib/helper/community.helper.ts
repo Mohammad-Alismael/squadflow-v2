@@ -24,8 +24,8 @@ export function getTheOldestMember(participants: ICommunity["participants"]) {
     (participant) => participant.user !== undefined
   );
   const newList = validParticipants.sort((a, b) => {
-    const dateA = new Date(a.joined_at);
-    const dateB = new Date(b.joined_at);
+    const dateA = new Date(a.joined_at).getTime();
+    const dateB = new Date(b.joined_at).getTime();
 
     // Check if either date is invalid
     if (isNaN(dateA) || isNaN(dateB)) {
@@ -34,7 +34,7 @@ export function getTheOldestMember(participants: ICommunity["participants"]) {
     }
 
     // If both dates are valid, proceed with the comparison
-    return dateA.getTime() - dateB.getTime();
+    return dateA - dateB;
   });
   if (newList.length > 0) {
     return newList[0].user;
@@ -57,13 +57,11 @@ export function isNoOneInParticipants(
 }
 
 export function removeUserId(
-  participants: Array<{ user: Schema.Types.ObjectId | IUser; joined_at: Date }>,
+  participants: ICommunity["participants"],
   userId: string
 ) {
   if (!userId) throw new Error("User not found");
-  const index = participants.findIndex((item) =>
-    new ObjectId(item.user).equals(userId)
-  );
+  const index = participants.findIndex((item) => item.user === userId);
   if (index !== -1) {
     participants.splice(index, 1);
   }
@@ -71,12 +69,10 @@ export function removeUserId(
 }
 
 export function isUserIdInParticipantsList(
-  participants: Array<{ user: Schema.Types.ObjectId; joined_at: Date }>,
+  participants: ICommunity["participants"],
   userId: string
 ) {
   if (!userId) throw new Error("User not found");
   if (!participants) throw new Error("participants not found");
-  return participants.some((participant) =>
-    new ObjectId(participant.user).equals(userId)
-  );
+  return participants.some((participant) => participant.user === userId);
 }

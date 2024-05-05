@@ -2,6 +2,7 @@ import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
 import { ObjectId } from "mongodb";
 import { ITask } from "@/utils/@types/task";
+import CustomError from "@/utils/CustomError";
 
 async function init() {
   await connectMongoDB();
@@ -47,12 +48,10 @@ const createTask = async ({
 };
 
 async function getTaskId(taskId: ObjectId) {
-  await init();
+  await init(); // Assuming this is your initialization function
   const task = await Task.findOne({ _id: taskId });
   if (!task) {
-    const error = new Error("Task ID not found");
-    error.statusCode = 404;
-    throw error;
+    throw new CustomError("Task ID not found", 404);
   }
   return task;
 }

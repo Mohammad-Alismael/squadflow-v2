@@ -38,14 +38,19 @@ export async function GET(request: Request, context: any) {
 export async function PUT(request: Request, context: any) {
   const { params } = await context;
   const { workspaceId } = params;
-  const data = await request.json();
+  const data: IWorkspace = await request.json();
+  if (!data.participants)
+    return NextResponse.json(
+      { message: "participants should be defined" },
+      { status: 400 }
+    );
   validateSchema(putSchema, data);
   const userId = request.headers.get("uid") as string;
   const communityId = request.headers.get("cid") as string;
   validateCommunity(communityId as string);
-  const workspace = await getWorkspaceById(workspaceId);
+  const workspace: IWorkspace = await getWorkspaceById(workspaceId);
   if (
-    !isUserWhoCreatedWorkspace(userId, workspace.created_by) &&
+    !isUserWhoCreatedWorkspace(userId, workspace.created_by as string) &&
     !isUserIdHasRole(workspace.participants, userId, "admin")
   )
     throw new Error("you are not allowed to change workspace details");

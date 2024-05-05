@@ -25,7 +25,9 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/jest": "^29.5.12",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20",
     "@types/react": "^18",
