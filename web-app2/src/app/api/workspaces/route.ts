@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
 import { createWorkspace } from "@/lib/workspace";
+import { validateCommunity } from "@/lib/helper/route.helper";
+import { checkUserIdsExist } from "@/lib/users";
 
 const postSchema = z.object({
   title: z.string("title should be a string"),
@@ -24,12 +26,17 @@ export async function POST(request: Request) {
       status: 400,
     });
   }
-  const userId = request.headers.get("uid");
-  const communityId = request.headers.get("cid");
-  if (!communityId || communityId === "")
-    return NextResponse.json({
-      message: "you must join a community first!",
-    });
+  const userId = request.headers.get("uid") as string;
+  const communityId = request.headers.get("cid") as string;
+  validateCommunity(communityId);
+  const userIdsToCheck: string[] = participants.map(({ user }) => user);
+  const allExist = await checkUserIdsExist(userIdsToCheck);
+  if (!allExist)
+    return NextResponse.json(
+      { message: "some user participant id(s) aren't valid" },
+      { status: 400 }
+    );
+
   const workspace = await createWorkspace({
     community: communityId,
     title,

@@ -3,6 +3,7 @@ import Workspace from "@/models/workspace";
 import User from "@/models/user";
 import { ObjectId } from "mongodb";
 import { deleteTasksByWorkspaceId } from "@/lib/tasks";
+import Task from "@/models/task";
 
 async function init() {
   await connectMongoDB();
@@ -16,6 +17,7 @@ async function createWorkspace(workspace: IWorkspace) {
       title: workspace.title,
       participants: workspace.participants,
       created_by: workspace.created_by,
+      updated_by: workspace.created_by,
     });
     console.log(`Workspace inserted with _id: ${result}`);
     return result;
@@ -95,6 +97,12 @@ async function deleteWorkspaceById(workspaceId: ObjectId) {
   await deleteTasksByWorkspaceId(workspaceId);
 }
 
+async function deleteWorkspacesByCommunityId(communityId: ObjectId) {
+  await init();
+  const { deletedCount } = await Task.deleteMany({ community: communityId });
+  return deletedCount;
+}
+
 export {
   createWorkspace,
   getWorkspaceById,
@@ -102,4 +110,5 @@ export {
   updateWorkspace,
   updateWorkspaceLabelsList,
   deleteLabelFromWorkspace,
+  deleteWorkspacesByCommunityId,
 };

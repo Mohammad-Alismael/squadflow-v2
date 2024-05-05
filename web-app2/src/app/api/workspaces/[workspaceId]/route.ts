@@ -16,6 +16,7 @@ import {
   getSchema,
   putSchema,
 } from "@/app/api/workspaces/[workspaceId]/schema";
+import { checkUserIdsExist } from "@/lib/users";
 
 export async function GET(request: Request, context: any) {
   const { params } = await context;
@@ -48,6 +49,15 @@ export async function PUT(request: Request, context: any) {
     !isUserIdHasRole(workspace.participants, userId, "admin")
   )
     throw new Error("you are not allowed to change workspace details");
+
+  const userIdsToCheck: string[] = data.participants.map(({ user }) => user);
+  const allExist = await checkUserIdsExist(userIdsToCheck);
+  if (!allExist)
+    return NextResponse.json(
+      { message: "some user participant id(s) aren't valid" },
+      { status: 400 }
+    );
+
   await updateWorkspace({
     _id: workspaceId,
     community: communityId as string,

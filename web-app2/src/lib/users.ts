@@ -5,7 +5,7 @@ import { IUser } from "@/utils/@types/user";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-const dbName = "squadflow";
+const dbName = "mobile-app";
 
 // Initialize MongoDB client
 async function init() {
@@ -114,6 +114,29 @@ async function listUsers() {
   }
 }
 
+async function checkUserIdsExist(userIds: string[]): Promise<boolean> {
+  try {
+    const users: IUser[] = await User.find({ _id: { $in: userIds } });
+    const existingUserIds: Set<string> = new Set(
+      users.map((user) => user._id.toString())
+    );
+    const missingUserIds: string[] = userIds.filter(
+      (userId) => !existingUserIds.has(userId)
+    );
+
+    if (missingUserIds.length === 0) {
+      console.log("All user IDs exist in the User collection");
+      return true;
+    } else {
+      console.log("Missing user IDs:", missingUserIds);
+      return false;
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return false;
+  }
+}
+
 export {
   createUser,
   login,
@@ -121,4 +144,5 @@ export {
   findUser,
   updateUserCommunityId,
   updateUserToken,
+  checkUserIdsExist,
 };

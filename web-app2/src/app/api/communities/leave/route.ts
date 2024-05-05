@@ -10,6 +10,7 @@ import {
   isAdminUserId,
   isNoOneInParticipants,
 } from "@/lib/helper/community.helper";
+import { deleteWorkspacesByCommunityId } from "@/lib/workspace";
 
 export async function POST(request: Request) {
   const url = new URL(request.url);
@@ -24,6 +25,7 @@ export async function POST(request: Request) {
       isNoOneInParticipants(participants)
     ) {
       await deleteCommunityByCode(code as string);
+      await deleteWorkspacesByCommunityId(_id);
       const user = await updateUserCommunityId(userId as string, ""); // reseting community id to empty string
       await updateUserToken(user);
       return NextResponse.json({

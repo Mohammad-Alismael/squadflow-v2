@@ -13,7 +13,7 @@ interface AuthProps {
   onLogin?: (email: string, password: string) => Promise<any>;
   signOut?: () => Promise<any>;
 }
-const TOKEN_KEY = "squadflow-user";
+const TOKEN_KEY = "mobile-app-user";
 const AuthContext = createContext<AuthProps>({});
 
 export const AuthProvider = ({ children }) => {
