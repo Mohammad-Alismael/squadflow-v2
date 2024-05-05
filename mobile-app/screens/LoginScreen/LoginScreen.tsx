@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Button } from "react-native";
-import { Input, Stack, YStack, Text } from "tamagui";
+import { Input, YStack, Text, XStack, Button } from "tamagui";
 import { useAuth } from "../../utils/context/AuthContext";
 import ROUTES from "../../utils/routes";
 
 function LoginScreen({ route, navigation }) {
   const { onLogin, isLoading } = useAuth();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState("");
 
   const nextScreen = (screenTitle: string) => {
@@ -17,31 +16,48 @@ function LoginScreen({ route, navigation }) {
     if (successfulLogin) nextScreen(ROUTES.HOME);
   };
   return (
-    <YStack marginHorizontal="$3" marginVertical="$5">
-      <Stack padding={10} justifyContent="space-between">
-        <Stack padding={10} marginVertical={20}>
-          <Text fontSize="$9">Welcome Back!</Text>
-          <YStack gap="$2">
-            <Input placeholder="Enter your email" onChangeText={setEmail} />
-            <Input
-              placeholder="Enter your password"
-              onChangeText={setPassword}
-              secureTextEntry={true}
-            />
-            <Text>forgot password?</Text>
-            <Button
-              onPress={handleClick}
-              disabled={isLoading}
-              title={isLoading ? "loading..." : "Sign in"}
-            />
-            <Text>Don't have an account yet?</Text>
-            <Button
-              onPress={() => nextScreen(ROUTES.REGISTER)}
-              title="Register Now!"
-            />
-          </YStack>
-        </Stack>
-      </Stack>
+    <YStack marginHorizontal="$4" marginVertical="$5" height="100%">
+      <YStack marginBottom="$3" marginTop="$10">
+        <Text fontSize="$9">Welcome Back!</Text>
+        <Text fontSize="$4">Give credential to sign in your account</Text>
+      </YStack>
+      <YStack gap="$2">
+        <Input
+          borderRadius="$5"
+          backgroundColor="#F8FAFC"
+          placeholder="Enter your email"
+          onChangeText={setEmail}
+        />
+        <Input
+          placeholder="Enter your password"
+          borderRadius="$5"
+          backgroundColor="#F8FAFC"
+          onChangeText={setPassword}
+          secureTextEntry={true}
+        />
+        <Text alignSelf="flex-end" color="$green11">
+          Forgot password?
+        </Text>
+        <Button
+          marginTop="$4"
+          backgroundColor="$green11"
+          color="$white1"
+          onPress={handleClick}
+          disabled={isLoading}
+        >
+          {isLoading ? "loading..." : "Sign in"}
+        </Button>
+      </YStack>
+      <XStack position="absolute" bottom={40} left="12%">
+        <Text textAlign="center">Don't have an account yet?</Text>
+        <Text
+          color="$green11"
+          marginHorizontal="$1.5"
+          onPress={() => nextScreen(ROUTES.REGISTER)}
+        >
+          Sign up
+        </Text>
+      </XStack>
     </YStack>
   );
 }
