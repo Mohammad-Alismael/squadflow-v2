@@ -35,7 +35,11 @@ function LoginScreen({ route, navigation }) {
           onChangeText={setPassword}
           secureTextEntry={true}
         />
-        <Text alignSelf="flex-end" color="$green11">
+        <Text
+          alignSelf="flex-end"
+          color="$green11"
+          textDecorationLine="underline"
+        >
           Forgot password?
         </Text>
         <Button
@@ -53,6 +57,7 @@ function LoginScreen({ route, navigation }) {
         <Text
           color="$green11"
           marginHorizontal="$1.5"
+          textDecorationLine="underline"
           onPress={() => nextScreen(ROUTES.REGISTER)}
         >
           Sign up
