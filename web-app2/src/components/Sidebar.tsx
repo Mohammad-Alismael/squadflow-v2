@@ -11,7 +11,7 @@ const links: linkType[] = [
     icon: "Calendar",
     link: "/calendar",
   },
-  { label: "Teams", icon: "Users", link: "/collaboration" },
+  { label: "Chats", icon: "Users", link: "/chats" },
   {
     label: "Settings",
     icon: "Settings",
@@ -21,14 +21,24 @@ const links: linkType[] = [
 
 const Sidebar = () => {
   return (
-    <div className="bg-white float-left h-full w-1/6 flex flex-col gap-4 p-5">
+    <div className="bg-white float-left h-full w-1/6 p-5">
       <Link className="flex items-center gap-2" href="/dashboard">
         <Image src={logo} alt="logo" priority width={50} height={50} />
-        <span className="text-3xl font-bold capitalize">squadflow</span>
+        <span className="text-2xl font-bold capitalize">squadflow</span>
       </Link>
-      {links.map((link, i) => (
-        <SidebarLink key={i} link={link} />
-      ))}
+      <div className="space-y-4 mt-8">
+        {links.map((link, i) => (
+          <SidebarLink key={i} link={link} />
+        ))}
+      </div>
+      {/*<SidebarLink*/}
+      {/*  key={345678}*/}
+      {/*  link={{*/}
+      {/*    label: "logout",*/}
+      {/*    icon: "log-out",*/}
+      {/*    link: "/logout",*/}
+      {/*  }}*/}
+      {/*/>*/}
     </div>
   );
 };
