@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="grid place-items-center h-screen bg-[#F2F0EB]">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

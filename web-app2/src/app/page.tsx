@@ -1,4 +1,4 @@
-import LoginForm from "@/components/LoginForm";
+import AuthForm from "@/components/AuthForm";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
@@ -10,7 +10,7 @@ export default async function Home() {
 
   return (
     <main>
-      <LoginForm />
+      <AuthForm />
     </main>
   );
 }
