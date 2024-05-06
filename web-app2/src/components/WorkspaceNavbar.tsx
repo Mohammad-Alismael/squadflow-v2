@@ -4,26 +4,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell } from "react-feather";
 import { Input } from "@/components/ui/input";
 import SearchDialog from "@/components/Dialogs/SearchDialog";
-async function getWisdom() {
-  const res = await fetch("https://api.api-ninjas.com/v1/quotes?category", {
-    method: "GET",
-    cache: "no-cache",
-    headers: {
-      "X-Api-Key": process.env.API_NINJA_KEY,
-    },
-  });
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
-  }
-  const data = await res.json();
-  return data[0];
-}
-async function WorkspaceNavbar() {
+async function WorkspaceNavbar({ workspaceId }: { workspaceId: string }) {
   return (
     <div className="w-full flex items-start justify-between float-right">
       <div>
-        <p className="text-sm opacity-50">show team members here.</p>
+        <p className="text-sm opacity-50">
+          show team members here. {workspaceId}
+        </p>
       </div>
       <div className="flex items-center justify-between gap-2">
         <SearchDialog>

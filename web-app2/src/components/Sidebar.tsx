@@ -5,7 +5,8 @@ import { linkType } from "@/utils/@types/types";
 import SidebarLink from "@/components/SidearLink";
 
 const links: linkType[] = [
-  { label: "Home", icon: "Grid", link: "/dashboard" },
+  { label: "Dashboard", icon: "Grid", link: "/dashboard" },
+  { label: "Workspaces", icon: "Grid", link: "/workspaces" },
   {
     label: "Calendar",
     icon: "Calendar",
@@ -21,7 +22,7 @@ const links: linkType[] = [
 
 const Sidebar = () => {
   return (
-    <div className="bg-white float-left h-full w-1/6 p-5">
+    <div className="relative bg-white float-left h-full w-1/6 p-5">
       <Link className="flex items-center gap-2" href="/dashboard">
         <Image src={logo} alt="logo" priority width={50} height={50} />
         <span className="text-2xl font-bold capitalize">squadflow</span>
@@ -31,14 +32,15 @@ const Sidebar = () => {
           <SidebarLink key={i} link={link} />
         ))}
       </div>
-      {/*<SidebarLink*/}
-      {/*  key={345678}*/}
-      {/*  link={{*/}
-      {/*    label: "logout",*/}
-      {/*    icon: "log-out",*/}
-      {/*    link: "/logout",*/}
-      {/*  }}*/}
-      {/*/>*/}
+      <div className="w-full absolute bottom-2 left-0 border-t-2 p-2">
+        <SidebarLink
+          link={{
+            label: "Logout",
+            icon: "LogOut",
+            link: "/logout",
+          }}
+        />
+      </div>
     </div>
   );
 };

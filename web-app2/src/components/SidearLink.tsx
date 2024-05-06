@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Settings, User, Grid, Calendar, Users } from "react-feather";
+import { Settings, User, Grid, Calendar, Users, LogOut } from "react-feather";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { linkType } from "@/utils/@types/types";
@@ -11,6 +11,7 @@ const icons = {
   Grid,
   Calendar,
   Users,
+  LogOut,
 };
 
 const SidebarLink = ({ link }: { link: linkType }) => {

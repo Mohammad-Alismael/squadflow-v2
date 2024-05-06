@@ -15,18 +15,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+  params,
+}: {
   children: React.ReactNode;
-}>) {
+  params: { workspaceId: string };
+}) {
   return (
     <>
       <Sidebar />
-      <div className="w-5/6 float-right p-4">
-        <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-          <WorkspaceNavbar />
-        </Suspense>
-        {children}
-      </div>
+      <div className="w-5/6 float-right p-4">{children}</div>
     </>
   );
 }

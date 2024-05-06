@@ -24,7 +24,7 @@ export default function RootLayout({
         <Suspense fallback={<Skeleton className="h-12 w-full" />}>
           <Navbar />
         </Suspense>
-        {children}
+        <div className="">{children}</div>
       </div>
     </>
   );
