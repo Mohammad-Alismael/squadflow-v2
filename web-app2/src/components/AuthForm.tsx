@@ -45,7 +45,7 @@ export default function AuthForm() {
     }
   };
   return (
-    <>
+    <div>
       <HeaderWithLogo />
       <Tabs defaultValue="account" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
@@ -116,7 +116,7 @@ export default function AuthForm() {
           </Card>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
   // return (
   //   <div className="bg-white shadow-lg p-5 rounded-lg">

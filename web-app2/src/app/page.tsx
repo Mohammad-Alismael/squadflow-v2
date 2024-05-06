@@ -9,7 +9,7 @@ export default async function Home() {
   if (session) redirect("/dashboard");
 
   return (
-    <main>
+    <main className="flex justify-center items-center w-screen h-screen">
       <AuthForm />
     </main>
   );
