@@ -5,11 +5,11 @@ import { linkType } from "@/utils/@types/types";
 import SidebarLink from "@/components/SidearLink";
 
 const links: linkType[] = [
-  { label: "Home", icon: "Grid", link: "/home" },
+  { label: "Home", icon: "Grid", link: "/dashboard" },
   {
     label: "Calendar",
     icon: "Calendar",
-    link: "/calendar",
+    link: "/calendars",
   },
   { label: "Chats", icon: "Users", link: "/chats" },
   {
