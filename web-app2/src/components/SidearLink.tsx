@@ -1,6 +1,14 @@
 "use client";
 import Link from "next/link";
-import { Settings, User, Grid, Calendar, Users, LogOut } from "react-feather";
+import {
+  Settings,
+  User,
+  Grid,
+  Calendar,
+  Users,
+  LogOut,
+  Folder,
+} from "react-feather";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { linkType } from "@/utils/@types/types";
@@ -12,6 +20,7 @@ const icons = {
   Calendar,
   Users,
   LogOut,
+  Folder,
 };
 
 const SidebarLink = ({ link }: { link: linkType }) => {
@@ -27,18 +36,18 @@ const SidebarLink = ({ link }: { link: linkType }) => {
   return (
     <Link
       href={link.link}
-      className="flex items-center hover:text-green-700 transition duration-200 ease-in-out"
+      className="p-2 flex items-center hover:text-green-700 transition duration-200 ease-in-out"
     >
       <IconComponent
         size={28}
         className={clsx(
-          "stroke-gray-300 hover:stroke-green-700 transition duration-200 ease-in-out",
+          "hover:stroke-green-700 transition duration-200 ease-in-out",
           isActive && "stroke-green-700"
         )}
       />
       <span
         className={clsx(
-          "px-4 text-gray-300 hover:text-green-700",
+          "px-4 hover:text-green-700 transition duration-200 ease-in-out",
           isActive && "text-green-700"
         )}
       >

@@ -10,6 +10,12 @@ import AssignedTasks from "@/app/(app)/dashboard/components/AssignedTasks";
 export default function Dashboard() {
   return (
     <>
+      <Navbar>
+        <div>
+          <p className="text-2xl">Hello, mohammad alismael</p>
+          <p className="text-sm opacity-50">never try to give up.</p>
+        </div>
+      </Navbar>
       <div className="w-4/6 h-full float-left pr-4">
         <CurrentTaskList />
       </div>

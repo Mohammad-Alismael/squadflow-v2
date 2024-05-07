@@ -6,9 +6,9 @@ import SidebarLink from "@/components/SidearLink";
 
 const links: linkType[] = [
   { label: "Dashboard", icon: "Grid", link: "/dashboard" },
-  { label: "Workspaces", icon: "Grid", link: "/workspaces" },
+  { label: "Workspaces", icon: "Folder", link: "/workspaces" },
   {
-    label: "Calendar",
+    label: "Calendars",
     icon: "Calendar",
     link: "/calendars",
   },
