@@ -5,7 +5,7 @@ import { jwtVerify } from "jose";
 export async function middleware(request: NextRequest) {
   try {
     const token = cookies().get("jwt");
-
+    // i can't get cookies while hitting api from nextjs frontend
     if (!token) {
       throw new Error("JWT token not found");
     }

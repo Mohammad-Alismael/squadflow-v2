@@ -11,7 +11,6 @@ import authOptions from "@/app/api/auth/[...nextauth]/options";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
-  console.log("dashboard", session);
   return (
     <div className="h-full flex flex-col">
       <Navbar>

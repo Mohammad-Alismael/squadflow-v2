@@ -11,12 +11,13 @@ const fetchWorkspaces = async () => {
     cache: "no-cache",
   });
   if (res.ok) {
-    redirect("/auth");
+    return res.json();
   }
-  return res.json();
+  return [];
 };
 async function Page() {
   const data = await fetchWorkspaces();
+  console.log(data);
   return (
     <div className="h-full flex flex-col">
       <Navbar>
