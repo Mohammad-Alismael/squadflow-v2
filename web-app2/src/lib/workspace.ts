@@ -75,6 +75,15 @@ async function getWorkspaceById(workspaceId: ObjectId) {
   return workspace;
 }
 
+async function getWorkspacesBByCommunityId(communityId: string) {
+  await init();
+  const workspaces = await Workspace.find({ community: communityId });
+  if (!workspaces) {
+    throw new Error("workspace not found");
+  }
+  return workspaces;
+}
+
 async function deleteLabelFromWorkspace(
   workspaceId: ObjectId,
   labelId: ObjectId
@@ -111,4 +120,5 @@ export {
   updateWorkspaceLabelsList,
   deleteLabelFromWorkspace,
   deleteWorkspacesByCommunityId,
+  getWorkspacesBByCommunityId,
 };

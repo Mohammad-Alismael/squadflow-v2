@@ -6,8 +6,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import CurrentTaskList from "@/app/(app)/dashboard/components/CurrentTaskList";
 import TodayTasksDeadlines from "@/app/(app)/dashboard/components/TodayTasksDeadlines";
 import AssignedTasks from "@/app/(app)/dashboard/components/AssignedTasks";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/api/auth/[...nextauth]/options";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await getServerSession(authOptions);
+  console.log("dashboard", session);
   return (
     <div className="h-full flex flex-col">
       <Navbar>
@@ -17,10 +21,10 @@ export default function Dashboard() {
         </div>
       </Navbar>
       <div className="flex-grow">
-        <div className="w-4/6 h-full float-left pr-4">
+        <div className="w-2/3 h-full float-left pr-4">
           <CurrentTaskList />
         </div>
-        <div className="w-2/6 h-full float-right space-y-4">
+        <div className="w-1/3 h-full float-right flex flex-col gap-4">
           <TodayTasksDeadlines />
           <AssignedTasks />
         </div>

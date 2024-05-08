@@ -21,13 +21,15 @@ export default function AuthForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     try {
+      setLoading(true);
+      console.log({ username, password });
       const res = (await signIn("credentials", {
         username,
         password,
@@ -42,6 +44,8 @@ export default function AuthForm() {
       router.replace("dashboard");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -81,6 +85,7 @@ export default function AuthForm() {
               <Button
                 className="bg-green-800 w-full capitalize"
                 onClick={handleSubmit}
+                disabled={loading}
               >
                 login
               </Button>

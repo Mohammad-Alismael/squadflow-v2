@@ -74,6 +74,26 @@ async function login(username: string, password: string) {
     throw error;
   }
 }
+async function loginWithoutCookie(username: string, password: string) {
+  await init();
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      throw new Error("user not found");
+    }
+    const passwordsMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordsMatch) {
+      throw new Error("incorrect user name or password");
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Error logging user:", error);
+    throw error;
+  }
+}
+
 // Read operation for users
 async function findUser(username: string) {
   await init();
@@ -147,6 +167,7 @@ async function checkUserIdsExist(userIds: string[]): Promise<boolean> {
 export {
   createUser,
   login,
+  loginWithoutCookie,
   listUsers,
   findUser,
   updateUserCommunityId,

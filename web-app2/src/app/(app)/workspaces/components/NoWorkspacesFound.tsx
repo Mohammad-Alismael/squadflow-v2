@@ -3,7 +3,7 @@ import Image from "next/image";
 
 function NoWorkspacesFound() {
   return (
-    <div className="h-[80%] flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <Image
         src="./Team-goals-bro.svg"
         width={500}
