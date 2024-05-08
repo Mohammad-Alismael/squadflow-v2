@@ -33,7 +33,7 @@ export default function AuthForm() {
 
     try {
       setLoading(true);
-      console.log({ username, password });
+      setError("");
       const res = (await signIn("credentials", {
         username,
         password,
@@ -118,6 +118,7 @@ export default function AuthForm() {
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="passowrd"
+                  type="password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>

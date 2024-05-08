@@ -17,6 +17,7 @@ async function logout() {
 const SidebarLogoutButton = () => {
   return (
     <form
+      className="w-full absolute bottom-2 left-0 border-t-2 pt-1"
       action={async () => {
         "use server";
         await logout();

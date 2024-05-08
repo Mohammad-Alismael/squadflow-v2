@@ -22,8 +22,9 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const cookie = cookies().get("jwt");
-  const { payload } = await verifyJWTToken(cookie?.value);
-  const isExpired = await isJWTTokenExpired(cookie?.value);
+  const isExpired = cookie?.value
+    ? await isJWTTokenExpired(cookie?.value)
+    : false;
   if (!cookie?.value || cookie?.value === "" || isExpired) redirect("/auth");
   return (
     <div className="h-screen">

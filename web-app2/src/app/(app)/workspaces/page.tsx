@@ -30,12 +30,12 @@ async function Page() {
       </Navbar>
       <div className="flex-grow">
         <Header />
+        {data.length === 0 && <NoWorkspacesFound />}
         <div className="py-4 h-[91%] grid grid-cols-4 grid-rows-2 gap-4 overflow-y-auto">
           {data.map((val) => {
             return <Workspace data={val} key={val.id} />;
           })}
         </div>
-        {!!data.length && <NoWorkspacesFound />}
       </div>
     </div>
   );

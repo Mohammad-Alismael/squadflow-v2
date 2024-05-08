@@ -34,6 +34,7 @@ export const verifyJWTToken = async (token: string) => {
 };
 
 export const isJWTTokenExpired = async (token: string) => {
+  console.log(token);
   if (!token) return false;
   try {
     const { payload } = await verifyJWTToken(token);
