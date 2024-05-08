@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
+import { verifyJWTToken } from "@/lib/helper/route.helper";
 
 export async function middleware(request: NextRequest) {
   try {
@@ -10,11 +11,7 @@ export async function middleware(request: NextRequest) {
       throw new Error("JWT token not found");
     }
 
-    const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
-
-    const { payload } = await jwtVerify(token.value, secret, {
-      algorithms: ["HS256"],
-    });
+    const { payload } = await verifyJWTToken(token.value);
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
     if (payload?._id && payload?.communityId) {
@@ -48,3 +45,11 @@ export const config = {
     "/api/tasks/:path*",
   ],
 };
+// export const config = {
+//   matcher: [
+//     "/api/users/:path*",
+//     "/api/communities/:path*",
+//     "/api/workspaces/:path*",
+//     "/api/tasks/:path*",
+//   ],
+// };

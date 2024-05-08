@@ -3,7 +3,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 export async function POST(request: Request) {
-  // cookies().delete("jwt");
-  console.log(cookies().getAll());
-  return NextResponse.json({ message: cookies().get("jwt") }, { status: 200 });
+  const res = NextResponse.next();
+  res.cookies.set({
+    name: "jwt",
+    value: "",
+    httpOnly: true,
+  });
+  return res;
 }

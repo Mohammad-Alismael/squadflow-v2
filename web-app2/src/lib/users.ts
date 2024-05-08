@@ -5,6 +5,7 @@ import { IUser } from "@/utils/@types/user";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import CustomError from "@/utils/CustomError";
 const dbName = "mobile-app";
 
 // Initialize MongoDB client
@@ -40,6 +41,7 @@ function generateAccessToken(user: User) {
   return jwt.sign(
     {
       _id: user._id,
+      username: user.username,
       email: user.email,
       communityId: user["_doc"].communityId,
       photoURL: user.photoURL,
@@ -55,12 +57,12 @@ async function login(username: string, password: string) {
   try {
     const user = await User.findOne({ username });
     if (!user) {
-      throw new Error("user not found");
+      throw new CustomError("user not found", 401);
     }
     const passwordsMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordsMatch) {
-      throw new Error("incorrect user name or password");
+      throw new CustomError("incorrect user name or password", 401);
     }
     cookies().set({
       name: "jwt",

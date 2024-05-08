@@ -3,6 +3,10 @@ import logo from "../../public/squadflow-v2-logo.png";
 import Link from "next/link";
 import { linkType } from "@/utils/@types/types";
 import SidebarLink from "@/components/SidearLink";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import clsx from "clsx";
+import SidebarLogoutButton from "@/components/SidebarLogoutButton";
 
 const links: linkType[] = [
   { label: "Dashboard", icon: "Grid", link: "/dashboard" },
@@ -32,15 +36,7 @@ const Sidebar = () => {
           <SidebarLink key={i} link={link} />
         ))}
       </div>
-      <div className="w-full absolute bottom-2 left-0 border-t-2 p-2">
-        <SidebarLink
-          link={{
-            label: "Logout",
-            icon: "LogOut",
-            link: "/logout",
-          }}
-        />
-      </div>
+      <SidebarLogoutButton />
     </div>
   );
 };

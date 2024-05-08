@@ -16,15 +16,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import HeaderWithLogo from "@/components/HeaderWithLogo";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Terminal } from "lucide-react";
+import CustomButton from "@/components/CustomButton";
 
 export default function AuthForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmitLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     try {
@@ -35,15 +39,43 @@ export default function AuthForm() {
         password,
         redirect: false,
       })) as SignInResponse;
-
-      if (res.error) {
+      if (res.status === 401) {
         setError("Invalid Credentials");
         return;
       }
 
-      router.replace("dashboard");
+      if (res.ok) {
+        router.replace("dashboard");
+        setError("");
+      }
     } catch (error) {
-      console.log(error);
+      console.log(error.value);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleSubmitSignup = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      console.log({ username, password });
+      const res = (await SignUp("credentials", {
+        username,
+        password,
+        redirect: false,
+      })) as SignInResponse;
+      if (res.status === 401) {
+        setError("Invalid Credentials");
+        return;
+      }
+
+      if (res.ok) {
+        router.replace("dashboard");
+        setError("");
+      }
+    } catch (error) {
+      console.log(error.value);
     } finally {
       setLoading(false);
     }
@@ -66,6 +98,15 @@ export default function AuthForm() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
+              {error !== "" && (
+                <Alert variant="destructive">
+                  <Terminal className="h-4 w-4" />
+                  <AlertTitle>Invalid Credentials</AlertTitle>
+                  <AlertDescription>
+                    your credentials aren't correct, please try again
+                  </AlertDescription>
+                </Alert>
+              )}
               <div className="space-y-1">
                 <Label htmlFor="username">Username</Label>
                 <Input
@@ -82,13 +123,11 @@ export default function AuthForm() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button
-                className="bg-green-800 w-full capitalize"
-                onClick={handleSubmit}
-                disabled={loading}
-              >
-                login
-              </Button>
+              <CustomButton
+                onClick={handleSubmitLogin}
+                loading={loading}
+                title="submit"
+              />
             </CardFooter>
           </Card>
         </TabsContent>

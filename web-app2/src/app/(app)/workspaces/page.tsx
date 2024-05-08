@@ -5,9 +5,11 @@ import Image from "next/image";
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
 import Workspace from "@/app/(app)/workspaces/components/Workspace";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 const fetchWorkspaces = async () => {
   const res = await fetch("http://localhost:3000/api/workspaces", {
-    method: "POST",
+    method: "GET",
+    headers: { Cookie: cookies().toString() },
     cache: "no-cache",
   });
   if (res.ok) {
@@ -16,7 +18,7 @@ const fetchWorkspaces = async () => {
   return [];
 };
 async function Page() {
-  const data = await fetchWorkspaces();
+  const data: IWorkspace[] = await fetchWorkspaces();
   console.log(data);
   return (
     <div className="h-full flex flex-col">
@@ -29,14 +31,11 @@ async function Page() {
       <div className="flex-grow">
         <Header />
         <div className="py-4 h-[91%] grid grid-cols-4 grid-rows-2 gap-4 overflow-y-auto">
-          <Workspace />
-          <Workspace />
-          <Workspace />
-          <Workspace />
-          <Workspace />
-          <Workspace />
+          {data.map((val) => {
+            return <Workspace data={val} key={val.id} />;
+          })}
         </div>
-        {/*<NoWorkspacesFound />*/}
+        {!!data.length && <NoWorkspacesFound />}
       </div>
     </div>
   );

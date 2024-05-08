@@ -8,14 +8,17 @@ import TodayTasksDeadlines from "@/app/(app)/dashboard/components/TodayTasksDead
 import AssignedTasks from "@/app/(app)/dashboard/components/AssignedTasks";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
+import { cookies } from "next/headers";
+import { verifyJWTToken } from "@/lib/helper/route.helper";
 
 export default async function Dashboard() {
-  const session = await getServerSession(authOptions);
+  const cookie = cookies().get("jwt");
+  const { payload } = await verifyJWTToken(cookie?.value);
   return (
     <div className="h-full flex flex-col">
       <Navbar>
         <div>
-          <p className="text-2xl">Hello, mohammad alismael</p>
+          <p className="text-2xl">Hello, {payload.username}</p>
           <p className="text-sm opacity-50">never try to give up.</p>
         </div>
       </Navbar>
