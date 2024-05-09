@@ -29,10 +29,11 @@ export default function AuthForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+  const [tab, setTab] = useState("login");
 
   const handleSubmitLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
+    setTab("login");
     try {
       setLoading(true);
       setError("");
@@ -58,7 +59,7 @@ export default function AuthForm() {
   };
   const handleSubmitSignup = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
+    setTab("signup");
     try {
       setError("");
       setLoading(true);
@@ -76,12 +77,12 @@ export default function AuthForm() {
   return (
     <div>
       <HeaderWithLogo />
-      <Tabs defaultValue="account" className="w-[400px]">
+      <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">Login</TabsTrigger>
+          <TabsTrigger value="login">Login</TabsTrigger>
           <TabsTrigger value="signup">Signup</TabsTrigger>
         </TabsList>
-        <TabsContent value="account">
+        <TabsContent value="login">
           <Card className="bg-white">
             <CardHeader>
               <CardTitle>Account</CardTitle>
@@ -91,7 +92,7 @@ export default function AuthForm() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              {error !== "" && (
+              {error !== "" && tab === "login" && (
                 <Alert variant="destructive">
                   <Terminal className="h-4 w-4" />
                   <AlertTitle>Invalid Credentials</AlertTitle>
@@ -135,7 +136,7 @@ export default function AuthForm() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              {success && (
+              {success && tab === "signup" && (
                 <Alert className="border-green-600">
                   <Terminal className="h-4 w-4" />
                   <AlertTitle className="capitalize text-green-600">
@@ -146,7 +147,7 @@ export default function AuthForm() {
                   </AlertDescription>
                 </Alert>
               )}
-              {error !== "" && (
+              {error !== "" && tab === "signup" && (
                 <Alert variant="destructive">
                   <Terminal className="h-4 w-4" />
                   <AlertTitle>Invalid Credentials</AlertTitle>
@@ -179,12 +180,11 @@ export default function AuthForm() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button
-                className="bg-green-800 w-full capitalize"
+              <CustomButton
                 onClick={handleSubmitSignup}
-              >
-                sign up
-              </Button>
+                loading={loading}
+                title="sign up"
+              />
             </CardFooter>
           </Card>
         </TabsContent>
