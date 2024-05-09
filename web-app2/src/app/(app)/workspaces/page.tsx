@@ -1,25 +1,15 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "@/app/(app)/workspaces/components/Header";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
-import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
-import Workspace from "@/app/(app)/workspaces/components/Workspace";
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-const fetchWorkspaces = async () => {
-  const res = await fetch("http://localhost:3000/api/workspaces", {
-    method: "GET",
-    headers: { Cookie: cookies().toString() },
-    cache: "no-cache",
-  });
-  if (res.ok) {
-    return res.json();
-  }
-  return [];
-};
-async function Page() {
-  const data: IWorkspace[] = await fetchWorkspaces();
-  console.log(data);
+import WorkspacesContainer from "./components/WorkspacesContainer";
+import WorkspaceContainerSkeleton from "@/app/(app)/workspaces/components/WorkspaceContainerSkeleton";
+
+async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) {
+  console.log({ view: searchParams["view"] });
   return (
     <div className="h-full flex flex-col">
       <Navbar>
@@ -30,12 +20,9 @@ async function Page() {
       </Navbar>
       <div className="flex-grow">
         <Header />
-        {data.length === 0 && <NoWorkspacesFound />}
-        <div className="py-4 h-[91%] grid grid-cols-4 grid-rows-2 gap-4 overflow-y-auto">
-          {data.map((val) => {
-            return <Workspace data={val} key={val.id} />;
-          })}
-        </div>
+        <Suspense fallback={<WorkspaceContainerSkeleton />}>
+          <WorkspacesContainer viewType={searchParams["view"]} />
+        </Suspense>
       </div>
     </div>
   );

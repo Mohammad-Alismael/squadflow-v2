@@ -1,0 +1,44 @@
+import React from "react";
+import Workspace from "@/app/(app)/workspaces/components/Workspace";
+import { cookies } from "next/headers";
+import WorkspaceSkeleton from "@/app/(app)/workspaces/components/WorkspaceSkeleton";
+import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
+import WorkspaceList from "@/app/(app)/workspaces/components/WorkspaceList";
+const fetchWorkspaces = async () => {
+  const res = await fetch("http://localhost:3000/api/workspaces", {
+    method: "GET",
+    headers: { Cookie: cookies().toString() },
+    cache: "no-cache",
+  });
+  if (res.ok) {
+    return res.json();
+  }
+  return [];
+};
+
+async function WorkspacesContainer({ viewType }: { viewType?: string }) {
+  console.log({ viewType });
+  const data: IWorkspace[] = await fetchWorkspaces();
+  console.log(data);
+  return (
+    <>
+      {data.length === 0 && <NoWorkspacesFound />}
+      {viewType && viewType === "list" && (
+        <div className="py-4 w-full h-[91%] space-y-2">
+          {data.map((val) => {
+            return <WorkspaceList data={val} key={val._id} />;
+          })}
+        </div>
+      )}
+      {(!viewType || viewType === "cards") && (
+        <div className="py-4 w-full h-[91%] grid grid-cols-4 grid-rows-2 gap-4 overflow-y-auto">
+          {data.map((val) => {
+            return <Workspace data={val} key={val._id} />;
+          })}
+        </div>
+      )}
+    </>
+  );
+}
+
+export default WorkspacesContainer;

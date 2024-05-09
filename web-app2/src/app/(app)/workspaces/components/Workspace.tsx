@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 
 function Workspace({ data }: { data: IWorkspace }) {
   return (
@@ -19,19 +20,7 @@ function Workspace({ data }: { data: IWorkspace }) {
       <Card className="">
         <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
           <CardTitle className="text-xl">{data.title}</CardTitle>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost">
-                <EllipsisVerticalIcon className="h-5 w-5" />
-                <span className="sr-only">More options</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <WorkspaceMenu />
         </CardHeader>
         <div className="relative h-[160px] overflow-hidden rounded-t-lg">
           <Image
@@ -47,7 +36,6 @@ function Workspace({ data }: { data: IWorkspace }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
         </div>
-
         <CardContent>
           <div className="space-y-2">
             <div className="mt-4 flex items-center gap-2">
