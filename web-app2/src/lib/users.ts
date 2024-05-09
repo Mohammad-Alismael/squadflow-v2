@@ -97,10 +97,21 @@ async function loginWithoutCookie(username: string, password: string) {
 }
 
 // Read operation for users
-async function findUser(username: string) {
+async function findUserByUsername(username: string) {
   await init();
   try {
     const user = await User.findOne({ username }).select("_id");
+    return user;
+  } catch (error) {
+    console.error("Error finding user:", error);
+    throw error;
+  }
+}
+
+async function findUserByEmail(email: string) {
+  await init();
+  try {
+    const user = await User.findOne({ email }).select("_id");
     return user;
   } catch (error) {
     console.error("Error finding user:", error);
@@ -171,7 +182,8 @@ export {
   login,
   loginWithoutCookie,
   listUsers,
-  findUser,
+  findUserByUsername,
+  findUserByEmail,
   updateUserCommunityId,
   updateUserToken,
   checkUserIdsExist,

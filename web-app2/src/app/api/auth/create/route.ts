@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { createUser, findUser } from "@/lib/users";
+import { createUser, findUserByUsername } from "@/lib/users";
 import { z } from "zod";
 const postSchema = z.object({
   username: z.string().refine((username) => typeof username === "string", {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     });
   }
   try {
-    const foundUser = await findUser(username);
+    const foundUser = await findUserByUsername(username);
     if (foundUser)
       return NextResponse.json(
         { message: "User already exists." },

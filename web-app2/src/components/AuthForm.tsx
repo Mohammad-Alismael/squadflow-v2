@@ -19,6 +19,7 @@ import HeaderWithLogo from "@/components/HeaderWithLogo";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Terminal } from "lucide-react";
 import CustomButton from "@/components/CustomButton";
+import { signup } from "@/app/auth/actions";
 
 export default function AuthForm() {
   const [username, setUsername] = useState("");
@@ -26,6 +27,7 @@ export default function AuthForm() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
 
   const handleSubmitLogin = async (e: { preventDefault: () => void }) => {
@@ -58,23 +60,14 @@ export default function AuthForm() {
     e.preventDefault();
 
     try {
+      setError("");
       setLoading(true);
-      console.log({ username, password });
-      const res = (await SignUp("credentials", {
-        username,
-        password,
-        redirect: false,
-      })) as SignInResponse;
-      if (res.status === 401) {
-        setError("Invalid Credentials");
-        return;
-      }
-
-      if (res.ok) {
-        router.replace("dashboard");
-        setError("");
-      }
+      setSuccess(false);
+      await signup(username, email, password);
+      setError("");
+      setSuccess(true);
     } catch (error) {
+      setError(error.message);
       console.log(error.value);
     } finally {
       setLoading(false);
@@ -142,21 +135,54 @@ export default function AuthForm() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
+              {success && (
+                <Alert className="border-green-600">
+                  <Terminal className="h-4 w-4" />
+                  <AlertTitle className="capitalize text-green-600">
+                    created account successfully.
+                  </AlertTitle>
+                  <AlertDescription>
+                    now, you can login with your account.
+                  </AlertDescription>
+                </Alert>
+              )}
+              {error !== "" && (
+                <Alert variant="destructive">
+                  <Terminal className="h-4 w-4" />
+                  <AlertTitle>Invalid Credentials</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
               <div className="space-y-1">
                 <Label htmlFor="username">Username</Label>
-                <Input id="username" type="text" />
+                <Input
+                  id="username"
+                  type="text"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" />
+                <Input
+                  id="email"
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" />
+                <Input
+                  id="password"
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="bg-green-800 w-full capitalize">
+              <Button
+                className="bg-green-800 w-full capitalize"
+                onClick={handleSubmitSignup}
+              >
                 sign up
               </Button>
             </CardFooter>
