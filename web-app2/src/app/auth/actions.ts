@@ -9,7 +9,7 @@ export async function signup(
   password: string
 ) {
   const foundUser = await findUserByUsername(username);
-  if (foundUser) throw Error("usenrame already exists.");
+  if (foundUser) throw Error("username already exists.");
 
   const foundUser2 = await findUserByEmail(email);
   if (foundUser2) throw Error("email already exists.");
