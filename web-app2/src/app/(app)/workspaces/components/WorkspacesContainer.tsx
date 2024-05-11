@@ -5,7 +5,7 @@ import WorkspaceSkeleton from "@/app/(app)/workspaces/components/WorkspaceSkelet
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
 import WorkspaceList from "@/app/(app)/workspaces/components/WorkspaceList";
 const fetchWorkspaces = async () => {
-  const res = await fetch("http://localhost:3000/api/workspaces", {
+  const res = await fetch(`${process.env.URL_API_ROUTE}/api/workspaces`, {
     method: "GET",
     headers: { Cookie: cookies().toString() },
     cache: "no-cache",
@@ -17,9 +17,7 @@ const fetchWorkspaces = async () => {
 };
 
 async function WorkspacesContainer({ viewType }: { viewType?: string }) {
-  console.log({ viewType });
   const data: IWorkspace[] = await fetchWorkspaces();
-  console.log(data);
   return (
     <>
       {data.length === 0 && <NoWorkspacesFound />}

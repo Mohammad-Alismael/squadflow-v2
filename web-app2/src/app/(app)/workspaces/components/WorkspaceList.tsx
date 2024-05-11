@@ -8,7 +8,7 @@ function WorkspaceList({ data }: { data: IWorkspace }) {
   return (
     <div className="bg-white px-4 py-2 border-2 rounded flex items-center justify-between">
       <p>{data.title}</p>
-      <WorkspaceMenu />
+      <WorkspaceMenu workspaceId={data._id as string} />
     </div>
   );
 }

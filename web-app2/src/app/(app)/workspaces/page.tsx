@@ -9,7 +9,6 @@ async function Page({
 }: {
   searchParams: { [key: string]: string };
 }) {
-  console.log({ view: searchParams["view"] });
   return (
     <div className="h-full flex flex-col">
       <Navbar>

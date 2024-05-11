@@ -20,7 +20,7 @@ function Workspace({ data }: { data: IWorkspace }) {
       <Card className="">
         <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
           <CardTitle className="text-xl">{data.title}</CardTitle>
-          <WorkspaceMenu />
+          <WorkspaceMenu workspaceId={data._id as string} />
         </CardHeader>
         <div className="relative h-[160px] overflow-hidden rounded-t-lg">
           <Image

@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -26,7 +31,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { handleCreateWorkspace } from "@/app/(app)/workspaces/actions";
 
-function CreateWorkspaceDialog({ children }: { children: ReactNode }) {
+function UpdateWorkspaceDialog() {
   const formSchema = z.object({
     title: z.string().min(4).max(50),
     participants: z.array(
@@ -47,20 +52,26 @@ function CreateWorkspaceDialog({ children }: { children: ReactNode }) {
       participants: [],
     },
   });
-  const [isLoading, setIsLoading] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
     const res = await handleCreateWorkspace(values);
-    setIsLoading(false);
     console.log(res);
     console.log(values);
   }
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="">
+      <ContextMenu>
+        <ContextMenuTrigger className="p-1">Right click</ContextMenuTrigger>
+        <ContextMenuContent>
+          <DialogTrigger asChild>
+            <ContextMenuItem>
+              <span>Edit</span>
+            </ContextMenuItem>
+          </DialogTrigger>
+        </ContextMenuContent>
+      </ContextMenu>
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>create workspace</DialogTitle>
+          <DialogTitle className="capitalize">update workspace</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription>
@@ -80,9 +91,7 @@ function CreateWorkspaceDialog({ children }: { children: ReactNode }) {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading} className="bg-green-700">
-              {isLoading ? "loading ..." : "submit"}
-            </Button>
+            <Button type="submit">Submit</Button>
           </form>
         </Form>
       </DialogContent>
@@ -90,4 +99,4 @@ function CreateWorkspaceDialog({ children }: { children: ReactNode }) {
   );
 }
 
-export default CreateWorkspaceDialog;
+export default UpdateWorkspaceDialog;

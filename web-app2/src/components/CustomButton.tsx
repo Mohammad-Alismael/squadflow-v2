@@ -1,17 +1,18 @@
 "use client";
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { Button } from "@/components/ui/button";
 type PropType = {
-  onClick: ((event: MouseEvent<T>) => void) | undefined;
+  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
   loading: boolean;
   title: string;
 };
-function CustomButton({ title, loading, onClick }: PropType) {
+function CustomButton({ title, loading, onClick, ...props }: PropType) {
   return (
     <Button
       className="bg-green-800 w-full capitalize"
       onClick={onClick}
       disabled={loading}
+      {...props}
     >
       {!loading ? (
         title

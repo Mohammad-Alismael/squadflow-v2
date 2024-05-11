@@ -27,7 +27,10 @@ const links: linkType[] = [
 const Sidebar = () => {
   return (
     <div className="relative bg-white float-left h-full w-1/6 p-5">
-      <Link className="flex items-center gap-2" href="/dashboard">
+      <Link
+        className="flex items-center gap-2 border-b-2 pb-2"
+        href="/dashboard"
+      >
         <Image src={logo} alt="logo" priority width={50} height={50} />
         <span className="text-2xl font-bold capitalize">squadflow</span>
       </Link>
