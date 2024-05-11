@@ -34,15 +34,16 @@ export const verifyJWTToken = async (token: string) => {
 };
 
 export const isJWTTokenExpired = async (token: string) => {
-  console.log(token);
-  if (!token) return false;
+  if (!token) return true;
   try {
     const { payload } = await verifyJWTToken(token);
+    if (!payload) return true;
     const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
-    return currentTime > payload.exp;
+    return currentTime > payload?.exp;
   } catch (error) {
     // Handle error if JWT verification fails
     console.error("Error verifying JWT token:", error);
-    throw error; // Re-throw the error to be handled by the caller
+    // throw error; // Re-throw the error to be handled by the caller
+    return true;
   }
 };
