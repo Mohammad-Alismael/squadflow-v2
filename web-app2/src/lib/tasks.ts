@@ -61,6 +61,14 @@ async function getTasksByWorkspaceId(workspaceId: ObjectId) {
   return Task.find({ workspace: workspaceId });
 }
 
+async function getTasksByWorkspaceIdAndColumnId(
+  workspaceId: ObjectId,
+  columnId: ObjectId
+) {
+  await init();
+  return Task.find({ $and: [{ workspace: workspaceId }, { columnId }] });
+}
+
 async function deleteTasksByWorkspaceId(workspaceId: ObjectId) {
   await init();
   const { deletedCount } = await Task.deleteMany({ workspace: workspaceId });
@@ -143,4 +151,5 @@ export {
   getCommentsTaskId,
   deleteTasksByWorkspaceId,
   getTasksByWorkspaceId,
+  getTasksByWorkspaceIdAndColumnId,
 };

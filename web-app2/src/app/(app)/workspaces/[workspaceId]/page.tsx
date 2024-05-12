@@ -2,9 +2,10 @@ import React, { Suspense } from "react";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/Column";
 import { cookies } from "next/headers";
 import WorkspaceNavbar from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceNavbar";
-const fetchTasksForWorkspace = async (workspaceId: string) => {
+
+const fetchWorkspace = async (workspaceId: string) => {
   const res = await fetch(
-    `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}/tasks`,
+    `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}`,
     {
       method: "GET",
       headers: { Cookie: cookies().toString() },
@@ -14,20 +15,27 @@ const fetchTasksForWorkspace = async (workspaceId: string) => {
   if (res.ok) {
     return res.json();
   }
-  return [];
+  return null;
 };
 
 async function Page({ params }: { params: { workspaceId: string } }) {
-  const data = await fetchTasksForWorkspace(params.workspaceId);
+  const workspaceData = fetchWorkspace(params.workspaceId);
+  const [workspace] = await Promise.all([workspaceData]);
   return (
     <div className="h-full flex flex-col">
       <Suspense fallback={<p>loading...</p>}>
         <WorkspaceNavbar workspaceId={params.workspaceId} />
       </Suspense>
-      <div>
-        <Column cards={data} />
-        <Column cards={data} />
-        <Column cards={data} />
+      <div className="h-full flex flex-row gap-4">
+        {workspace.columns.map((column) => {
+          return (
+            <Column
+              key={column._id}
+              workspaceId={params.workspaceId}
+              data={column}
+            />
+          );
+        })}
       </div>
     </div>
   );

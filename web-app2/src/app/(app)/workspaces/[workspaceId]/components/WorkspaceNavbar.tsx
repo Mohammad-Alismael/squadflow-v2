@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Navbar from "@/components/Navbar";
 import { cookies } from "next/headers";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const fetchWorkspace = async (workspaceId: string) => {
   const res = await fetch(
@@ -20,12 +21,18 @@ const fetchWorkspace = async (workspaceId: string) => {
 
 async function WorkspaceNavbar({ workspaceId }: { workspaceId: string }) {
   const data: IWorkspace = await fetchWorkspace(workspaceId);
-  console.log("workspace", data);
   return (
     <Navbar>
       <div>
         <p className="text-2xl">{data.title}</p>
-        <p className="text-sm opacity-50">never try to give up.</p>
+        <div className="flex items-center gap-2">
+          {data.participants.map((participant) => (
+            <Avatar>
+              <AvatarImage src="/avatars/01.png" />
+              <AvatarFallback>{participant.user}</AvatarFallback>
+            </Avatar>
+          ))}
+        </div>
       </div>
     </Navbar>
   );

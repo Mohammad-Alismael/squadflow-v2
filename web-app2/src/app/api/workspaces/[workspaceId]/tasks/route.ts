@@ -11,15 +11,27 @@ import {
   getSchema,
   patchSchema,
 } from "@/app/api/workspaces/[workspaceId]/labels/schema";
-import { getTasksByWorkspaceId } from "@/lib/tasks";
+import {
+  getTasksByWorkspaceId,
+  getTasksByWorkspaceIdAndColumnId,
+} from "@/lib/tasks";
+import { ObjectId } from "mongodb";
 
 export async function GET(request: Request, context: any) {
+  const url = new URL(request.url);
+  const columnId = url.searchParams.get("columnId") as string;
+
   const { params } = await context;
   const { workspaceId } = params;
   validateSchema(getSchema, { workspaceId });
   try {
     await getWorkspaceById(workspaceId);
-    const result = await getTasksByWorkspaceId(workspaceId);
+    const result = columnId
+      ? await getTasksByWorkspaceIdAndColumnId(
+          workspaceId,
+          new ObjectId(columnId)
+        )
+      : await getTasksByWorkspaceId(workspaceId);
     return NextResponse.json(result, { status: 200 });
   } catch (e) {
     return NextResponse.json(

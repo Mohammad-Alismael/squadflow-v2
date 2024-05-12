@@ -3,9 +3,6 @@ import logo from "../../public/squadflow-v2-logo.png";
 import Link from "next/link";
 import { linkType } from "@/utils/@types/types";
 import SidebarLink from "@/components/SidearLink";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import clsx from "clsx";
 import SidebarLogoutButton from "@/components/SidebarLogoutButton";
 
 const links: linkType[] = [
@@ -26,15 +23,12 @@ const links: linkType[] = [
 
 const Sidebar = () => {
   return (
-    <div className="relative bg-white float-left h-full w-1/6 p-5">
-      <Link
-        className="flex items-center gap-2 border-b-2 pb-2"
-        href="/dashboard"
-      >
+    <div className="relative bg-white float-left h-full w-1/6 pl-4 py-5">
+      <Link className="flex items-center gap-4" href="/dashboard">
         <Image src={logo} alt="logo" priority width={50} height={50} />
         <span className="text-2xl font-bold capitalize">squadflow</span>
       </Link>
-      <div className="space-y-4 mt-8">
+      <div className="space-y-2 mt-6">
         {links.map((link, i) => (
           <SidebarLink key={i} link={link} />
         ))}

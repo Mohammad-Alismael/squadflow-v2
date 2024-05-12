@@ -22,6 +22,7 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const cookie = cookies().get("jwt");
+  console.log({ cookie });
   const isExpired = cookie?.value
     ? await isJWTTokenExpired(cookie?.value)
     : false;

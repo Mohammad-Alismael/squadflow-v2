@@ -36,7 +36,10 @@ const SidebarLink = ({ link }: { link: linkType }) => {
   return (
     <Link
       href={link.link}
-      className="p-2 flex items-center hover:text-green-700 transition duration-200 ease-in-out"
+      className={clsx(
+        "w-full p-2 flex items-center hover:text-green-700 transition duration-200 ease-in-out",
+        isActive && " border-r-2 border-r-green-700"
+      )}
     >
       <IconComponent
         size={28}
