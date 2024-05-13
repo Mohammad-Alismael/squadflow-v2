@@ -24,14 +24,15 @@ async function WorkspaceNavbar({ workspaceId }: { workspaceId: string }) {
   return (
     <Navbar>
       <div>
-        <p className="text-2xl">{data.title}</p>
+        <p className="text-2xl">{data?.title}</p>
         <div className="flex items-center gap-2">
-          {data.participants.map((participant) => (
-            <Avatar>
-              <AvatarImage src="/avatars/01.png" />
-              <AvatarFallback>{participant.user}</AvatarFallback>
-            </Avatar>
-          ))}
+          {data &&
+            data?.participants.map((participant) => (
+              <Avatar>
+                <AvatarImage src="/avatars/01.png" />
+                <AvatarFallback>{participant.user}</AvatarFallback>
+              </Avatar>
+            ))}
         </div>
       </div>
     </Navbar>

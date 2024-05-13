@@ -64,18 +64,6 @@ function Page(props) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input defaultValue="Pedro Duarte" id="name" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="username">Username</Label>
-                <Input defaultValue="@peduarte" id="username" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="email">Email</Label>
-                <Input defaultValue="pedro@example.com" id="email" />
-              </div>
-              <div className="space-y-1">
                 <Label htmlFor="profile-picture">Profile Picture</Label>
                 <div className="flex items-center gap-4">
                   <Avatar className="h-12 w-12 border">
@@ -87,6 +75,19 @@ function Page(props) {
                     Upload new photo
                   </Button>
                 </div>
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="name">Name</Label>
+                <Input defaultValue="Pedro Duarte" id="name" />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="username">Username</Label>
+                <Input defaultValue="@peduarte" id="username" />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="email">Email</Label>
+                <Input defaultValue="pedro@example.com" id="email" />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="timezone">Timezone</Label>

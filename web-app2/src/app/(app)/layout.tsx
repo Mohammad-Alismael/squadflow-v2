@@ -22,11 +22,20 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const cookie = cookies().get("jwt");
-  console.log({ cookie });
-  const isExpired = cookie?.value
-    ? await isJWTTokenExpired(cookie?.value)
-    : false;
-  if (!cookie?.value || cookie?.value === "" || isExpired) redirect("/auth");
+  if (!cookie?.value || cookie?.value === "") redirect("/auth");
+
+  if (!cookie || !cookie.value) {
+    // Redirect to the authentication route if the JWT token is missing or empty
+    redirect("/auth");
+  } else {
+    try {
+      // Verify the JWT token
+      await verifyJWTToken(cookie.value);
+    } catch (error) {
+      console.error("Error verifying JWT token:", error);
+      redirect("/auth");
+    }
+  }
   return (
     <div className="h-screen">
       <Sidebar />

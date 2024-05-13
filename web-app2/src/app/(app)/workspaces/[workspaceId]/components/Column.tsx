@@ -4,6 +4,7 @@ import { MoreVertical } from "react-feather";
 import { Button } from "@/components/ui/button";
 import { ITask } from "@/utils/@types/task";
 import { cookies } from "next/headers";
+import TaskDetailsDialog from "@/components/Dialogs/TaskDetailsDialog";
 const fetchTasksForColumnId = async (workspaceId: string, columnId: string) => {
   const res = await fetch(
     `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}/tasks?columnId=${columnId}`,
@@ -41,7 +42,11 @@ async function Column({
       </div>
       <div className="overflow-auto no-scrollbar">
         {tasks.map((task, i) => {
-          return <TaskCard key={task._id} data={task} />;
+          return (
+            <TaskDetailsDialog>
+              <TaskCard key={task._id} data={task} />
+            </TaskDetailsDialog>
+          );
         })}
       </div>
 
