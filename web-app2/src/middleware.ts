@@ -12,9 +12,10 @@ export async function middleware(request: NextRequest) {
     }
 
     const { payload } = await verifyJWTToken(token.value);
+    if (!payload?._id) console.log("_id not found");
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
-    if (payload?._id && payload?.communityId) {
+    if (payload?._id && payload?.communityId !== null) {
       requestHeaders.set("uid", <string>payload?._id);
       requestHeaders.set("cid", <string>payload?.communityId);
     } else
@@ -40,6 +41,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/api/users/:path*",
+    "/api/community/:path*",
     "/api/communities/:path*",
     "/api/workspaces/:path*",
     "/api/tasks/:path*",

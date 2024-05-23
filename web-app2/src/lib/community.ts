@@ -9,6 +9,8 @@ import {
   removeUserId,
   generateRandomId,
 } from "@/lib/helper/community.helper";
+import CustomError from "@/utils/CustomError";
+import { HttpStatusCode } from "@/utils/HttpStatusCode";
 
 async function init() {
   await connectMongoDB();
@@ -176,25 +178,24 @@ async function updateCommunityAdmin(
 
 async function getCommunityById(communityId: string) {
   await init();
-  try {
-    const result = (await Community.findById(new ObjectId(communityId))
-      .select("_id name code participants admin")
-      .populate({
-        path: "participants.user",
-        select: "_id username email joined_community_at",
-      })
-      .populate({
-        path: "admin",
-        select: "_id username email",
-      })
-      .exec()) as ICommunity;
+  const result = (await Community.findById(new ObjectId(communityId))
+    .select("_id name code participants admin")
+    .populate({
+      path: "participants.user",
+      select: "_id username email joined_community_at",
+    })
+    .populate({
+      path: "admin",
+      select: "_id username email",
+    })
+    .exec()) as ICommunity;
 
-    if (!result) throw new Error("communities Id doesn't exists");
-    return result;
-  } catch (error) {
-    console.error("Error creating Community:", error);
-    throw error;
-  }
+  if (!result)
+    throw new CustomError(
+      "communities Id doesn't exists",
+      HttpStatusCode.NOT_FOUND
+    );
+  return result;
 }
 
 async function updateCommunity(community: ICommunity) {
