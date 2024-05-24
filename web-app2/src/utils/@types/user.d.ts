@@ -6,3 +6,9 @@ export interface IUser {
   photoURL: string;
   communityId: string;
 }
+
+export interface PopulatedUser {
+  _id: string;
+  username: string;
+  email: string;
+}

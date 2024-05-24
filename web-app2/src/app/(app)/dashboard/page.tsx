@@ -18,7 +18,7 @@ export default async function Dashboard() {
     <div className="h-full flex flex-col">
       <Navbar>
         <div>
-          <p className="text-2xl">Hello, {payload.username}</p>
+          <p className="text-2xl">Hello, {payload?.username}</p>
           <p className="text-sm opacity-50">never try to give up.</p>
         </div>
       </Navbar>

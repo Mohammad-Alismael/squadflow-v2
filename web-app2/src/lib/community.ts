@@ -49,7 +49,7 @@ async function findCommunityByCode(code: string) {
     const community = await Community.findOne({ code });
 
     if (!community) {
-      throw new Error("Code doesn't exist");
+      throw new CustomError("Code doesn't exist", HttpStatusCode.NOT_FOUND);
     }
     return community;
   } catch (error) {
@@ -178,7 +178,7 @@ async function updateCommunityAdmin(
 
 async function getCommunityById(communityId: string) {
   await init();
-  const result = (await Community.findById(new ObjectId(communityId))
+  const result = await Community.findById(new ObjectId(communityId))
     .select("_id name code participants admin")
     .populate({
       path: "participants.user",
@@ -188,7 +188,7 @@ async function getCommunityById(communityId: string) {
       path: "admin",
       select: "_id username email",
     })
-    .exec()) as ICommunity;
+    .exec();
 
   if (!result)
     throw new CustomError(
