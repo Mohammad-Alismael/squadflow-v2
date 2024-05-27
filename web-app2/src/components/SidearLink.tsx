@@ -50,7 +50,7 @@ const SidebarLink = ({ link }: { link: linkType }) => {
       />
       <span
         className={clsx(
-          "px-4 hover:text-green-700 transition duration-200 ease-in-out",
+          "px-4 text-gray-700 hover:text-green-700 transition duration-200 ease-in-out",
           isActive && "text-green-700"
         )}
       >

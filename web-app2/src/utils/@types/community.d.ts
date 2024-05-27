@@ -11,6 +11,12 @@ export interface ICommunity extends Document {
   }>; // Array of references to User schema or ObjectId
 }
 
+export interface Participant {
+  _id: Schema.Types.ObjectId;
+  user: Schema.Types.ObjectId;
+  joined_at: Date;
+}
+
 export interface CommunityResponse {
   _id: string;
   name: string;

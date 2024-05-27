@@ -2,17 +2,42 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
+import { redirect } from "next/navigation";
+import { handleJwtValidation } from "@/utils/helper";
 
 export async function middleware(request: NextRequest) {
+  console.log("middleware running on", request.url);
+  // if (request.nextUrl.pathname.startsWith("/")) {
+  //   return NextResponse.next();
+  // }
+  if (request.nextUrl.pathname.startsWith("/auth")) {
+    const res = await handleJwtValidation();
+    console.log({ res });
+    if (res) return NextResponse.redirect(new URL("/dashboard", request.url));
+    // if (res) return redirect("/dashboard");
+    return NextResponse.next();
+  }
+  if (request.nextUrl.pathname.startsWith("/api/auth/")) {
+    return NextResponse.next();
+  }
+  if (request.nextUrl.pathname.startsWith("/logout")) {
+    return NextResponse.next();
+  }
+  const isFromApi = request.nextUrl.pathname.startsWith("/api");
+  console.log({ isFromApi });
   try {
     const token = cookies().get("jwt");
-    // i can't get cookies while hitting api from nextjs frontend
-    if (!token) {
+
+    if (!token && isFromApi) {
       throw new Error("JWT token not found");
     }
 
+    if (!token) {
+      // return NextResponse.redirect(new URL("/dashboard", request.url));
+      return redirect("/dashboard");
+    }
+
     const { payload } = await verifyJWTToken(token.value);
-    if (!payload?._id) console.log("_id not found");
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
     if (payload?._id && payload?.communityId !== null) {
@@ -32,26 +57,20 @@ export async function middleware(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error verifying JWT token:", error);
-    // Handle the error, you might want to send a response indicating authentication failure
-    return NextResponse.json({ message: error.message }, { status: 400 });
+    console.error("Error verifying JWT token from middleware:", error.name);
+    if (isFromApi)
+      return NextResponse.json({ message: error.message }, { status: 400 });
+    else return NextResponse.redirect(new URL("/auth", request.url));
   }
 }
 
 export const config = {
   matcher: [
-    "/api/users/:path*",
-    "/api/community/:path*",
-    "/api/communities/:path*",
-    "/api/workspaces/:path*",
-    "/api/tasks/:path*",
+    /*
+     * Match all request paths except for the ones starting with:
+     * - static (static files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
 };
-// export const config = {
-//   matcher: [
-//     "/api/users/:path*",
-//     "/api/communities/:path*",
-//     "/api/workspaces/:path*",
-//     "/api/tasks/:path*",
-//   ],
-// };

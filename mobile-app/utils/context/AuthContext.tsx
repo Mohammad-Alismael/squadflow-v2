@@ -58,6 +58,7 @@ export const AuthProvider = ({ children }) => {
   ) => {
     try {
       await handleSignUp(email, username, password);
+      return true;
     } catch (error) {
       switch (error.code) {
         case "auth/email-already-in-use":
@@ -73,6 +74,9 @@ export const AuthProvider = ({ children }) => {
           alert("Something went wrong. Please try again later.");
           break;
       }
+      return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 

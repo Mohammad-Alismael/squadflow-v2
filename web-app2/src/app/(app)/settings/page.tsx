@@ -31,6 +31,7 @@ import {
   UsersIcon,
 } from "lucide-react";
 import CommunitySection from "@/app/(app)/settings/sections/CommunitySection";
+import GeneralSection from "@/app/(app)/settings/sections/GeneralSection";
 
 Page.propTypes = {};
 
@@ -70,48 +71,7 @@ function Page() {
                 Manage your general account settings.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-1">
-                <Label htmlFor="profile-picture">Profile Picture</Label>
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-12 w-12 border">
-                    <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
-                    <AvatarFallback>PD</AvatarFallback>
-                  </Avatar>
-                  <Button variant="outline">
-                    <UploadIcon className="mr-2 h-4 w-4" />
-                    Upload new photo
-                  </Button>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input defaultValue="Pedro Duarte" id="name" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="username">Username</Label>
-                <Input defaultValue="@peduarte" id="username" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="email">Email</Label>
-                <Input defaultValue="pedro@example.com" id="email" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="timezone">Timezone</Label>
-                <Select defaultValue="America/New_York">
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select timezone" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="America/New_York">New York</SelectItem>
-                    <SelectItem value="Europe/London">London</SelectItem>
-                    <SelectItem value="Asia/Tokyo">Tokyo</SelectItem>
-                    <SelectItem value="Australia/Sydney">Sydney</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
+            <GeneralSection />
             <CardFooter>
               <Button>
                 <CheckIcon className="mr-2 h-4 w-4" />

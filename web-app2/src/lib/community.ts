@@ -75,47 +75,47 @@ async function deleteCommunityByCode(code: string) {
 
 async function joinCommunityByCode(userId: string, code: string) {
   await init();
-  try {
-    const community = await Community.findOne({ code });
-
-    if (!community) {
-      throw new Error("Code doesn't exist");
-    }
-    const alreadyJoined = isUserIdInParticipantsList(
-      community.participants,
-      userId
+  const community = await Community.findOne({ code });
+  if (!community) {
+    throw new CustomError(
+      "community code doesn't exist",
+      HttpStatusCode.NOT_FOUND
     );
-
-    if (alreadyJoined) {
-      throw new Error("Already joined this community");
-    }
-
-    // Ensure userId is a valid ObjectId
-    const isValidObjectId = mongoose.Types.ObjectId.isValid(userId.trim());
-    if (!isValidObjectId) {
-      throw new Error("Invalid user ID");
-    }
-
-    // Convert userId to ObjectId
-    const userIdObjectId = new mongoose.Types.ObjectId(userId.trim());
-
-    const participantObject = {
-      user: userIdObjectId,
-      joined_at: Date.now(),
-    };
-
-    // Update the document using findOneAndUpdate and $push
-    const updatedCommunity = await Community.findOneAndUpdate(
-      { _id: community._id },
-      { $push: { participants: participantObject } },
-      { new: true } // Return the modified document
-    );
-
-    return updatedCommunity._id;
-  } catch (error) {
-    console.error("Error joining community:", error);
-    throw error;
   }
+  const alreadyJoined = isUserIdInParticipantsList(
+    community.participants,
+    userId
+  );
+
+  if (alreadyJoined) {
+    throw new CustomError(
+      "Already joined this community",
+      HttpStatusCode.CONFLICT
+    );
+  }
+
+  // Ensure userId is a valid ObjectId
+  const isValidObjectId = mongoose.Types.ObjectId.isValid(userId.trim());
+  if (!isValidObjectId) {
+    throw new CustomError("Invalid user ID", HttpStatusCode.NOT_FOUND);
+  }
+
+  // Convert userId to ObjectId
+  const userIdObjectId = new mongoose.Types.ObjectId(userId.trim());
+
+  const participantObject = {
+    user: userIdObjectId,
+    joined_at: Date.now(),
+  };
+
+  // Update the document using findOneAndUpdate and $push
+  const updatedCommunity = await Community.findOneAndUpdate(
+    { _id: community._id },
+    { $push: { participants: participantObject } },
+    { new: true } // Return the modified document
+  );
+
+  return updatedCommunity._id;
 }
 
 async function leaveCommunityForParticipants(
@@ -123,19 +123,22 @@ async function leaveCommunityForParticipants(
   userId: string,
   participants: ICommunity["participants"]
 ) {
-  // if the user id ins't an admin
+  const alreadyJoined = isUserIdInParticipantsList(participants, userId);
+  if (!alreadyJoined)
+    throw new CustomError("already left this community", HttpStatusCode.OK);
+  const newParticipants = removeUserId(participants, userId);
   await init();
   try {
-    const alreadyJoined = isUserIdInParticipantsList(participants, userId);
-    if (!alreadyJoined) throw new Error("already left this communities");
-    const newParticipants = removeUserId(participants, userId);
     await Community.updateOne(
       { _id: communityId },
       { participants: newParticipants }
     );
   } catch (error) {
     console.error("Error creating Community:", error);
-    throw error;
+    throw new CustomError(
+      "Error updating Community participants",
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 }
 

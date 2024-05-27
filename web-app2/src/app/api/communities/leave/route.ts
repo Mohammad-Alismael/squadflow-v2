@@ -20,21 +20,22 @@ export async function POST(request: Request) {
     const foundCommunity = await findCommunityByCode(code as string);
     const { _id, participants } = foundCommunity;
 
-    if (
-      isAdminUserId(foundCommunity.admin, userId as string) &&
-      isNoOneInParticipants(participants)
-    ) {
+    const isAdminUserId_ = isAdminUserId(
+      foundCommunity.admin,
+      userId as string
+    );
+
+    if (isAdminUserId_ && isNoOneInParticipants(participants)) {
       await deleteCommunityByCode(code as string);
       await deleteWorkspacesByCommunityId(_id);
       const user = await updateUserCommunityId(userId as string, ""); // reseting community id to empty string
       await updateUserToken(user);
       return NextResponse.json({
-        message: "deleted your community because no one joined your community",
+        message: "deleted your community, because no one joined your community",
       });
     }
 
-    if (isAdminUserId(foundCommunity.admin, userId as string))
-      await replaceAdminByTheOldestMember(_id, participants);
+    if (isAdminUserId_) await replaceAdminByTheOldestMember(_id, participants);
     else
       await leaveCommunityForParticipants(_id, userId as string, participants);
 
@@ -42,6 +43,6 @@ export async function POST(request: Request) {
     await updateUserToken(user);
     return NextResponse.json({ message: "success" });
   } catch (e) {
-    return NextResponse.json({ message: e.message });
+    return NextResponse.json({ message: e.message }, { status: e.statusCode });
   }
 }

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { Input, YStack, Text, XStack, Button } from "tamagui";
+import PropTypes from "prop-types";
 import { useAuth } from "../../utils/context/AuthContext";
 import ROUTES from "../../utils/routes";
+import { Button, Input, Text, XStack, YStack } from "tamagui";
 
-function LoginScreen({ route, navigation }) {
-  const { onLogin, isLoading } = useAuth();
+RegisterScreen.propTypes = {};
+
+function RegisterScreen({ route, navigation }) {
+  const { onRegister, isLoading } = useAuth();
+  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState("");
 
@@ -12,16 +16,24 @@ function LoginScreen({ route, navigation }) {
     navigation.navigate(screenTitle);
   };
   const handleClick = async () => {
-    const successfulLogin = await onLogin(email, password);
+    const successfulLogin = await onRegister(email, username, password);
     if (successfulLogin) nextScreen(ROUTES.HOME);
   };
   return (
     <YStack marginHorizontal="$4" marginVertical="$5" height="100%">
       <YStack marginBottom="$3" marginTop="$10">
-        <Text fontSize="$9">Welcome Back!</Text>
-        <Text fontSize="$4">Give credential to sign in your account</Text>
+        <Text fontSize="$8" fontWeight="$5">
+          Welcome to Sqaudflow!
+        </Text>
+        <Text fontSize="$4">Give credential to create new account</Text>
       </YStack>
       <YStack gap="$2">
+        <Input
+          borderRadius="$5"
+          backgroundColor="#F8FAFC"
+          placeholder="Enter your username"
+          onChangeText={setUsername}
+        />
         <Input
           borderRadius="$5"
           backgroundColor="#F8FAFC"
@@ -49,16 +61,16 @@ function LoginScreen({ route, navigation }) {
           onPress={handleClick}
           disabled={isLoading}
         >
-          {isLoading ? "loading..." : "Sign in"}
+          {isLoading ? "loading..." : "Sign up"}
         </Button>
       </YStack>
       <XStack position="absolute" bottom={40} left="12%">
-        <Text textAlign="center">Don't have an account yet?</Text>
+        <Text textAlign="center">already have an account?</Text>
         <Text
           color="$green11"
           marginHorizontal="$1.5"
           textDecorationLine="underline"
-          onPress={() => nextScreen(ROUTES.REGISTER)}
+          onPress={() => nextScreen(ROUTES.LOGIN)}
         >
           Sign up
         </Text>
@@ -67,4 +79,4 @@ function LoginScreen({ route, navigation }) {
   );
 }
 
-export default LoginScreen;
+export default RegisterScreen;

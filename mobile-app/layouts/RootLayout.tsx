@@ -21,6 +21,7 @@ import CommunityScreen from "../screens/CommunityScreen/CommunityScreen";
 import ChatsScreen from "../screens/ChatsScreen/ChatsScreen";
 import ProjectsScreen from "../screens/ProjectsScreen/ProjectsScreen";
 import ProfileRightHeader from "../Components/ScreenHeaders/ProfileRightHeader";
+import RegisterScreen from "../screens/RegisterScreen/RegisterScreen";
 
 RootLayout.propTypes = {};
 const Tab = createBottomTabNavigator();
@@ -160,9 +161,14 @@ function RootLayout(props) {
           )}
         />
         <Stack.Screen
-          name="Login"
+          name={ROUTES.LOGIN}
           options={{ headerShown: false }}
           component={LoginScreen}
+        />
+        <Stack.Screen
+          name={ROUTES.REGISTER}
+          options={{ headerShown: false }}
+          component={RegisterScreen}
         />
         <Stack.Screen
           name={ROUTES.JOIN_A_TEAM}

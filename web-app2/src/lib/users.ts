@@ -6,6 +6,8 @@ import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import CustomError from "@/utils/CustomError";
+import { HttpStatusCode } from "@/utils/HttpStatusCode";
+
 const dbName = "mobile-app";
 
 // Initialize MongoDB client
@@ -32,7 +34,7 @@ async function createUser(user: {
 }
 // @ts-ignore
 function generateAccessToken(user: User) {
-  console.log({
+  console.log("from generateAccessToken", {
     _id: user._id,
     email: user.email,
     communityId: user["_doc"].communityId,
@@ -122,15 +124,13 @@ async function findUserByEmail(email: string) {
 async function updateUserCommunityId(userId: string, communityId: string) {
   await init();
   try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { communityId },
-      { new: true }
-    );
-    return user;
+    return await User.findByIdAndUpdate(userId, { communityId }, { new: true });
   } catch (error) {
     console.error("Error finding user:", error);
-    throw error;
+    throw new CustomError(
+      "Error finding user",
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 }
 
@@ -139,6 +139,8 @@ async function updateUserToken(user: IUser) {
     name: "jwt",
     value: generateAccessToken(user),
     httpOnly: true,
+    secure: true,
+    sameSite: "lax",
     path: "/",
   });
 }

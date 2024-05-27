@@ -10,9 +10,11 @@ import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 import { cookies } from "next/headers";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
+import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
   const cookie = cookies().get("jwt");
+  if (!cookie) redirect("/auth");
   const { payload } = await verifyJWTToken(cookie?.value);
   return (
     <div className="h-full flex flex-col">

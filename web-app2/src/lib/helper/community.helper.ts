@@ -1,4 +1,4 @@
-import { ICommunity } from "@/utils/@types/community";
+import { ICommunity, Participant } from "@/utils/@types/community";
 import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
 import { IUser } from "@/utils/@types/user";
@@ -56,12 +56,9 @@ export function isNoOneInParticipants(
   return participants.length === 0;
 }
 
-export function removeUserId(
-  participants: ICommunity["participants"],
-  userId: string
-) {
+export function removeUserId(participants: Participant[], userId: string) {
   if (!userId) throw new Error("User not found");
-  const index = participants.findIndex((item) => item.user === userId);
+  const index = participants.findIndex((item) => item.user.equals(userId));
   if (index !== -1) {
     participants.splice(index, 1);
   }
@@ -69,10 +66,10 @@ export function removeUserId(
 }
 
 export function isUserIdInParticipantsList(
-  participants: ICommunity["participants"],
+  participants: Participant[],
   userId: string
 ) {
   if (!userId) throw new Error("User not found");
   if (!participants) throw new Error("participants not found");
-  return participants.some((participant) => participant.user === userId);
+  return participants.some((participant) => participant.user.equals(userId));
 }

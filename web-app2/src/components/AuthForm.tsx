@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,7 +18,7 @@ import HeaderWithLogo from "@/components/HeaderWithLogo";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Terminal } from "lucide-react";
 import CustomButton from "@/components/CustomButton";
-import { signup } from "@/app/auth/actions";
+import { handleLogin, signup } from "@/app/auth/actions";
 
 export default function AuthForm() {
   const [username, setUsername] = useState("");
@@ -37,21 +36,11 @@ export default function AuthForm() {
     try {
       setLoading(true);
       setError("");
-      const res = (await signIn("credentials", {
-        username,
-        password,
-        redirect: false,
-      })) as SignInResponse;
-      if (res.status === 401) {
-        setError("Invalid Credentials");
-        return;
-      }
-
-      if (res.ok) {
-        router.replace("dashboard");
-        setError("");
-      }
+      await handleLogin(username, password);
+      router.replace("dashboard");
+      setError("");
     } catch (error) {
+      setError(error.message);
       console.log(error.value);
     } finally {
       setLoading(false);

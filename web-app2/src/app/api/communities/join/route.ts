@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { updateUserCommunityId, updateUserToken } from "@/lib/users";
 import { validateSchema } from "@/lib/helper/route.helper";
 import { joinPostSchema } from "@/app/api/communities/schema";
+import { HttpStatusCode } from "@/utils/HttpStatusCode";
 
 export async function POST(request: Request) {
   const url = new URL(request.url);
@@ -10,12 +11,14 @@ export async function POST(request: Request) {
   validateSchema(joinPostSchema, { code });
   const userId = request.headers.get("uid");
   const communityId = request.headers.get("cid");
-
   if (communityId !== "")
-    return NextResponse.json({
-      message:
-        "you must leave your current community in order to join this community",
-    });
+    return NextResponse.json(
+      {
+        message:
+          "you must leave your current community in order to join this community",
+      },
+      { status: HttpStatusCode.CONFLICT }
+    );
   try {
     const communityId = await joinCommunityByCode(
       userId as string,
@@ -25,7 +28,7 @@ export async function POST(request: Request) {
     await updateUserToken(user);
     return NextResponse.json({ message: "success" });
   } catch (e) {
-    return NextResponse.json({ message: e.message });
+    return NextResponse.json({ message: e.message }, { status: e.statusCode });
   }
 }
 
