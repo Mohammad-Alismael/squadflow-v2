@@ -8,6 +8,8 @@ import { HttpStatusCode } from "@/utils/HttpStatusCode";
 export async function POST(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
+  const returnId = url.searchParams.get("returnId") === "true";
+  console.log({ code, returnId });
   validateSchema(joinPostSchema, { code });
   const userId = request.headers.get("uid");
   const communityId = request.headers.get("cid");
@@ -25,8 +27,12 @@ export async function POST(request: Request) {
       code as string
     );
     const user = await updateUserCommunityId(userId as string, communityId);
-    await updateUserToken(user);
-    return NextResponse.json({ message: "success" });
+    if (!returnId) {
+      await updateUserToken(user);
+      return NextResponse.json({ message: "success" });
+    } else {
+      return NextResponse.json({ communityId });
+    }
   } catch (e) {
     return NextResponse.json({ message: e.message }, { status: e.statusCode });
   }

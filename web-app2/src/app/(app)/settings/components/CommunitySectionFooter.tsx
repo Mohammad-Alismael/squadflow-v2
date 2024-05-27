@@ -2,12 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
-import {
-  handleJoinCommunity,
-  handleJoinCommunityForm,
-  handleLeaveCommunity,
-  handleLeaveCommunityForm,
-} from "@/app/(app)/settings/actions";
+import { handleLeaveCommunity } from "@/app/(app)/settings/actions";
 import { revalidatePath } from "next/cache";
 import CreateCommunityDialog from "@/components/Dialogs/CreateCommunityDialog";
 import { useRouter } from "next/navigation";
@@ -22,10 +17,11 @@ function CommunitySectionFooter({
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLeave = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       await handleLeaveCommunity(code);
     } catch (e) {
@@ -42,7 +38,7 @@ function CommunitySectionFooter({
           onClick={handleLeave}
           disabled={isLoading}
         >
-          leave community
+          {!isLoading ? "leave community" : "loading ..."}
         </Button>
       )}
       {status === 204 && (

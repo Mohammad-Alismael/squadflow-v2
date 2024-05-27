@@ -54,29 +54,52 @@ function generateAccessToken(user: User) {
     }
   );
 }
+
+export function generateAccessTokenFlat(user: {
+  photoURL: unknown;
+  _id: unknown;
+  communityId: any;
+  email: unknown;
+  username: unknown;
+}) {
+  console.log("from generateAccessTokenFlat", {
+    _id: user._id,
+    email: user.email,
+    communityId: user.communityId,
+    photoURL: user.photoURL,
+  });
+  return jwt.sign(
+    {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      communityId: user.communityId,
+      photoURL: user.photoURL,
+    },
+    process.env.NEXTAUTH_SECRET as string,
+    {
+      expiresIn: "6h",
+    }
+  );
+}
 async function login(username: string, password: string) {
   await init();
-  try {
-    const user = await User.findOne({ username });
-    if (!user) {
-      throw new CustomError("user not found", 401);
-    }
-    const passwordsMatch = await bcrypt.compare(password, user.password);
-
-    if (!passwordsMatch) {
-      throw new CustomError("incorrect user name or password", 401);
-    }
-    cookies().set({
-      name: "jwt",
-      value: generateAccessToken(user),
-      httpOnly: true,
-      path: "/",
-    });
-    return user;
-  } catch (error) {
-    console.error("Error logging user:", error);
-    throw error;
+  const user = await User.findOne({ username });
+  if (!user) {
+    throw new CustomError("user not found", 401);
   }
+  const passwordsMatch = await bcrypt.compare(password, user.password);
+
+  if (!passwordsMatch) {
+    throw new CustomError("incorrect user name or password", 401);
+  }
+  cookies().set({
+    name: "jwt",
+    value: generateAccessToken(user),
+    httpOnly: true,
+    path: "/",
+  });
+  return user;
 }
 async function loginWithoutCookie(username: string, password: string) {
   await init();
@@ -114,6 +137,16 @@ async function findUserByEmail(email: string) {
   await init();
   try {
     const user = await User.findOne({ email }).select("_id");
+    return user;
+  } catch (error) {
+    console.error("Error finding user:", error);
+    throw error;
+  }
+}
+async function findUserByUserId(userId: string) {
+  await init();
+  try {
+    const user = await User.findById(userId);
     return user;
   } catch (error) {
     console.error("Error finding user:", error);
@@ -189,4 +222,5 @@ export {
   updateUserCommunityId,
   updateUserToken,
   checkUserIdsExist,
+  findUserByUserId,
 };

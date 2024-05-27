@@ -2,7 +2,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { createWorkspace, getWorkspacesBByCommunityId } from "@/lib/workspace";
 import { validateCommunity, validateSchema } from "@/lib/helper/route.helper";
-import { checkUserIdsExist } from "@/lib/users";
+import { checkUserIdsExist, findUserByUserId } from "@/lib/users";
 import { postSchema } from "@/app/api/workspaces/schema";
 
 export async function POST(request: Request) {
@@ -37,7 +37,9 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const communityId = request.headers.get("cid") as string;
+  const userId = request.headers.get("uid") as string;
+
+  const { communityId } = await findUserByUserId(userId);
   validateCommunity(communityId);
   try {
     const workspaces = await getWorkspacesBByCommunityId(communityId);

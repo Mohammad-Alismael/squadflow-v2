@@ -3,13 +3,9 @@ import React, { useState } from "react";
 import { handleJoinCommunityForm } from "@/app/(app)/settings/actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { clsx } from "clsx";
-import { useRouter } from "next/navigation";
+import SubmitButton from "@/app/(app)/settings/components/SubmitButton";
 function JoinCommunityForm() {
-  const router = useRouter();
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   return (
@@ -20,7 +16,6 @@ function JoinCommunityForm() {
           setError("community code text field can't be empty");
           return;
         }
-        setIsLoading(true);
         setError(null);
         setSuccess(null);
         try {
@@ -29,8 +24,6 @@ function JoinCommunityForm() {
         } catch (error) {
           // Capture the error message to display to the user
           setError(error.message);
-        } finally {
-          setIsLoading(false);
         }
       }}
       className={clsx(
@@ -49,13 +42,7 @@ function JoinCommunityForm() {
         {success && <span className="text-green-400">{success}</span>}
         {error && <span className="text-red-400">{error}</span>}
       </div>
-      <Button
-        type="submit"
-        className=" w-1/2 bg-green-600 capitalize"
-        disabled={isLoading}
-      >
-        {!isLoading ? "join community" : "loading.."}
-      </Button>
+      <SubmitButton />
     </form>
   );
 }

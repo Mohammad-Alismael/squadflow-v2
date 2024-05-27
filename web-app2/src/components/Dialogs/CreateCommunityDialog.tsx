@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { handleCreateWorkspace } from "@/app/(app)/workspaces/actions";
+import { handleCreateCommunity } from "@/app/(app)/settings/actions";
 
 function CreateCommunityDialog({ children }: { children: ReactNode }) {
   const formSchema = z.object({
@@ -39,10 +40,8 @@ function CreateCommunityDialog({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    const res = await handleCreateWorkspace(values);
+    await handleCreateCommunity(values);
     setIsLoading(false);
-    console.log(res);
-    console.log(values);
   }
   return (
     <Dialog>

@@ -11,7 +11,7 @@ export const redirectToggle = (type: string) => {
   redirect(`/workspaces?view=${type}`);
 };
 
-export const handleCreateWorkspace = async (form: any) => {
+export const handleCreateWorkspace = async (form: FormData) => {
   const response = await fetch(`${process.env.URL_API_ROUTE}/api/workspaces`, {
     method: "POST",
     headers: {
