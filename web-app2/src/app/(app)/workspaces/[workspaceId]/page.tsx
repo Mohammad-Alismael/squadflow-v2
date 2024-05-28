@@ -27,9 +27,6 @@ async function Page({ params }: { params: { workspaceId: string } }) {
   const [workspace] = await Promise.all([workspaceData]);
   return (
     <div className="h-full flex flex-col">
-      <Head>
-        <title>{workspace?.title}</title>
-      </Head>
       <Suspense fallback={<p>loading...</p>}>
         <WorkspaceNavbar workspaceId={params.workspaceId} />
       </Suspense>

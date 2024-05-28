@@ -13,7 +13,7 @@ const links: linkType[] = [
     icon: "Calendar",
     link: "/calendars",
   },
-  { label: "Chats", icon: "Users", link: "/chats" },
+  { label: "Messaging", icon: "Users", link: "/chats" },
   {
     label: "Settings",
     icon: "Settings",
@@ -23,12 +23,13 @@ const links: linkType[] = [
 
 const Sidebar = () => {
   return (
-    <div className="relative bg-white float-left h-full w-1/6 pl-4 py-5">
-      <Link className="flex items-center gap-2.5" href="/dashboard">
+    <div className="relative bg-white float-left h-full w-1/6 py-5">
+      <Link className="flex items-center gap-2.5 pl-4" href="/dashboard">
         <Image src={logo} alt="logo" priority width={50} height={50} />
         <span className="text-2xl font-bold capitalize">squadflow</span>
       </Link>
-      <div className="space-y-2 mt-4">
+      <hr className="my-2" />
+      <div className="space-y-2 pl-3">
         {links.map((link, i) => (
           <SidebarLink key={i} link={link} />
         ))}
