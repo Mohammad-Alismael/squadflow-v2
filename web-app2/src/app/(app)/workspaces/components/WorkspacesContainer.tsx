@@ -22,14 +22,14 @@ async function WorkspacesContainer({ viewType }: { viewType?: string }) {
     <>
       {data.length === 0 && <NoWorkspacesFound />}
       {viewType && viewType === "list" && (
-        <div className="py-4 w-full h-[91%] space-y-2">
+        <div className="py-4 w-full space-y-2">
           {data.map((val) => {
             return <WorkspaceList data={val} key={val._id} />;
           })}
         </div>
       )}
       {(!viewType || viewType === "cards") && (
-        <div className="py-4 w-full h-[91%] grid grid-cols-4 grid-rows-2 gap-4 overflow-y-auto">
+        <div className="py-4 w-full grid grid-cols-4 grid-rows-2 gap-4 overflow-y-auto">
           {data.map((val) => {
             return <Workspace data={val} key={val._id} />;
           })}

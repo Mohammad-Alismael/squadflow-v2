@@ -8,12 +8,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { EllipsisVerticalIcon } from "lucide-react";
-import UpdateWorkspaceDialog from "@/components/Dialogs/UpdateWorkspaceDialog";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { handleDeleteWorkspace } from "@/app/(app)/workspaces/actions";
 
 function WorkspaceMenu({ workspaceId }: { workspaceId: string }) {
-  const handleChange = async (e) => {
+  const router = useRouter();
+
+  const handleChange = async () => {
     await handleDeleteWorkspace(workspaceId);
   };
   return (
@@ -24,7 +25,13 @@ function WorkspaceMenu({ workspaceId }: { workspaceId: string }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <UpdateWorkspaceDialog />
+        <DropdownMenuItem
+          onClick={() =>
+            router.replace(`/workspaces?workspaceId=${workspaceId}`)
+          }
+        >
+          edit
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={handleChange}>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

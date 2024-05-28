@@ -27,9 +27,7 @@ function Header() {
       </Select>
       <div className="flex flex-row items-center justify-between gap-2">
         <ListToggle />
-        <CreateWorkspaceDialog>
-          <Button className="capitalize bg-green-800">create workspace</Button>
-        </CreateWorkspaceDialog>
+        <CreateWorkspaceDialog />
       </div>
     </div>
   );

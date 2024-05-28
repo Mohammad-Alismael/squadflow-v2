@@ -1,41 +1,18 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { EllipsisVerticalIcon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 
 function Workspace({ data }: { data: IWorkspace }) {
   return (
-    <Link href={`/workspaces/${data._id}`}>
-      <Card className="">
-        <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
-          <CardTitle className="text-xl">{data.title}</CardTitle>
-          <WorkspaceMenu workspaceId={data._id as string} />
-        </CardHeader>
-        <div className="relative h-[160px] overflow-hidden rounded-t-lg">
-          <Image
-            alt="Project background"
-            className="h-full w-full object-cover"
-            height="200"
-            src="/placeholder.svg"
-            style={{
-              aspectRatio: "400/200",
-              objectFit: "cover",
-            }}
-            width="400"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
-        </div>
+    <Card className="">
+      <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
+        <CardTitle className="text-xl">{data.title}</CardTitle>
+        <WorkspaceMenu workspaceId={data._id as string} />
+      </CardHeader>
+      <Link href={`/workspaces/${data._id}`}>
         <CardContent>
           <div className="space-y-2">
             <div className="mt-4 flex items-center gap-2">
@@ -60,8 +37,8 @@ function Workspace({ data }: { data: IWorkspace }) {
             </div>
           </div>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 }
 

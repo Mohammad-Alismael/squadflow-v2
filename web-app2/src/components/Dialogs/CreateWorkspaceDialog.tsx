@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { handleCreateWorkspace } from "@/app/(app)/workspaces/actions";
 
-function CreateWorkspaceDialog({ children }: { children: ReactNode }) {
+function CreateWorkspaceDialog() {
   const formSchema = z.object({
     title: z.string().min(4).max(50),
     participants: z.array(
@@ -47,17 +47,24 @@ function CreateWorkspaceDialog({ children }: { children: ReactNode }) {
       participants: [],
     },
   });
+  const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    const res = await handleCreateWorkspace(values);
+    await handleCreateWorkspace(values);
     setIsLoading(false);
-    console.log(res);
-    console.log(values);
+    setOpen(false);
   }
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+      <DialogTrigger asChild>
+        <Button
+          className="capitalize bg-green-800"
+          onClick={() => setOpen(true)}
+        >
+          create workspace {open ? "f" : "g"}
+        </Button>
+      </DialogTrigger>
       <DialogContent className="">
         <DialogHeader>
           <DialogTitle>create workspace</DialogTitle>

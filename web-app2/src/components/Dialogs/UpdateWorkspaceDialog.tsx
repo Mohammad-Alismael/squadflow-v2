@@ -30,8 +30,12 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { handleCreateWorkspace } from "@/app/(app)/workspaces/actions";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function UpdateWorkspaceDialog() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const workspaceId = searchParams.get("workspaceId");
   const formSchema = z.object({
     title: z.string().min(4).max(50),
     participants: z.array(
@@ -54,21 +58,12 @@ function UpdateWorkspaceDialog() {
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const res = await handleCreateWorkspace(values);
-    console.log(res);
-    console.log(values);
   }
   return (
-    <Dialog>
-      <ContextMenu>
-        <ContextMenuTrigger className="p-1">Right click</ContextMenuTrigger>
-        <ContextMenuContent>
-          <DialogTrigger asChild>
-            <ContextMenuItem>
-              <span>Edit</span>
-            </ContextMenuItem>
-          </DialogTrigger>
-        </ContextMenuContent>
-      </ContextMenu>
+    <Dialog
+      open={workspaceId !== null}
+      onOpenChange={() => window.history.replaceState(null, "", "/workspaces")}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="capitalize">update workspace</DialogTitle>

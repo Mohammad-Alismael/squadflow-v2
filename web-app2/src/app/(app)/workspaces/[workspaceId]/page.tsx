@@ -31,17 +31,19 @@ async function Page({ params }: { params: { workspaceId: string } }) {
       <Suspense fallback={<p>loading...</p>}>
         <WorkspaceNavbar workspaceId={params.workspaceId} />
       </Suspense>
-      <Header className="mt-0 mb-4" workspaceId={params.workspaceId} />
+      <Header className="mt-0 mb-1" workspaceId={params.workspaceId} />
 
-      <div className="h-full flex flex-row gap-4">
+      <div className="h-full flex flex-row gap-4 py-4">
         {workspace &&
           workspace?.columns.map((column) => {
             return (
-              <Column
-                key={column._id}
-                workspaceId={params.workspaceId}
-                data={column}
-              />
+              <Suspense fallback={<p>loading column...</p>}>
+                <Column
+                  key={column._id}
+                  workspaceId={params.workspaceId}
+                  data={column}
+                />
+              </Suspense>
             );
           })}
       </div>

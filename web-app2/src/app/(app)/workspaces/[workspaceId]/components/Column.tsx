@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ITask } from "@/utils/@types/task";
 import { cookies } from "next/headers";
 import TaskDetailsDialog from "@/components/Dialogs/TaskDetailsDialog";
+import CreateTaskDialog from "@/components/Dialogs/CreateTaskDialog";
+import ColumnHeader from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeader";
 const fetchTasksForColumnId = async (workspaceId: string, columnId: string) => {
   const res = await fetch(
     `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}/tasks?columnId=${columnId}`,
@@ -30,16 +32,7 @@ async function Column({
   console.log(tasks);
   return (
     <div className="rounded-xl h-full w-1/4 bg-gray-300 p-4">
-      <div className="flex justify-between pb-4">
-        <div className="flex justify-center items-center gap-1">
-          <span className="capitalize">{data.title}</span>
-          <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center">
-            {tasks.length}
-          </span>
-        </div>
-
-        <MoreVertical size={20} />
-      </div>
+      <ColumnHeader length={tasks.length} title={data.title} />
       <div className="overflow-auto no-scrollbar">
         {tasks.map((task, i) => {
           return (
@@ -49,8 +42,9 @@ async function Column({
           );
         })}
       </div>
-
-      <Button className="w-full bg-green-700">+ task card</Button>
+      <CreateTaskDialog>
+        <Button className="w-full bg-green-700">+ task card</Button>
+      </CreateTaskDialog>
     </div>
   );
 }
