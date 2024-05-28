@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
 import { redirect } from "next/navigation";
-import { getJWTToken, handleJwtValidation } from "@/utils/helper";
+import { handleJwtValidation } from "@/utils/helper";
 
 export async function middleware(request: NextRequest) {
   console.log("middleware running on", request.url);
@@ -12,7 +12,6 @@ export async function middleware(request: NextRequest) {
   // }
   if (request.nextUrl.pathname.startsWith("/auth")) {
     const res = await handleJwtValidation();
-    console.log({ res });
     if (res) return NextResponse.redirect(new URL("/dashboard", request.url));
     // if (res) return redirect("/dashboard");
     return NextResponse.next();
@@ -38,7 +37,6 @@ export async function middleware(request: NextRequest) {
     }
 
     const { payload } = await verifyJWTToken(token.value);
-    console.log({ payload });
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
     if (payload?._id && payload?.communityId !== null) {
@@ -58,7 +56,7 @@ export async function middleware(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error verifying JWT token from middleware:", error.name);
+    console.error("Error verifying JWT token from middleware:", error.message);
     if (isFromApi)
       return NextResponse.json({ message: error.message }, { status: 400 });
     else return NextResponse.redirect(new URL("/auth", request.url));

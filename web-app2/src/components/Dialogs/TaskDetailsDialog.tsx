@@ -1,66 +1,23 @@
 "use client";
 import React, { ReactNode } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu";
-import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { handleCreateWorkspace } from "@/app/(app)/workspaces/actions";
 import { Label } from "@/components/ui/label";
+import { useRouter, useSearchParams } from "next/navigation";
 
-function TaskDetailsDialog({ children }: { children: React.ReactNode }) {
-  const formSchema = z.object({
-    title: z.string().min(4).max(50),
-    participants: z.array(
-      z
-        .object({
-          user: z.string(),
-          role: z.enum(["admin", "editor", "viewer"]),
-        })
-        .refine((value) => ["admin", "editor", "viewer"].includes(value.role), {
-          message: "role should be either admin or editor or viewer",
-        })
-    ),
-  });
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      participants: [],
-    },
-  });
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // const res = await handleCreateWorkspace(values);
-    // console.log(res);
-    // console.log(values);
-  }
+function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const taskId = searchParams.get("taskId");
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog
+      open={taskId !== null}
+      onOpenChange={() =>
+        window.history.replaceState(null, "", `/workspaces/${workspaceId}`)
+      }
+    >
       <DialogContent className="p-0 w-4/5 h-[80%]">
         <div className="w-full flex flex-row">
           <div className="w-1/2 p-4">

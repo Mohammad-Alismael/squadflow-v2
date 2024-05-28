@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import WorkspaceNavbar from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceNavbar";
 import Header from "@/app/(app)/workspaces/[workspaceId]/components/Header";
 import Head from "next/head";
+import TaskDetailsDialog from "@/components/Dialogs/TaskDetailsDialog";
+import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
 
 const fetchWorkspace = async (workspaceId: string) => {
   const res = await fetch(
@@ -37,7 +39,7 @@ async function Page({ params }: { params: { workspaceId: string } }) {
         {workspace &&
           workspace?.columns.map((column) => {
             return (
-              <Suspense fallback={<p>loading column...</p>}>
+              <Suspense fallback={<ColumnSkeleton />}>
                 <Column
                   key={column._id}
                   workspaceId={params.workspaceId}
@@ -47,6 +49,7 @@ async function Page({ params }: { params: { workspaceId: string } }) {
             );
           })}
       </div>
+      <TaskDetailsDialog workspaceId={workspace?._id} />
     </div>
   );
 }

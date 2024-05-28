@@ -29,17 +29,12 @@ async function Column({
   workspaceId: string;
 }) {
   const tasks = await fetchTasksForColumnId(workspaceId, data._id);
-  console.log(tasks);
   return (
     <div className="rounded-xl h-full w-1/4 bg-gray-300 p-4">
       <ColumnHeader length={tasks.length} title={data.title} />
       <div className="overflow-auto no-scrollbar">
-        {tasks.map((task, i) => {
-          return (
-            <TaskDetailsDialog>
-              <TaskCard key={task._id} data={task} />
-            </TaskDetailsDialog>
-          );
+        {tasks.map((task: ITask) => {
+          return <TaskCard key={task._id} data={task} />;
         })}
       </div>
       <CreateTaskDialog>
