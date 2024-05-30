@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
 import { redirect } from "next/navigation";
-import { handleJwtValidation } from "@/utils/helper";
+import { handleJwtValidation } from "@/utils/helperServer";
 
 export async function middleware(request: NextRequest) {
   console.log("middleware running on", request.url);

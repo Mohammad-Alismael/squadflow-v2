@@ -17,13 +17,17 @@ import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantSto
 function Participant({
   user,
   showDelete = false,
+  role = "",
 }: {
   user: PopulatedUser;
   showDelete: boolean;
+  role?: string;
 }) {
-  const { addParticipant, removeParticipant } = workspaceParticipantStore();
+  const { addParticipant, removeParticipant, changeRole } =
+    workspaceParticipantStore();
   const handleChange = (value: string) => {
-    addParticipant({ user: user._id, role: value });
+    !showDelete && addParticipant({ user: user._id, role: value });
+    showDelete && changeRole({ user: user._id, role: value });
   };
   const handlePressOnIcon = () => {
     removeParticipant(user._id);
@@ -46,7 +50,7 @@ function Participant({
         </div>
       </div>
       <div className="flex flex-row items-center gap-4">
-        <Select onValueChange={handleChange}>
+        <Select onValueChange={handleChange} defaultValue={role}>
           <SelectTrigger className="w-[120px] h-[31px]">
             <SelectValue placeholder="select role" />
           </SelectTrigger>

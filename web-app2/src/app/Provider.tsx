@@ -1,12 +1,17 @@
 "use client";
-
-import { SessionProvider } from "next-auth/react";
 import React, { ReactNode } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 type AuthProviderProps = {
   children: ReactNode;
 };
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  return <SessionProvider>{children}</SessionProvider>;
+export const ReactQueryProvider: React.FC<AuthProviderProps> = ({
+  children,
+}) => {
+  const queryClient = new QueryClient();
+
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 };

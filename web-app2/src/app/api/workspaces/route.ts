@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   const userId = request.headers.get("uid") as string;
   const communityId = request.headers.get("cid") as string;
   validateCommunity(communityId);
-  const userIdsToCheck: string[] = participants.map(({ user }) => user);
+  const userIdsToCheck: string[] = data.participants.map(({ user }) => user);
   const allExist = await checkUserIdsExist(userIdsToCheck);
   if (!allExist)
     return NextResponse.json(
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
   const workspace = await createWorkspace({
     community: communityId,
     title,
-    participants,
+    participants: [...participants, { user: userId, role: "admin" }],
     created_by: userId,
   });
   return NextResponse.json({ workspaceId: workspace._id }, { status: 201 });

@@ -1,57 +1,31 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import Participant from "@/app/(app)/workspaces/components/Participant";
-import { CommunityResponse } from "@/utils/@types/community";
-import { fetchCommunity } from "@/app/(app)/settings/requests";
-import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
+import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import FindParticipantsDialog from "@/components/Dialogs/FindParticipantsDialog";
+import { PlusIcon } from "lucide-react";
+import { Participant } from "@/utils/store/workspaceParticipantStore";
 
-function ParticipantsList() {
-  const [data, setData] = useState<CommunityResponse>(null);
-  const [isLoading, setLoading] = useState(true);
-  const [keyword, setKeyword] = useState("");
-  const state = workspaceParticipantStore((state) => state);
-  useEffect(() => {
-    const fetch = async () => {
-      const res = await fetchCommunity();
-      if (res.status === 200) setData(res.data);
-    };
-    setLoading(true);
-    fetch();
-    setLoading(false);
-  }, []);
-
-  if (isLoading) return <p>Loading...</p>;
-  if (data)
-    return (
-      <div className="">
-        <Input
-          type="text"
-          placeholder="search by username..."
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-        <div className="mt-2">
-          {data.participants
-            .filter((participant) =>
-              participant.user.username.includes(keyword)
-            )
-            .map((participant, index) => {
-              return (
-                <>
-                  <Participant
-                    key={participant._id}
-                    user={participant.user}
-                    showDelete={state.participants
-                      .map((item) => item.user)
-                      .includes(participant.user._id)}
-                  />
-                  {index !== data.participants.length - 1 && <hr />}
-                </>
-              );
-            })}
+function ParticipantsList({
+  joinedParticipants,
+}: {
+  joinedParticipants: Participant[];
+}) {
+  return (
+    <div className="mt-4 flex items-center gap-2">
+      {joinedParticipants.map((item) => {
+        return (
+          <Avatar>
+            <AvatarImage src="/avatars/01.png" />
+            <AvatarFallback>{item.user}</AvatarFallback>
+          </Avatar>
+        );
+      })}
+      <FindParticipantsDialog>
+        <div className="bg-gray-200 rounded-full p-2">
+          <PlusIcon className="h-6 w-6" />
         </div>
-      </div>
-    );
+      </FindParticipantsDialog>
+    </div>
+  );
 }
 
 export default ParticipantsList;

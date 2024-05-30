@@ -29,6 +29,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusIcon } from "lucide-react";
 import FindParticipantsDialog from "@/components/Dialogs/FindParticipantsDialog";
 import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
+import ParticipantsList from "@/components/Dialogs/components/ParticipantsList";
+import { useUpdateParticipants } from "@/utils/hooks/updateParticipants";
 
 function CreateWorkspaceDialog() {
   const formSchema = z.object({
@@ -54,18 +56,15 @@ function CreateWorkspaceDialog() {
 
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const joinedParticipants = workspaceParticipantStore(
-    (state) => state.participants
-  );
+  const joinedParticipants = useUpdateParticipants(form);
+  const { reset } = workspaceParticipantStore();
 
-  useEffect(() => {
-    form.setValue("participants", joinedParticipants);
-  }, [JSON.stringify(joinedParticipants)]);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     await handleCreateWorkspace(values);
     setIsLoading(false);
     setOpen(false);
+    reset();
   }
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -106,21 +105,7 @@ function CreateWorkspaceDialog() {
                 <FormItem>
                   <FormLabel className="capitalize">participants</FormLabel>
                   <FormControl>
-                    <div className="mt-4 flex items-center gap-2">
-                      {joinedParticipants.map((item) => {
-                        return (
-                          <Avatar>
-                            <AvatarImage src="/avatars/01.png" />
-                            <AvatarFallback>{item.user}</AvatarFallback>
-                          </Avatar>
-                        );
-                      })}
-                      <FindParticipantsDialog>
-                        <div className="bg-gray-200 rounded-full p-2">
-                          <PlusIcon className="h-6 w-6" />
-                        </div>
-                      </FindParticipantsDialog>
-                    </div>
+                    <ParticipantsList joinedParticipants={joinedParticipants} />
                   </FormControl>
                 </FormItem>
               )}

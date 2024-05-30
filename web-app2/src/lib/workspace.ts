@@ -4,6 +4,8 @@ import User from "@/models/user";
 import { ObjectId } from "mongodb";
 import { deleteTasksByWorkspaceId } from "@/lib/tasks";
 import Task from "@/models/task";
+import CustomError from "@/utils/CustomError";
+import { HttpStatusCode } from "@/utils/HttpStatusCode";
 
 async function init() {
   await connectMongoDB();
@@ -37,7 +39,8 @@ async function updateWorkspace(workspace: IWorkspace) {
         participants: workspace.participants,
         labels: workspace.labels,
         updated_by: workspace.created_by,
-      }
+      },
+      { new: true }
     );
     console.log(`Workspace updated with _id: ${result}`);
     return result;
@@ -70,7 +73,7 @@ async function getWorkspaceById(workspaceId: ObjectId) {
   await init();
   const workspace = await Workspace.findOne({ _id: workspaceId });
   if (!workspace) {
-    throw new Error("workspace not found");
+    throw new CustomError("workspace not found", HttpStatusCode.NOT_FOUND);
   }
   return workspace;
 }

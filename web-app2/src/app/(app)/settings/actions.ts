@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { generateAccessTokenFlat } from "@/lib/users";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
+import { handleError } from "@/utils/helper";
 
 export const handleJoinCommunityForm = async (formData: FormData) => {
   const response = await fetch(
@@ -78,14 +79,6 @@ export const handleLeaveCommunityForm = async (formData: FormData) => {
   await handleError(response);
 };
 
-async function handleError(response: Response) {
-  if (!response.ok) {
-    const msg = await response.json();
-    console.log(msg["message"]);
-    throw new Error(msg["message"]);
-  }
-}
-
 export const handleLeaveCommunity = async (code: string) => {
   const response = await fetch(
     `${process.env.URL_API_ROUTE}/api/communities/leave?code=${code}&returnId=true`,
@@ -124,6 +117,7 @@ export const handleLeaveCommunity = async (code: string) => {
 };
 
 export const handleCreateCommunity = async (form: { name: string }) => {
+  // update auth token after you create
   const response = await fetch(`${process.env.URL_API_ROUTE}/api/communities`, {
     method: "POST",
     headers: {

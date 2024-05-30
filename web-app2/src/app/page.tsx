@@ -1,7 +1,3 @@
-import AuthForm from "@/components/AuthForm";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import authOptions from "@/app/api/auth/[...nextauth]/options";
 import Head from "next/head";
 
 export default async function Home() {

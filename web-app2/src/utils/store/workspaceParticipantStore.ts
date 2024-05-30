@@ -1,17 +1,23 @@
 import { create } from "zustand";
+import { PopulatedUser } from "@/utils/@types/user";
 
-type Participant = {
+export interface Participant {
   user: string;
   role: "admin" | "editor" | "viewer";
-};
+}
+interface ParticipantWorkspace extends Participant {
+  _id: string;
+}
 interface State {
   participants: Participant[];
 }
 
 interface Actions {
   addParticipant(participant: Participant): void;
+  setParticipants(participants: ParticipantWorkspace[]): void;
   removeParticipant(participantId: string): void;
   changeRole(participant: Participant): void;
+  reset(): void;
 }
 
 const initialState: State = {
@@ -42,6 +48,12 @@ const handleChangeRole = (
     else return item;
   });
 };
+const handleSetParticipants = (participants: ParticipantWorkspace[]) => {
+  return participants.map((participant) => ({
+    user: participant.user,
+    role: participant.role,
+  }));
+};
 
 const workspaceParticipantStore = create<State & Actions>((set) => ({
   ...initialState,
@@ -49,6 +61,11 @@ const workspaceParticipantStore = create<State & Actions>((set) => ({
     set((state) => ({
       ...state,
       participants: handleAddParticipant(state.participants, participant),
+    })),
+  setParticipants: (participants) =>
+    set((state) => ({
+      ...state,
+      participants: handleSetParticipants(participants),
     })),
   removeParticipant: (participant) =>
     set((state) => ({
@@ -60,6 +77,7 @@ const workspaceParticipantStore = create<State & Actions>((set) => ({
       ...state,
       participants: handleChangeRole(state.participants, participant),
     })),
+  reset: () => set(initialState),
 }));
 
 export { workspaceParticipantStore };
