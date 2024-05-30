@@ -6,6 +6,7 @@ import { deleteTasksByWorkspaceId } from "@/lib/tasks";
 import Task from "@/models/task";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
+import mongoose from "mongoose";
 
 async function init() {
   await connectMongoDB();
@@ -115,6 +116,30 @@ async function deleteWorkspacesByCommunityId(communityId: ObjectId) {
   return deletedCount;
 }
 
+async function getUserRoleInWorkspace(workspaceId: string, userId: string) {
+  try {
+    const project = await Workspace.findOne(
+      {
+        _id: new ObjectId(workspaceId),
+        "participants.user": new ObjectId(userId),
+      },
+      { "participants.$": 1 } // Project only the matching participant
+    );
+
+    if (project && project.participants.length > 0) {
+      return project.participants[0].role;
+    } else {
+      return null; // User is not a participant in this project
+    }
+  } catch (error) {
+    console.error("Error finding user role in workspace:", error);
+    throw new CustomError(
+      "Error finding user role in workspace",
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 export {
   createWorkspace,
   getWorkspaceById,
@@ -124,4 +149,5 @@ export {
   deleteLabelFromWorkspace,
   deleteWorkspacesByCommunityId,
   getWorkspacesBByCommunityId,
+  getUserRoleInWorkspace,
 };

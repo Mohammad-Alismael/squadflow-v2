@@ -58,6 +58,7 @@ function UpdateWorkspaceDialog() {
     form.clearErrors();
     try {
       workspaceId && (await handleUpdateWorkspace(values, workspaceId));
+      window.history.replaceState(null, "", "/workspaces");
       await queryClient.invalidateQueries([workspaceId]);
       revalidateWorkspacePath();
     } catch (error) {
@@ -65,7 +66,6 @@ function UpdateWorkspaceDialog() {
       form.setError("participants", { type: "custom", message: error.message });
     } finally {
       setIsLoading(false);
-      window.history.replaceState(null, "", "/workspaces");
     }
   }
 

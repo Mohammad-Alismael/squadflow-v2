@@ -8,6 +8,7 @@ import TaskDetailsDialog from "@/components/Dialogs/TaskDetailsDialog";
 import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
 
 const fetchWorkspace = async (workspaceId: string) => {
+  if (!workspaceId) return null;
   const res = await fetch(
     `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}`,
     {
