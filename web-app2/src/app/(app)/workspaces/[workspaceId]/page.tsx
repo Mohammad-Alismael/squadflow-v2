@@ -34,17 +34,27 @@ async function Page({ params }: { params: { workspaceId: string } }) {
 
       <div className="h-full flex flex-row gap-4 py-4">
         {workspace &&
-          workspace?.columns.map((column) => {
-            return (
-              <Suspense fallback={<ColumnSkeleton />}>
-                <Column
-                  key={column._id}
-                  workspaceId={params.workspaceId}
-                  data={column}
-                />
-              </Suspense>
-            );
-          })}
+          workspace?.columns.map(
+            (column: {
+              _id: string;
+              order: number;
+              title: string;
+              color: string;
+            }) => {
+              return (
+                <Suspense
+                  key={`column-${column._id}`}
+                  fallback={<ColumnSkeleton />}
+                >
+                  <Column
+                    key={column._id}
+                    workspaceId={params.workspaceId}
+                    data={column}
+                  />
+                </Suspense>
+              );
+            }
+          )}
       </div>
       <TaskDetailsDialog workspaceId={workspace?._id} />
     </div>

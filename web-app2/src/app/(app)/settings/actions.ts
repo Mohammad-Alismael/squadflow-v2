@@ -41,11 +41,7 @@ export const handleJoinCommunityForm = async (formData: FormData) => {
     revalidatePath("/settings");
   }
 
-  if (!response.ok) {
-    const msg = await response.json();
-    console.log(msg["message"]);
-    throw new Error(msg["message"]);
-  }
+  await handleError(response);
 };
 
 export const handleJoinCommunity = async (code: string) => {
@@ -61,11 +57,7 @@ export const handleJoinCommunity = async (code: string) => {
   );
   if (response.status === 200) revalidatePath("/settings");
 
-  if (!response.ok) {
-    const msg = await response.json();
-    console.log(msg["message"]);
-    throw new Error(msg["message"]);
-  }
+  await handleError(response);
 };
 
 export const handleLeaveCommunityForm = async (formData: FormData) => {
@@ -83,12 +75,16 @@ export const handleLeaveCommunityForm = async (formData: FormData) => {
   );
   if (response.status === 200) revalidatePath("/settings");
 
+  await handleError(response);
+};
+
+async function handleError(response: Response) {
   if (!response.ok) {
     const msg = await response.json();
     console.log(msg["message"]);
     throw new Error(msg["message"]);
   }
-};
+}
 
 export const handleLeaveCommunity = async (code: string) => {
   const response = await fetch(
@@ -124,11 +120,7 @@ export const handleLeaveCommunity = async (code: string) => {
     revalidatePath("/settings");
   }
 
-  if (!response.ok) {
-    const msg = await response.json();
-    console.log(msg["message"]);
-    throw new Error(msg["message"]);
-  }
+  await handleError(response);
 };
 
 export const handleCreateCommunity = async (form: { name: string }) => {

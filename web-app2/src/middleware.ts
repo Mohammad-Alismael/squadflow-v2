@@ -7,13 +7,9 @@ import { handleJwtValidation } from "@/utils/helper";
 
 export async function middleware(request: NextRequest) {
   console.log("middleware running on", request.url);
-  // if (request.nextUrl.pathname.startsWith("/")) {
-  //   return NextResponse.next();
-  // }
   if (request.nextUrl.pathname.startsWith("/auth")) {
     const res = await handleJwtValidation();
     if (res) return NextResponse.redirect(new URL("/dashboard", request.url));
-    // if (res) return redirect("/dashboard");
     return NextResponse.next();
   }
   if (request.nextUrl.pathname.startsWith("/api/auth/")) {
@@ -32,8 +28,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (!token) {
-      // return NextResponse.redirect(new URL("/dashboard", request.url));
-      return redirect("/dashboard");
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     const { payload } = await verifyJWTToken(token.value);

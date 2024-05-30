@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 
-function Workspace({ data }: { data: IWorkspace }) {
+function WorkspaceCard({ data }: { data: IWorkspace }) {
   return (
     <Card className="">
       <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
@@ -16,23 +16,17 @@ function Workspace({ data }: { data: IWorkspace }) {
         <CardContent>
           <div className="space-y-2">
             <div className="mt-4 flex items-center gap-2">
-              <Avatar>
-                <AvatarImage src="/avatars/01.png" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
-              <Avatar>
-                <AvatarImage src="/avatars/02.png" />
-                <AvatarFallback>SM</AvatarFallback>
-              </Avatar>
-              <Avatar>
-                <AvatarImage src="/avatars/03.png" />
-                <AvatarFallback>LW</AvatarFallback>
-              </Avatar>
+              {data.participants.map((participant) => (
+                <Avatar>
+                  <AvatarImage src="/avatars/01.png" />
+                  <AvatarFallback>{participant.user}</AvatarFallback>
+                </Avatar>
+              ))}
             </div>
             <div className="flex items-center justify-between gap-2">
-              <Progress value={75} className="bg-green-800" />
+              <Progress value={data.progress} className="bg-green-800" />
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                75%
+                {data.progress}%
               </span>
             </div>
           </div>
@@ -42,4 +36,4 @@ function Workspace({ data }: { data: IWorkspace }) {
   );
 }
 
-export default Workspace;
+export default WorkspaceCard;

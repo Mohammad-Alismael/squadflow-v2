@@ -1,5 +1,5 @@
 import React from "react";
-import Workspace from "@/app/(app)/workspaces/components/Workspace";
+import WorkspaceCard from "@/app/(app)/workspaces/components/WorkspaceCard";
 import { cookies } from "next/headers";
 import WorkspaceSkeleton from "@/app/(app)/workspaces/components/WorkspaceSkeleton";
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
@@ -31,7 +31,7 @@ async function WorkspacesContainer({ viewType }: { viewType?: string }) {
       {(!viewType || viewType === "cards") && (
         <div className="py-4 w-full grid grid-cols-4 grid-rows-2 gap-4 overflow-y-auto">
           {data.map((val) => {
-            return <Workspace data={val} key={val._id} />;
+            return <WorkspaceCard data={val} key={val._id} />;
           })}
         </div>
       )}

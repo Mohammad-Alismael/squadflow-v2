@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -25,8 +25,10 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { handleCreateWorkspace } from "@/app/(app)/workspaces/actions";
-import Participant from "@/app/(app)/workspaces/components/Participant";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { PlusIcon } from "lucide-react";
+import FindParticipantsDialog from "@/components/Dialogs/FindParticipantsDialog";
+import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
 
 function CreateWorkspaceDialog() {
   const formSchema = z.object({
@@ -49,8 +51,16 @@ function CreateWorkspaceDialog() {
       participants: [],
     },
   });
+
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const joinedParticipants = workspaceParticipantStore(
+    (state) => state.participants
+  );
+
+  useEffect(() => {
+    form.setValue("participants", joinedParticipants);
+  }, [JSON.stringify(joinedParticipants)]);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     await handleCreateWorkspace(values);
@@ -92,23 +102,24 @@ function CreateWorkspaceDialog() {
             <FormField
               control={form.control}
               name="participants"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
-                  <FormLabel>participants</FormLabel>
+                  <FormLabel className="capitalize">participants</FormLabel>
                   <FormControl>
                     <div className="mt-4 flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <Avatar>
-                        <AvatarImage src="/avatars/02.png" />
-                        <AvatarFallback>SM</AvatarFallback>
-                      </Avatar>
-                      <Avatar>
-                        <AvatarImage src="/avatars/03.png" />
-                        <AvatarFallback>LW</AvatarFallback>
-                      </Avatar>
+                      {joinedParticipants.map((item) => {
+                        return (
+                          <Avatar>
+                            <AvatarImage src="/avatars/01.png" />
+                            <AvatarFallback>{item.user}</AvatarFallback>
+                          </Avatar>
+                        );
+                      })}
+                      <FindParticipantsDialog>
+                        <div className="bg-gray-200 rounded-full p-2">
+                          <PlusIcon className="h-6 w-6" />
+                        </div>
+                      </FindParticipantsDialog>
                     </div>
                   </FormControl>
                 </FormItem>
@@ -119,13 +130,6 @@ function CreateWorkspaceDialog() {
             </Button>
           </form>
         </Form>
-        <div>
-          <Participant />
-          <hr className="my-2" />
-          <Participant />
-          <hr className="my-2" />
-          <Participant />
-        </div>
       </DialogContent>
     </Dialog>
   );
