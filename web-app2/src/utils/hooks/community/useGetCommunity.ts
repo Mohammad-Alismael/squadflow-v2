@@ -1,5 +1,4 @@
 import { useQuery, UseQueryResult } from "react-query";
-import { fetchWorkspaceById } from "@/app/(app)/dashboard/requests";
 import { fetchCommunity } from "@/app/(app)/settings/requests";
 import { CommunityResponse, ICommunity } from "@/utils/@types/community";
 interface PropTypes {

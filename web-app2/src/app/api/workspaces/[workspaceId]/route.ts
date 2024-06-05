@@ -17,6 +17,7 @@ import {
   putSchema,
 } from "@/app/api/workspaces/[workspaceId]/schema";
 import { checkUserIdsExist } from "@/lib/users";
+import { IWorkspace } from "@/utils/@types/workspace";
 
 export async function GET(request: Request, context: any) {
   const { params } = await context;
@@ -48,30 +49,36 @@ export async function PUT(request: Request, context: any) {
   const userId = request.headers.get("uid") as string;
   const communityId = request.headers.get("cid") as string;
   validateCommunity(communityId as string);
-  const workspace: IWorkspace = await getWorkspaceById(workspaceId);
-  if (
-    !isUserWhoCreatedWorkspace(userId, workspace.created_by as string) &&
-    !isUserIdHasRole(workspace.participants, userId, "admin")
-  )
-    throw new Error("you are not allowed to change workspace details");
+  try {
+    const workspace: IWorkspace = await getWorkspaceById(workspaceId);
+    const x = isUserIdHasRole(workspace.participants, userId, "admin");
+    if (!x) throw new Error("you are not allowed to change workspace details");
 
-  const userIdsToCheck: string[] = data.participants.map(({ user }) => user);
-  const allExist = await checkUserIdsExist(userIdsToCheck);
-  if (!allExist)
+    const userIdsToCheck: string[] = data.participants.map(({ user }) => user);
+    const allExist = await checkUserIdsExist(userIdsToCheck);
+    if (!allExist)
+      return NextResponse.json(
+        { message: "some user participant id(s) aren't valid" },
+        { status: 400 }
+      );
+
+    await updateWorkspace({
+      _id: workspaceId,
+      community: communityId as string,
+      title: data.title,
+      participants: data.participants,
+      labels: data.labels,
+      updated_by: userId,
+    });
+    return NextResponse.json({ message: "success!" }, { status: 200 });
+  } catch (e) {
     return NextResponse.json(
-      { message: "some user participant id(s) aren't valid" },
-      { status: 400 }
+      {
+        message: e.message,
+      },
+      { status: e.statusCode }
     );
-
-  await updateWorkspace({
-    _id: workspaceId,
-    community: communityId as string,
-    title: data.title,
-    participants: data.participants,
-    labels: data.labels,
-    updated_by: userId,
-  });
-  return NextResponse.json({ message: "success!" }, { status: 200 });
+  }
 }
 
 export async function DELETE(request: Request, context: any) {

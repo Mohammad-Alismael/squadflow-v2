@@ -1,5 +1,6 @@
 import { useQuery, UseQueryResult } from "react-query";
-import { fetchWorkspaceById } from "@/app/(app)/dashboard/requests";
+import { IWorkspace } from "@/utils/@types/workspace";
+import { fetchWorkspaceById } from "@/lib/api/workspace";
 interface PropTypes {
   id: string;
   enabled: boolean;

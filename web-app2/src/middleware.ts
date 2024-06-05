@@ -12,6 +12,9 @@ export async function middleware(request: NextRequest) {
     if (res) return NextResponse.redirect(new URL("/dashboard", request.url));
     return NextResponse.next();
   }
+  if (request.nextUrl.pathname.startsWith(".")) {
+    return NextResponse.next();
+  }
   if (request.nextUrl.pathname.startsWith("/api/auth/")) {
     return NextResponse.next();
   }
@@ -19,24 +22,23 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   const isFromApi = request.nextUrl.pathname.startsWith("/api");
-  console.log({ isFromApi });
+  console.log("from api", isFromApi);
   try {
     const token = cookies().get("jwt");
-
     if (!token && isFromApi) {
       throw new Error("JWT token not found");
     }
 
     if (!token) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/auth", request.url));
     }
 
     const { payload } = await verifyJWTToken(token.value);
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
     if (payload?._id && payload?.communityId !== null) {
-      requestHeaders.set("uid", <string>payload?._id);
-      requestHeaders.set("cid", <string>payload?.communityId);
+      requestHeaders.set("uid", payload?._id.toString());
+      requestHeaders.set("cid", payload?.communityId as string);
     } else
       return NextResponse.json(
         { message: "error happened in user token" },

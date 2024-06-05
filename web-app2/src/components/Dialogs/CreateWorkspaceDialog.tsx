@@ -25,9 +25,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { handleCreateWorkspace } from "@/app/(app)/workspaces/actions";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PlusIcon } from "lucide-react";
-import FindParticipantsDialog from "@/components/Dialogs/FindParticipantsDialog";
 import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
 import ParticipantsList from "@/components/Dialogs/components/ParticipantsList";
 import { useUpdateParticipants } from "@/utils/hooks/updateParticipants";

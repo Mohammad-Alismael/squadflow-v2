@@ -1,12 +1,8 @@
-import UserInfo from "@/components/UserInfo";
-import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import React, { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import CurrentTaskList from "@/app/(app)/dashboard/components/CurrentTaskList";
 import TodayTasksDeadlines from "@/app/(app)/dashboard/components/TodayTasksDeadlines";
 import AssignedTasks from "@/app/(app)/dashboard/components/AssignedTasks";
-import { getServerSession } from "next-auth";
 import { cookies } from "next/headers";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
 import { redirect } from "next/navigation";

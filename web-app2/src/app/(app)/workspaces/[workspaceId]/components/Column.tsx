@@ -11,6 +11,7 @@ const fetchTasksForColumnId = async (workspaceId: string, columnId: string) => {
   const res = await fetch(
     `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}/tasks?columnId=${columnId}`,
     {
+      next: { tags: [`column-${columnId}`] },
       method: "GET",
       headers: { Cookie: cookies().toString() },
       cache: "no-cache",
@@ -37,9 +38,7 @@ async function Column({
           return <TaskCard key={task._id} data={task} />;
         })}
       </div>
-      <CreateTaskDialog>
-        <Button className="w-full bg-green-700">+ task card</Button>
-      </CreateTaskDialog>
+      <CreateTaskDialog columnId={data._id} />
     </div>
   );
 }

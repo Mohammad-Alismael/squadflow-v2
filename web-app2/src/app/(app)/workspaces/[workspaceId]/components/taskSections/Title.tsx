@@ -28,7 +28,7 @@ function Title() {
   return (
     <>
       {!isEditModeOn ? (
-        <h4 onClick={handleClickT} className="capitalize font-bold text-xl">
+        <h4 onClick={handleClickT} className="capitalize font-bold text-2xl">
           {title}
         </h4>
       ) : (

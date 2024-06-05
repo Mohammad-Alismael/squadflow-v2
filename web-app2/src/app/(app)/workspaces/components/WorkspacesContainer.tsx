@@ -1,10 +1,10 @@
 import React from "react";
 import WorkspaceCard from "@/app/(app)/workspaces/components/WorkspaceCard";
-import { cookies } from "next/headers";
-import WorkspaceSkeleton from "@/app/(app)/workspaces/components/WorkspaceSkeleton";
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
 import WorkspaceList from "@/app/(app)/workspaces/components/WorkspaceList";
-const fetchWorkspaces = async () => {
+import { IWorkspace } from "@/utils/@types/workspace";
+import { cookies } from "next/headers";
+export const fetchWorkspaces = async () => {
   const res = await fetch(`${process.env.URL_API_ROUTE}/api/workspaces`, {
     method: "GET",
     headers: { Cookie: cookies().toString() },
@@ -15,9 +15,9 @@ const fetchWorkspaces = async () => {
   }
   return [];
 };
-
 async function WorkspacesContainer({ viewType }: { viewType?: string }) {
   const data: IWorkspace[] = await fetchWorkspaces();
+
   return (
     <>
       {data.length === 0 && <NoWorkspacesFound />}

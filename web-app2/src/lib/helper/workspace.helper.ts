@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 import { IUser } from "@/utils/@types/user";
 import { ObjectId } from "mongodb";
+import { IWorkspace } from "@/utils/@types/workspace";
 
 export const isUserWhoCreatedWorkspace = (
   userId: string,
@@ -29,6 +30,6 @@ export const isUserIdHasRole = (
 
   return participants.some(
     (participant) =>
-      new ObjectId(participant.user).equals(userId) && participant.role === role
+      participant.user.toString() === userId && participant.role === role
   );
 };

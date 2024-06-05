@@ -78,6 +78,20 @@ async function getWorkspaceById(workspaceId: ObjectId) {
   }
   return workspace;
 }
+async function getWorkspaceParticipants(workspaceId: ObjectId) {
+  await init();
+  const workspace = await Workspace.findById(workspaceId)
+    .select("participants")
+    .populate({
+      path: "participants.user",
+      select: "_id username email role",
+    })
+    .exec();
+  if (!workspace) {
+    throw new CustomError("workspace not found", HttpStatusCode.NOT_FOUND);
+  }
+  return workspace;
+}
 
 async function getWorkspacesBByCommunityId(communityId: string) {
   await init();
@@ -150,4 +164,5 @@ export {
   deleteWorkspacesByCommunityId,
   getWorkspacesBByCommunityId,
   getUserRoleInWorkspace,
+  getWorkspaceParticipants,
 };

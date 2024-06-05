@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { IUser } from "@/utils/@types/user";
+import { IUser, PopulatedUser } from "@/utils/@types/user";
 
 export interface ITask {
   _id?: string;
@@ -20,4 +20,17 @@ export interface ITask {
   attachments: string[];
   created_by: Schema.Types.ObjectId | IUser;
   updated_by: Schema.Types.ObjectId | IUser;
+}
+
+export interface Comment {
+  _id?: string;
+  user: PopulatedUser;
+  text: string;
+  created_at: Date;
+}
+export interface ICommentCreate {
+  _id?: string;
+  created_by: string;
+  text: string;
+  created_at: Date;
 }

@@ -1,3 +1,5 @@
+import { PopulatedUser } from "@/utils/@types/user";
+
 interface IWorkspace {
   _id?: string;
   created_by?: string;
@@ -8,7 +10,26 @@ interface IWorkspace {
     user: string;
     role: string;
   }>;
-  columns?: { order: number; title: string; color: string }[];
+  columns?: WorkspaceColumn[];
   labels?: { color: string; title: string }[];
   progress?: number;
+}
+
+interface WorkspaceParticipants {
+  user: PopulatedUser;
+  role: string;
+  _id: string;
+}
+
+export interface WorkspaceColumn {
+  _id: string;
+  order: number;
+  title: string;
+  color: string;
+}
+
+export interface WorkspaceLabel {
+  _id: string;
+  title: string;
+  color: string;
 }
