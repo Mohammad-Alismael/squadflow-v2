@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { clsx } from "clsx";
+import ParticipantsHeader from "@/app/(app)/workspaces/[workspaceId]/components/ParticipantsHeader";
 
 Header.propTypes = {};
 
@@ -29,20 +30,21 @@ function Header({
         className
       )}
     >
-      <Select>
-        <SelectTrigger className="w-[180px] bg-white">
-          <SelectValue placeholder="group by" />
-        </SelectTrigger>
-        <SelectContent className="bg-white">
-          <SelectItem value="alphabticaly">A-Z</SelectItem>
-          <SelectItem value="accedning">latest to oldest</SelectItem>
-          <SelectItem value="decending">oldest to latest</SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="flex flex-row items-center gap-4">
+        <Select>
+          <SelectTrigger className="w-[180px] bg-white">
+            <SelectValue placeholder="group by" />
+          </SelectTrigger>
+          <SelectContent className="bg-white">
+            <SelectItem value="alphabticaly">A-Z</SelectItem>
+            <SelectItem value="accedning">latest to oldest</SelectItem>
+            <SelectItem value="decending">oldest to latest</SelectItem>
+          </SelectContent>
+        </Select>
+        <ParticipantsHeader workspaceId={workspaceId} />
+      </div>
       <div className="flex flex-row items-center justify-between gap-2">
-        <CreateWorkspaceDialog>
-          <Button className="capitalize bg-green-800">modify columns</Button>
-        </CreateWorkspaceDialog>
+        <Button className="capitalize bg-green-800">modify columns</Button>
         <WorkspaceMenu workspaceId={workspaceId} />
       </div>
     </div>

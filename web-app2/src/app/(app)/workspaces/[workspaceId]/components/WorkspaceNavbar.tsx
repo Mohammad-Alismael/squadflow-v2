@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import Navbar from "@/components/Navbar";
 import { cookies } from "next/headers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { IWorkspace } from "@/utils/@types/workspace";
 
-const fetchWorkspace = async (workspaceId: string) => {
+export const fetchWorkspace = async (workspaceId: string) => {
   const res = await fetch(
     `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}`,
     {
@@ -23,17 +24,8 @@ async function WorkspaceNavbar({ workspaceId }: { workspaceId: string }) {
   const data: IWorkspace = await fetchWorkspace(workspaceId);
   return (
     <Navbar>
-      <div>
-        <p className="text-2xl">{data?.title}</p>
-        <div className="flex items-center gap-2">
-          {data &&
-            data?.participants.map((participant) => (
-              <Avatar>
-                <AvatarImage src="/avatars/01.png" />
-                <AvatarFallback>{participant.user}</AvatarFallback>
-              </Avatar>
-            ))}
-        </div>
+      <div className="">
+        <p className="text-2xl capitalize font-bold">{data?.title}</p>
       </div>
     </Navbar>
   );

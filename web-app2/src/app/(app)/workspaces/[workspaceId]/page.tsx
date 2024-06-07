@@ -1,11 +1,9 @@
 import React, { Suspense } from "react";
-import Column from "@/app/(app)/workspaces/[workspaceId]/components/Column";
 import { cookies } from "next/headers";
 import WorkspaceNavbar from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceNavbar";
 import Header from "@/app/(app)/workspaces/[workspaceId]/components/Header";
-import Head from "next/head";
 import TaskDetailsDialog from "@/components/Dialogs/TaskDetailsDialog";
-import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
+import ColumnsContainer from "@/app/(app)/workspaces/[workspaceId]/components/ColumnsContainer";
 
 const fetchWorkspace = async (workspaceId: string) => {
   if (!workspaceId) return null;
@@ -31,32 +29,8 @@ async function Page({ params }: { params: { workspaceId: string } }) {
       <Suspense fallback={<p>loading...</p>}>
         <WorkspaceNavbar workspaceId={params.workspaceId} />
       </Suspense>
-      <Header className="mt-0 mb-1" workspaceId={params.workspaceId} />
-
-      <div className="h-full flex flex-row gap-4 py-4">
-        {workspace &&
-          workspace?.columns.map(
-            (column: {
-              _id: string;
-              order: number;
-              title: string;
-              color: string;
-            }) => {
-              return (
-                <Suspense
-                  key={`column-${column._id}`}
-                  fallback={<ColumnSkeleton />}
-                >
-                  <Column
-                    key={column._id}
-                    workspaceId={params.workspaceId}
-                    data={column}
-                  />
-                </Suspense>
-              );
-            }
-          )}
-      </div>
+      <Header className="mb-2" workspaceId={params.workspaceId} />
+      <ColumnsContainer workspace={workspace} />
       <TaskDetailsDialog workspaceId={workspace?._id} />
     </div>
   );

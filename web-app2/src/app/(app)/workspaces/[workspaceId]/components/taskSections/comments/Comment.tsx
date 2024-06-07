@@ -15,7 +15,7 @@ function Comment({ data }: { data: ICommentCreate }) {
         <div className="flex items-center gap-2">
           <div className="font-medium">username</div>
           <div className="text-xs text-gray-500 dark:text-gray-400">
-            {data.created_at.toString()}
+            {data.created_at}
           </div>
         </div>
         <div className="text-gray-500 dark:text-gray-400">{data.text}</div>

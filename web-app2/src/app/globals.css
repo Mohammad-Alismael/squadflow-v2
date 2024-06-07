@@ -74,3 +74,15 @@
       @apply bg-background text-foreground;
     }
   }
+.tasks-container {
+  height: 88%; /* Adjust as needed */
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+  /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.tasks-container::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, and Opera */
+}

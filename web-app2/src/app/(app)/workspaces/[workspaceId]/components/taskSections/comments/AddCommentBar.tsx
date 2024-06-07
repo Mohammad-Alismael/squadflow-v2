@@ -17,7 +17,14 @@ function AddCommentBar() {
     addComment({
       _id: uuidv4(),
       text,
-      created_at: new Date(),
+      created_at: new Date().toLocaleDateString("en-GB", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      }),
       created_by: "user_auth_id",
     });
   };

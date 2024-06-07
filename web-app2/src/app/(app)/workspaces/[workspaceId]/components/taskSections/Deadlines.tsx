@@ -7,7 +7,7 @@ import { FormField } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 
-function Dates() {
+function Deadlines() {
   const { setEndTime } = useTaskPropertiesStore();
 
   return (
@@ -21,11 +21,13 @@ function Dates() {
         <Input
           type="time"
           className=""
-          onChange={(e) => setEndTime(e.target.value)}
+          onChange={(e) => {
+            setEndTime(e.target.value);
+          }}
         />
       </div>
     </div>
   );
 }
 
-export default Dates;
+export default Deadlines;

@@ -18,7 +18,7 @@ import Labels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections
 import Assignees from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Assignees";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Description";
-import Dates from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Dates";
+import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Deadlines";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/CommentContainer";
 import { useParams } from "next/navigation";
@@ -56,29 +56,13 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
       attachments,
       comments,
     } = useTaskPropertiesStore.getState();
-    console.log({
-      taskId,
-      workspace: workspaceId,
-      columnId,
-      title,
-      description,
-      taskDate,
-      endTime,
-      column,
-      priority,
-      participants,
-      labels,
-      subTasks,
-      attachments,
-      comments,
-    });
     createMutation({
       workspace: workspaceId,
       columnId,
       title,
       description,
-      taskDate,
-      endTime,
+      dueDate: taskDate,
+      dueTime: endTime,
       column,
       priority,
       participants,
@@ -87,14 +71,16 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
       attachments,
       comments,
     });
-    if (isSuccess) {
+    if (!isError) {
       toast({
         title: `successfully created task`,
       });
+
+      revalidateURL(workspaceId as string);
+      setOpen(false);
+      reset();
     }
-    reset();
-    revalidateURL(workspaceId as string);
-    setOpen(false);
+
     if (isError) toast({ title: error });
   };
   return (
@@ -110,7 +96,7 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
             <Priority />
             <Column />
             <Labels />
-            <Dates />
+            <Deadlines />
             <Description />
             <Button
               className="w-full bg-green-700"
@@ -139,9 +125,7 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
               <TabsContent value="account" className="h-full">
                 <CommentContainer />
               </TabsContent>
-              <TabsContent value="password">
-                Change your password here.
-              </TabsContent>
+              <TabsContent value="password">coming soon</TabsContent>
             </Tabs>
           </div>
         </div>

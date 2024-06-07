@@ -1,6 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { NextResponse } from "next/server";
-import { deleteTask, getTaskId, updateTask } from "@/lib/tasks";
+import {
+  deleteTask,
+  getTaskId,
+  getTaskIdPopulated,
+  updateTask,
+} from "@/lib/tasks";
 import { validateSchema } from "@/lib/helper/route.helper";
 import {
   getOrDeleteSchema,
@@ -13,7 +18,7 @@ export async function GET(request: Request, context: any) {
   const { taskId } = params;
   validateSchema(getOrDeleteSchema, { taskId });
   try {
-    const task = await getTaskId(taskId);
+    const task = await getTaskIdPopulated(taskId);
     return NextResponse.json(task, { status: 200 });
   } catch (e) {
     return NextResponse.json(

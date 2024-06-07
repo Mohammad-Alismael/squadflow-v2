@@ -15,15 +15,26 @@ const taskSchema = new Schema(
     labels: [{ color: String, title: String }],
     comments: [
       {
-        user: { type: Schema.Types.ObjectId, ref: "User" },
+        created_by: { type: Schema.Types.ObjectId, ref: "User" },
         text: String,
         created_at: { type: Date, default: Date.now() },
       },
     ],
-    dueDate: String,
-    dueTime: String,
-    priority: String,
-    description: String,
+    dueDate: {
+      type: String,
+      required: false,
+    },
+    dueTime: {
+      type: String,
+      required: false,
+    },
+    priority: {
+      type: String,
+      required: false,
+    },
+    description: {
+      type: String,
+    },
     attachments: [String],
     created_by: { type: Schema.Types.ObjectId, ref: "User" },
     updated_by: { type: Schema.Types.ObjectId, ref: "User" },

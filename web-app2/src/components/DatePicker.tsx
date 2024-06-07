@@ -19,7 +19,7 @@ export function DatePicker() {
   const [date, setDate] = React.useState<Date>();
   const { setTaskDate } = useTaskPropertiesStore();
   useEffect(() => {
-    setTaskDate(date?.toString());
+    setTaskDate(date?.toLocaleDateString("en-GB"));
   }, [date]);
   return (
     <Popover>

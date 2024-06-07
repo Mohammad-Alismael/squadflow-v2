@@ -6,7 +6,13 @@ import { useGetUserAuth } from "@/utils/hooks/user/useGetUserAuth";
 
 AuthComment.propTypes = {};
 
-function AuthComment({ text, created_at }: { text: string; created_at: Date }) {
+function AuthComment({
+  text,
+  created_at,
+}: {
+  text: string;
+  created_at: string;
+}) {
   const { data: userData, isLoading } = useGetUserAuth();
 
   if (isLoading) return <p>loading ...</p>;

@@ -9,7 +9,7 @@ function CommentContainer() {
   const comments = useTaskPropertiesStore((state) => state.comments);
   return (
     <div className="relative h-full flex flex-col items-center justify-between">
-      <div className="space-y-2 w-full">
+      <div className="space-y-2 w-full h-[80%] overflow-y-auto">
         {comments.map((comment) =>
           comment.created_by === "user_auth_id" ? (
             <AuthComment text={comment.text} created_at={comment.created_at} />

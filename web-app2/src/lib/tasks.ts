@@ -3,6 +3,7 @@ import Task from "@/models/task";
 import { ObjectId } from "mongodb";
 import { ITask } from "@/utils/@types/task";
 import CustomError from "@/utils/CustomError";
+import { HttpStatusCode } from "@/utils/HttpStatusCode";
 
 async function init() {
   await connectMongoDB();
@@ -12,6 +13,7 @@ const createTask = async ({
   title,
   columnId,
   participants,
+  comments,
   labels,
   dueDate,
   dueTime,
@@ -28,6 +30,7 @@ const createTask = async ({
       title,
       columnId,
       participants,
+      comments,
       labels,
       dueDate,
       dueTime,
@@ -39,17 +42,35 @@ const createTask = async ({
     });
 
     // Return the created task
-    return task;
+    console.log("new task created", task);
+    return task?._id;
   } catch (error) {
     // Handle error
     console.error("Error creating task:", error);
-    throw new Error("Failed to create task");
+    throw new CustomError(
+      "Failed to create task",
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 
 async function getTaskId(taskId: ObjectId) {
   await init(); // Assuming this is your initialization function
   const task = await Task.findOne({ _id: taskId });
+  if (!task) {
+    throw new CustomError("Task ID not found", 404);
+  }
+  return task;
+}
+
+async function getTaskIdPopulated(taskId: ObjectId) {
+  await init(); // Assuming this is your initialization function
+  const task = (await Task.findOne({ _id: taskId })
+    .populate({
+      path: "participants",
+      select: "_id username email photoURL",
+    })
+    .exec()) as ITask;
   if (!task) {
     throw new CustomError("Task ID not found", 404);
   }
@@ -152,4 +173,5 @@ export {
   deleteTasksByWorkspaceId,
   getTasksByWorkspaceId,
   getTasksByWorkspaceIdAndColumnId,
+  getTaskIdPopulated,
 };
