@@ -1,9 +1,14 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
-import { createWorkspace, getWorkspacesBByCommunityId } from "@/lib/workspace";
+import {
+  createWorkspace,
+  getWorkspacesByCommunityAndUser,
+  getWorkspacesByCommunityId,
+} from "@/lib/workspace";
 import { validateCommunity, validateSchema } from "@/lib/helper/route.helper";
 import { checkUserIdsExist, findUserByUserId } from "@/lib/users";
 import { postSchema } from "@/app/api/workspaces/schema";
+import { IWorkspace } from "@/utils/@types/workspace";
 
 export async function POST(request: Request) {
   const data: IWorkspace = await request.json();
@@ -36,13 +41,22 @@ export async function POST(request: Request) {
   return NextResponse.json({ workspaceId: workspace._id }, { status: 201 });
 }
 
-export async function GET(request: Request) {
+export async function GET(request: Request, context: any) {
   const userId = request.headers.get("uid") as string;
-
+  const url = new URL(request.url);
+  const participated = url.searchParams.get("participated") == "true";
   const { communityId } = await findUserByUserId(userId);
   validateCommunity(communityId);
   try {
-    const workspaces = await getWorkspacesBByCommunityId(communityId);
+    console.log(participated);
+    if (participated) {
+      const workspaces = await getWorkspacesByCommunityAndUser(
+        communityId,
+        userId
+      );
+      return NextResponse.json(workspaces, { status: 200 });
+    }
+    const workspaces = await getWorkspacesByCommunityId(communityId);
     return NextResponse.json(workspaces, { status: 200 });
   } catch (e) {
     return NextResponse.json(

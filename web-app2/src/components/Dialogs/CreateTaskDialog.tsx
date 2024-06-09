@@ -24,11 +24,12 @@ import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/ta
 import { useParams } from "next/navigation";
 import { useCreateTask } from "@/utils/hooks/task/useCreateTask";
 import { useToast } from "@/components/ui/use-toast";
-import { isError } from "node:util";
 import { revalidateURL } from "@/components/Dialogs/actions";
+import { useQueryClient } from "react-query";
 
 function CreateTaskDialog({ columnId }: { columnId: string }) {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { workspaceId } = useParams();
   const {
@@ -79,6 +80,7 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
       revalidateURL(workspaceId as string);
       setOpen(false);
       reset();
+      console.log(queryClient.getQueryCache());
     }
 
     if (isError) toast({ title: error });

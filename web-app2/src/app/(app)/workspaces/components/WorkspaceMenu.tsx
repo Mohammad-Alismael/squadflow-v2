@@ -24,15 +24,23 @@ function WorkspaceMenu({ workspaceId }: { workspaceId: string }) {
           <EllipsisVerticalIcon className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align="start" className="z-50">
         <DropdownMenuItem
-          onClick={() =>
-            router.replace(`/workspaces?workspaceId=${workspaceId}`)
-          }
+          onClick={(e) => {
+            e.stopPropagation();
+            router.replace(`/workspaces?workspaceId=${workspaceId}`);
+          }}
         >
-          edit
+          Edit
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleChange}>Delete</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            handleChange();
+          }}
+        >
+          Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

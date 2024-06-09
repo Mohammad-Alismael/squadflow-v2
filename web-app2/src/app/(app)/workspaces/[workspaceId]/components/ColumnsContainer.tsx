@@ -1,18 +1,46 @@
 "use client";
-import React from "react";
+import React, { startTransition, useEffect, useOptimistic } from "react";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/Column";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import { updateColumnIdForTaskId } from "@/app/(app)/workspaces/[workspaceId]/actions";
+import { useQueryClient } from "react-query";
+import { useGetTasksByWorkspaceId } from "@/utils/hooks/workspace/useGetTasksByWorkspaceId";
+import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
+import { TaskResponse } from "@/utils/@types/task";
+import { WorkspaceColumn } from "@/utils/@types/workspace";
 
-function ColumnsContainer({ workspace }: { workspace: any }) {
-  const handleOnDragEnd = (result: any) => {
+function ColumnsContainer({
+  workspaceId,
+  columns,
+  tasks,
+}: {
+  workspaceId: string;
+  columns: WorkspaceColumn[];
+  tasks: TaskResponse[];
+}) {
+  const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
+
+  const handleOnDragEnd = async (result: any) => {
     const { source, destination, draggableId, type } = result;
-    console.log(type);
     if (!destination) return;
     if (source.droppableId === destination.droppableId) return;
+
     const taskId = draggableId;
     const fromColumnId = source.droppableId;
     const toColumnId = destination.droppableId;
-    console.log({ taskId, fromColumnId, toColumnId });
+
+    if (type === "task") {
+      // Wrap the state update with startTransition
+      startTransition(() => {
+        const newOptimisticTasks = optimisticTasks.map((task) => {
+          if (task._id === taskId) {
+            return { ...task, columnId: toColumnId };
+          } else return task;
+        });
+        setOptimisticTasks(newOptimisticTasks);
+      });
+      await updateColumnIdForTaskId(taskId, toColumnId);
+    }
   };
 
   return (
@@ -24,23 +52,25 @@ function ColumnsContainer({ workspace }: { workspace: any }) {
             {...provided.droppableProps}
             className="h-[84.5%] flex flex-row gap-4 py-2"
           >
-            {workspace &&
-              workspace?.columns.map(
-                (column: {
-                  _id: string;
-                  order: number;
-                  title: string;
-                  color: string;
-                }) => {
-                  return (
-                    <Column
-                      key={column._id}
-                      workspaceId={workspace._id}
-                      data={column}
-                    />
-                  );
-                }
-              )}
+            {columns.map(
+              (column: {
+                _id: string;
+                order: number;
+                title: string;
+                color: string;
+              }) => {
+                return (
+                  <Column
+                    key={column._id}
+                    workspaceId={workspaceId}
+                    data={column}
+                    tasks={optimisticTasks?.filter(
+                      (item) => item.columnId === column._id
+                    )}
+                  />
+                );
+              }
+            )}
             {provided.placeholder}
           </div>
         )}

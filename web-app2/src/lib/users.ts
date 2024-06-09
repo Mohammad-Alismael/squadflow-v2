@@ -7,6 +7,8 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
+import { ObjectId } from "mongodb";
+import { NextResponse } from "next/server";
 
 const dbName = "mobile-app";
 
@@ -133,6 +135,18 @@ async function findUserByUsername(username: string) {
   }
 }
 
+const findUserById = async (userId: string) => {
+  const userData = await User.findById(new ObjectId(userId));
+  if (!userData)
+    throw new CustomError("user not found", HttpStatusCode.NOT_FOUND);
+  const res = {
+    username: userData?.username,
+    email: userData?.email,
+    photoURL: userData?.photoURL,
+  };
+  return res;
+};
+
 async function findUserByEmail(email: string) {
   await init();
   try {
@@ -223,4 +237,5 @@ export {
   updateUserToken,
   checkUserIdsExist,
   findUserByUserId,
+  findUserById,
 };

@@ -63,6 +63,21 @@ async function getTaskId(taskId: ObjectId) {
   return task;
 }
 
+async function updateColumnId(taskId: ObjectId, columnId: ObjectId) {
+  await init(); // Assuming this is your initialization function
+  const result = await Task.updateOne({ _id: taskId }, { $set: { columnId } });
+
+  if (result.matchedCount === 0) {
+    throw new CustomError("Task ID not found", 404);
+  }
+
+  if (result.modifiedCount === 0) {
+    throw new CustomError("Update failed, column ID might be the same", 400);
+  }
+
+  return result.modifiedCount;
+}
+
 async function getTaskIdPopulated(taskId: ObjectId) {
   await init(); // Assuming this is your initialization function
   const task = (await Task.findOne({ _id: taskId })
@@ -174,4 +189,5 @@ export {
   getTasksByWorkspaceId,
   getTasksByWorkspaceIdAndColumnId,
   getTaskIdPopulated,
+  updateColumnId,
 };

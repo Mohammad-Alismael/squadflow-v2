@@ -8,7 +8,7 @@ import { PopulatedUser } from "@/utils/@types/user";
 export async function GET(request: Request, context: any) {
   const url = new URL(request.url);
   const includeDetails = url.searchParams.get("details") === "true";
-  const { params } = await context;
+  const { params } = context;
   const { workspaceId } = params;
   const userId = request.headers.get("uid") as string;
   validateSchema(getSchema, { workspaceId });

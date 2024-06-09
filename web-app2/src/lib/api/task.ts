@@ -33,3 +33,18 @@ export const fetchTasksForColumnId = async (
   }
   return [];
 };
+
+export const fetchTasksForWorkspace = async (workspaceId: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL_API_ROUTE}/api/workspaces/${workspaceId}/tasks`,
+    {
+      method: "GET",
+      credentials: "include",
+      cache: "no-cache",
+    }
+  );
+  if (res.ok) {
+    return res.json();
+  }
+  return [];
+};

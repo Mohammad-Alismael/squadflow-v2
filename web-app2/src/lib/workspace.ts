@@ -93,7 +93,7 @@ async function getWorkspaceParticipants(workspaceId: ObjectId) {
   return workspace;
 }
 
-async function getWorkspacesBByCommunityId(communityId: string) {
+async function getWorkspacesByCommunityId(communityId: string) {
   await init();
   const workspaces = await Workspace.find({ community: communityId });
   if (!workspaces) {
@@ -101,6 +101,25 @@ async function getWorkspacesBByCommunityId(communityId: string) {
   }
   return workspaces;
 }
+
+const getWorkspacesByCommunityAndUser = async (
+  communityId: string,
+  userId: string
+) => {
+  try {
+    const workspaces = await Workspace.find({
+      community: communityId,
+      "participants.user": new ObjectId(userId),
+    });
+    return workspaces;
+  } catch (err) {
+    console.error(err);
+    throw new CustomError(
+      "Error fetching workspaces",
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
+  }
+};
 
 async function deleteLabelFromWorkspace(
   workspaceId: ObjectId,
@@ -162,7 +181,8 @@ export {
   updateWorkspaceLabelsList,
   deleteLabelFromWorkspace,
   deleteWorkspacesByCommunityId,
-  getWorkspacesBByCommunityId,
+  getWorkspacesByCommunityId,
   getUserRoleInWorkspace,
   getWorkspaceParticipants,
+  getWorkspacesByCommunityAndUser,
 };

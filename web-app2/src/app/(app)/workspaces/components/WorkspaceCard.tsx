@@ -4,15 +4,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
+import { IWorkspace } from "@/utils/@types/workspace";
 
 function WorkspaceCard({ data }: { data: IWorkspace }) {
   return (
-    <Card className="">
-      <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
-        <CardTitle className="text-xl">{data.title}</CardTitle>
-        <WorkspaceMenu workspaceId={data._id as string} />
-      </CardHeader>
-      <Link href={`/workspaces/${data._id}`}>
+    <Link href={`/workspaces/${data._id}`} passHref>
+      <Card className="">
+        <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
+          <CardTitle className="text-xl">{data.title}</CardTitle>
+          <WorkspaceMenu workspaceId={data._id as string} />
+        </CardHeader>
+
         <CardContent>
           <div className="space-y-2">
             <div className="mt-4 flex items-center gap-2">
@@ -31,8 +33,8 @@ function WorkspaceCard({ data }: { data: IWorkspace }) {
             </div>
           </div>
         </CardContent>
-      </Link>
-    </Card>
+      </Card>
+    </Link>
   );
 }
 
