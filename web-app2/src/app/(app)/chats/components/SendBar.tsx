@@ -28,7 +28,7 @@ function SendBar({
     setText("");
   };
   return (
-    <div className="flex flex-row w-full">
+    <div className="flex flex-row w-full gap-2">
       <Input
         type="text"
         name="message"
@@ -41,7 +41,9 @@ function SendBar({
         }}
         onChange={(e) => setText(e.target.value)}
       />
-      <Button onClick={handleSubmit}>submit</Button>
+      <Button onClick={handleSubmit} className="bg-green-800">
+        submit
+      </Button>
     </div>
   );
 }

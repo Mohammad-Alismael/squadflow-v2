@@ -27,10 +27,17 @@ function Message({
           <AvatarFallback>{userData.username}</AvatarFallback>
         </Avatar>
         <div className="bg-white p-2 rounded-md">
-          <p className="text-sm">{userData?.username}</p>
+          <p className="text-sm text-green-800">{userData?.username}</p>
           <p>{data.text}</p>
-          <span className="text-sm">
-            {Date(data.timestamp.toString()).toString()}
+          <span className="text-sm opacity-50 self-end">
+            {new Date(data.timestamp).toLocaleDateString("en-GB", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: false,
+            })}
           </span>
         </div>
       </div>

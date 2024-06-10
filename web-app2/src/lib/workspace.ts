@@ -78,6 +78,19 @@ async function getWorkspaceById(workspaceId: ObjectId) {
   }
   return workspace;
 }
+async function getWorkspaceByIdPopulated(workspaceId: ObjectId) {
+  await init();
+  const workspace = await Workspace.findOne({ _id: workspaceId })
+    .populate({
+      path: "participants.user",
+      select: "_id username email role",
+    })
+    .exec();
+  if (!workspace) {
+    throw new CustomError("workspace not found", HttpStatusCode.NOT_FOUND);
+  }
+  return workspace;
+}
 async function getWorkspaceParticipants(workspaceId: ObjectId) {
   await init();
   const workspace = await Workspace.findById(workspaceId)
@@ -91,6 +104,20 @@ async function getWorkspaceParticipants(workspaceId: ObjectId) {
     throw new CustomError("workspace not found", HttpStatusCode.NOT_FOUND);
   }
   return workspace;
+}
+
+async function getWorkspacesByCommunityIdPopulated(communityId: string) {
+  await init();
+  const workspaces = await Workspace.find({ community: communityId })
+    .populate({
+      path: "participants.user",
+      select: "_id username email role",
+    })
+    .exec();
+  if (!workspaces) {
+    throw new Error("workspace not found");
+  }
+  return workspaces;
 }
 
 async function getWorkspacesByCommunityId(communityId: string) {
@@ -110,7 +137,12 @@ const getWorkspacesByCommunityAndUser = async (
     const workspaces = await Workspace.find({
       community: communityId,
       "participants.user": new ObjectId(userId),
-    });
+    })
+      .populate({
+        path: "participants.user",
+        select: "_id username email role",
+      })
+      .exec();
     return workspaces;
   } catch (err) {
     console.error(err);
@@ -185,4 +217,6 @@ export {
   getUserRoleInWorkspace,
   getWorkspaceParticipants,
   getWorkspacesByCommunityAndUser,
+  getWorkspacesByCommunityIdPopulated,
+  getWorkspaceByIdPopulated,
 };

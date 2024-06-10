@@ -4,6 +4,7 @@ import {
   createWorkspace,
   getWorkspacesByCommunityAndUser,
   getWorkspacesByCommunityId,
+  getWorkspacesByCommunityIdPopulated,
 } from "@/lib/workspace";
 import { validateCommunity, validateSchema } from "@/lib/helper/route.helper";
 import { checkUserIdsExist, findUserByUserId } from "@/lib/users";
@@ -48,7 +49,6 @@ export async function GET(request: Request, context: any) {
   const { communityId } = await findUserByUserId(userId);
   validateCommunity(communityId);
   try {
-    console.log(participated);
     if (participated) {
       const workspaces = await getWorkspacesByCommunityAndUser(
         communityId,
@@ -56,7 +56,7 @@ export async function GET(request: Request, context: any) {
       );
       return NextResponse.json(workspaces, { status: 200 });
     }
-    const workspaces = await getWorkspacesByCommunityId(communityId);
+    const workspaces = await getWorkspacesByCommunityIdPopulated(communityId);
     return NextResponse.json(workspaces, { status: 200 });
   } catch (e) {
     return NextResponse.json(

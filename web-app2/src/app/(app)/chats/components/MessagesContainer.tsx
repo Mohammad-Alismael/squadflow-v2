@@ -23,7 +23,7 @@ function MessagesContainer({
   useEffect(() => {
     const dbRef = ref(getDatabase());
     const convRef = child(dbRef, `communities/${communityId}/${workspaceId}`);
-
+    setData([]);
     return onValue(
       convRef,
       async (snapshot) => {
@@ -46,7 +46,7 @@ function MessagesContainer({
   if (!workspaceId) return <div>select workspace to read messages</div>;
   if (workspaceId)
     return (
-      <div className="h-[90%] w-full overflow-y-auto flex flex-col items-start gap-2 py-4">
+      <div className="h-[80%] w-full overflow-y-auto flex flex-col items-start gap-2 py-4">
         {!data.length && <p>no messages</p>}
         {!!data.length &&
           data.map((item) => (

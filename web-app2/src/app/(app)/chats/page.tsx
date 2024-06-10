@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import PropTypes from "prop-types";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,11 @@ import Message from "@/app/(app)/chats/components/Message";
 import WorkspacesList from "@/app/(app)/chats/components/WorkspacesList";
 import WorkspaceDetailsBar from "@/app/(app)/chats/components/workspaceDetailsBar";
 
-async function Page() {
+async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) {
   const cookie = cookies().get("jwt");
   if (!cookie) redirect("/auth");
   const { payload } = await verifyJWTToken(cookie?.value);
@@ -26,9 +30,13 @@ async function Page() {
         </div>
       </Navbar>
       <div className="flex-grow h-[89.9%]">
-        <WorkspacesList />
-        <div className="h-full w-3/4 float-right p-4">
-          <WorkspaceDetailsBar />
+        <Suspense fallback={<p>loading ...</p>}>
+          <WorkspacesList selectedWorkspaceId={searchParams["workspaceId"]} />
+        </Suspense>
+        <div className="h-full w-3/4 float-right px-4">
+          <Suspense fallback={<p>loading ...</p>}>
+            <WorkspaceDetailsBar workspaceId={searchParams["workspaceId"]} />
+          </Suspense>
           <MessagesContainer
             userId={payload?._id}
             communityId={payload?.communityId}
