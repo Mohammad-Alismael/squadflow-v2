@@ -21,7 +21,7 @@ function WorkspaceCard({ data }: { data: IWorkspace }) {
               {data.participants.map((participant) => (
                 <Avatar>
                   <AvatarImage src="/avatars/01.png" />
-                  <AvatarFallback>{participant.user}</AvatarFallback>
+                  <AvatarFallback>{participant.user.username}</AvatarFallback>
                 </Avatar>
               ))}
             </div>

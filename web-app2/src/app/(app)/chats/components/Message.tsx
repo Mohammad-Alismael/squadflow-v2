@@ -4,6 +4,7 @@ import { useGetUserById } from "@/utils/hooks/user/useGetUserById";
 import { MessageType } from "@/app/(app)/chats/components/MessagesContainer";
 import { clsx } from "clsx";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import MessageSkeleton from "@/app/(app)/chats/components/MessageSkeleton";
 
 function Message({
   data,
@@ -13,7 +14,7 @@ function Message({
   currentUserId: string;
 }) {
   const { data: userData, isLoading } = useGetUserById(data.created_by);
-  if (isLoading) return <p>loading ...</p>;
+  if (isLoading) return <MessageSkeleton />;
   if (userData)
     return (
       <div

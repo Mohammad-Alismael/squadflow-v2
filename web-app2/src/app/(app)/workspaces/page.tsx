@@ -19,7 +19,7 @@ async function Page({
             <p className="text-sm opacity-50">never try to give up.</p>
           </div>
         </Navbar>
-        <div className="flex flex-col flex-grow ">
+        <div className="flex flex-col flex-grow">
           <Header />
           <Suspense fallback={<WorkspaceContainerSkeleton />}>
             <WorkspacesContainer viewType={searchParams["view"]} />

@@ -20,8 +20,10 @@ function Workspace({
       onClick={() => redirectWorkspaceChat(workspace._id)}
       key={workspace._id}
       className={clsx(
-        "bg-white rounded-md p-4 space-y-1",
-        selectedWorkspaceId === workspace._id && "border-2 border-green-800"
+        "rounded-md p-4 space-y-1",
+        selectedWorkspaceId === workspace._id
+          ? "border-2 border-green-800"
+          : "border-2 border-gray-100"
       )}
     >
       <p>{workspace.title}</p>
