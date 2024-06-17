@@ -23,13 +23,20 @@ const links: linkType[] = [
 
 const Sidebar = () => {
   return (
-    <div className="relative bg-white float-left h-full w-1/6 py-5">
-      <Link className="flex items-center gap-2.5 pl-4" href="/dashboard">
+    <div className="relative bg-white float-left h-full w-1/6 pt-4 pb-5">
+      <Link
+        className="flex flex-row items-center gap-x-2.5 pl-4"
+        href="/dashboard"
+      >
         <Image src={logo} alt="logo" priority width={50} height={50} />
         <span className="text-2xl font-bold capitalize">squadflow</span>
       </Link>
-      <hr className="my-2" />
-      <div className="space-y-2 pl-3">
+
+      <hr className="mb-2 mt-4" />
+      <p className="opacity-50 mt-3 mb-1 mx-4 uppercase font-bold text-sm">
+        overview
+      </p>
+      <div className="space-y-2 pl-4">
         {links.map((link, i) => (
           <SidebarLink key={i} link={link} />
         ))}

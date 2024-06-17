@@ -6,11 +6,12 @@ import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 
 function Description() {
   const { setDescription } = useTaskPropertiesStore();
-
+  const description = useTaskPropertiesStore((state) => state.description);
   return (
     <div className="space-y-2">
       <Label className="capitalize text-md font-bold">description</Label>
       <Textarea
+        defaultValue={description}
         placeholder="Type your message here."
         onChange={(e) => setDescription(e.target.value)}
       />

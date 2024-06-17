@@ -3,9 +3,6 @@ import React, { startTransition, useEffect, useOptimistic } from "react";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/Column";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { updateColumnIdForTaskId } from "@/app/(app)/workspaces/[workspaceId]/actions";
-import { useQueryClient } from "react-query";
-import { useGetTasksByWorkspaceId } from "@/utils/hooks/workspace/useGetTasksByWorkspaceId";
-import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
 import { TaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 

@@ -125,7 +125,9 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="account" className="h-full">
-                <CommentContainer />
+                <CommentContainer>
+                  <CommentContainer.AddCommentLocal />
+                </CommentContainer>
               </TabsContent>
               <TabsContent value="password">coming soon</TabsContent>
             </Tabs>

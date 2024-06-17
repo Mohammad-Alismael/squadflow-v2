@@ -2,9 +2,17 @@ import React, { Suspense } from "react";
 import WorkspaceNavbar from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceNavbar";
 import Header from "@/app/(app)/workspaces/[workspaceId]/components/Header";
 import TaskDetailsDialog from "@/components/Dialogs/TaskDetailsDialog";
-import ColumnsContainer from "@/app/(app)/workspaces/[workspaceId]/components/ColumnsContainer";
+const ColumnsContainer = dynamic(
+  () =>
+    import("@/app/(app)/workspaces/[workspaceId]/components/ColumnsContainer"),
+  {
+    // loading: () => <p>Loading...</p>,
+    ssr: false,
+  }
+);
 import { cookies, headers } from "next/headers";
 import ColumnsWrapper from "@/app/(app)/workspaces/[workspaceId]/components/ColumnsWrapper";
+import dynamic from "next/dynamic";
 
 const fetchWorkspace = async (workspaceId: string) => {
   if (!workspaceId) return null;

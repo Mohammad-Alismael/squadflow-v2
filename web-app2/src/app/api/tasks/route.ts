@@ -11,7 +11,6 @@ export async function POST(request: Request) {
   validateSchema(postSchema, data);
   const userId = request.headers.get("uid");
   try {
-    console.log(data);
     data.comments = data.comments.map((item) => {
       const x = item;
       delete x["_id"];
@@ -19,6 +18,7 @@ export async function POST(request: Request) {
       x["created_by"] = userId as string;
       return x;
     });
+    console.log({ comments: data.comments });
     await getWorkspaceById(data.workspace);
     const task = await createTask({
       ...data,

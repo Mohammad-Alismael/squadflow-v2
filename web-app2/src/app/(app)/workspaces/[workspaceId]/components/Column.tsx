@@ -23,6 +23,7 @@ function Column({
     <Draggable draggableId={data._id} index={data.order}>
       {(provided, snapshot) => (
         <div
+          key={data._id}
           ref={provided.innerRef}
           {...provided.draggableProps}
           className="rounded-xl h-full w-1/4 bg-gray-300 p-4"
@@ -42,7 +43,7 @@ function Column({
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {tasks.map((task: TaskResponse, index) => {
+                {tasks.map((task: TaskResponse, index: number) => {
                   return <TaskCard key={task._id} data={task} index={index} />;
                 })}
                 {provided.placeholder}

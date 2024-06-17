@@ -29,13 +29,16 @@ function AddCommentBar() {
     });
   };
   return (
-    <div className="flex w-full gap-3 items-stretch my-2">
+    <div className="flex w-full gap-3 items-stretch my-4">
       <Avatar className="h-10 w-10 shrink-0">
         <img src="/placeholder.svg" alt="Avatar" />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>
       <div className="w-[90%]">
         <Input
+          onKeyPress={(event) => {
+            if (event.key === "Enter") handleAddComment();
+          }}
           type="text"
           placeholder="Write a comment..."
           onChange={(e) => setText(e.target.value)}
@@ -46,7 +49,7 @@ function AddCommentBar() {
         onClick={handleAddComment}
         type="submit"
         size="icon"
-        className="h-10 w-20 rounded-full bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+        className="h-10 w-20 rounded-full bg-green-800 text-white hover:bg-blue-600 focus:outline-none"
       >
         <SendIcon className="h-5 w-5" />
         <span className="sr-only">Send</span>

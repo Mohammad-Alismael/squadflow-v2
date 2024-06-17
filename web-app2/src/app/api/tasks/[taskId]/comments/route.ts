@@ -6,7 +6,7 @@ import { addCommentToTask, getCommentsTaskId, getTaskId } from "@/lib/tasks";
 import { ObjectId } from "mongodb";
 
 export async function GET(request: Request, context: any) {
-  const { params } = await context;
+  const { params } = context;
   const { taskId } = params;
   validateSchema(getOrDeleteSchema, { taskId });
   try {
@@ -23,10 +23,11 @@ export async function GET(request: Request, context: any) {
 }
 
 export async function POST(request: Request, context: any) {
-  const { params } = await context;
+  const { params } = context;
   const { taskId } = params;
   const { text } = await request.json();
-  const userId = request.headers.get("uid");
+  console.log({ taskId, text });
+  const userId = request.headers.get("uid") as string;
   validateSchema(getOrDeleteSchema, { taskId });
   if (!text)
     return NextResponse.json(
@@ -36,8 +37,7 @@ export async function POST(request: Request, context: any) {
       }
     );
   try {
-    await getTaskId(taskId);
-    const task = await addCommentToTask(taskId, {
+    await addCommentToTask(taskId, {
       user: userId as string,
       text,
       created_at: new Date(),

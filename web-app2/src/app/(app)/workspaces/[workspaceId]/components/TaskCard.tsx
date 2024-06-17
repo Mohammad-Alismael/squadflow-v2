@@ -19,7 +19,7 @@ const TaskCard = ({ data, index }: { data: TaskResponse; index: number }) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <Link href={`?taskId=${_id}`}>
+          <Link href={`?taskId=${_id}`} prefetch={false}>
             <Card
               className={clsx(
                 "p-3 space-y-1",

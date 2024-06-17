@@ -18,9 +18,18 @@ import { useEffect } from "react";
 export function DatePicker() {
   const [date, setDate] = React.useState<Date>();
   const { setTaskDate } = useTaskPropertiesStore();
+  const dueDate = useTaskPropertiesStore((state) => state.taskDate);
+
   useEffect(() => {
     setTaskDate(date?.toLocaleDateString("en-GB"));
   }, [date]);
+  useEffect(() => {
+    if (dueDate && dueDate !== "") {
+      const [day, month, year] = dueDate.split("/");
+      const dateObject: Date = new Date(year, month - 1, day);
+      setDate(dateObject);
+    }
+  }, []);
   return (
     <Popover>
       <PopoverTrigger asChild>

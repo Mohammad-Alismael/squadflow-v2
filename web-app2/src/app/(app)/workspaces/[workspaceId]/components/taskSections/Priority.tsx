@@ -11,11 +11,11 @@ import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 
 function Priority() {
   const { setPriority } = useTaskPropertiesStore();
-
+  const priority = useTaskPropertiesStore((state) => state.priority);
   return (
     <div className="flex flex-row items-center gap-8">
       <h3 className="font-bold">priority</h3>
-      <Select onValueChange={setPriority}>
+      <Select onValueChange={setPriority} defaultValue={priority}>
         <SelectTrigger className="w-[160px] h-[41px] bg-gray-100">
           <SelectValue placeholder="select order list" />
         </SelectTrigger>

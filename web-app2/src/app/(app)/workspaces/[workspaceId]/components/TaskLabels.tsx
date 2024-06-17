@@ -8,7 +8,7 @@ function TaskLabels({ labels }: { labels: WorkspaceLabel[] }) {
   const colors = labels.map(({ color }) => color);
   return (
     <div className="flex flex-row gap-2">
-      {colors.map((color, index) => (
+      {colors.slice(0, 3).map((color, index) => (
         <div
           key={index}
           style={{

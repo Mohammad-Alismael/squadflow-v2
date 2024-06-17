@@ -13,7 +13,7 @@ function ParticipantsList({
     <div className="mt-4 flex items-center gap-2">
       {joinedParticipants.map((item) => {
         return (
-          <Avatar>
+          <Avatar key={item.user}>
             <AvatarImage src="/avatars/01.png" />
             <AvatarFallback>{item.user}</AvatarFallback>
           </Avatar>

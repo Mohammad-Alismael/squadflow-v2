@@ -85,6 +85,10 @@ async function getTaskIdPopulated(taskId: ObjectId) {
       path: "participants",
       select: "_id username email photoURL",
     })
+    .populate({
+      path: "comments.created_by",
+      select: "_id username email photoURL",
+    })
     .exec()) as ITask;
   if (!task) {
     throw new CustomError("Task ID not found", 404);
@@ -174,7 +178,10 @@ const addCommentToTask = async (
   } catch (error) {
     // Handle error
     console.error("Error deleting task:", error);
-    throw new Error("Failed to delete task");
+    throw new CustomError(
+      "Failed to delete task",
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 

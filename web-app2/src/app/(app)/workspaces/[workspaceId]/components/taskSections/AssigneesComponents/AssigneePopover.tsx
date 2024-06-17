@@ -31,10 +31,10 @@ function AssigneePopover({ children }: { children: ReactNode }) {
             data &&
             data.map((item, index) => {
               return (
-                <>
-                  <AddAssignee key={item._id} data={item} />
+                <React.Fragment key={item._id}>
+                  <AddAssignee data={item} />
                   {index !== data?.length - 1 && <hr />}
-                </>
+                </React.Fragment>
               );
             })}
         </div>

@@ -75,7 +75,7 @@
     }
   }
 .tasks-container {
-  height: 88%; /* Adjust as needed */
+  height: 86.5%; /* Adjust as needed */
   overflow-y: auto;
   margin-bottom: 0.5rem;
   /* Hide scrollbar for Webkit browsers (Chrome, Safari) */

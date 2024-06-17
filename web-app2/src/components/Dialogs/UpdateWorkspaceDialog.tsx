@@ -77,7 +77,7 @@ function UpdateWorkspaceDialog() {
         form.setValue("participants", workspace?.participants);
       workspace?.participants && setParticipants(workspace?.participants);
     }
-  }, [workspaceId, isLoadingWorkspace]);
+  }, [workspaceId, isLoadingWorkspace, joinedParticipants]);
   return (
     <Dialog
       open={workspaceId !== null}
@@ -90,7 +90,7 @@ function UpdateWorkspaceDialog() {
         <DialogHeader>
           <DialogTitle className="capitalize">update workspace</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         {isLoadingWorkspace && <p>loading ...</p>}

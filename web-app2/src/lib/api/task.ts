@@ -48,3 +48,32 @@ export const fetchTasksForWorkspace = async (workspaceId: string) => {
   }
   return [];
 };
+
+export const fetchTaskById = async (taskId: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL_API_ROUTE}/api/tasks/${taskId}`,
+    {
+      method: "GET",
+      credentials: "include",
+      cache: "no-cache",
+    }
+  );
+  if (res.ok) {
+    return res.json();
+  } else await handleError(res);
+};
+
+export const postCommentByTaskId = async (taskId: string, text: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL_API_ROUTE}/api/tasks/${taskId}/comments`,
+    {
+      method: "POST",
+      credentials: "include",
+      cache: "no-cache",
+      body: JSON.stringify({ text }),
+    }
+  );
+  if (res.ok) {
+    return res.json();
+  } else await handleError(res);
+};
