@@ -6,12 +6,10 @@ const ColumnsContainer = dynamic(
   () =>
     import("@/app/(app)/workspaces/[workspaceId]/components/ColumnsContainer"),
   {
-    // loading: () => <p>Loading...</p>,
     ssr: false,
   }
 );
-import { cookies, headers } from "next/headers";
-import ColumnsWrapper from "@/app/(app)/workspaces/[workspaceId]/components/ColumnsWrapper";
+import { cookies } from "next/headers";
 import dynamic from "next/dynamic";
 
 const fetchWorkspace = async (workspaceId: string) => {

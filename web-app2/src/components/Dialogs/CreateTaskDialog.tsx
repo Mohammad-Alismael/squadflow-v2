@@ -64,7 +64,6 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
       description,
       dueDate: taskDate,
       dueTime: endTime,
-      column,
       priority,
       participants,
       labels,
@@ -80,7 +79,6 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
       revalidateURL(workspaceId as string);
       setOpen(false);
       reset();
-      console.log(queryClient.getQueryCache());
     }
 
     if (isError) toast({ title: error });

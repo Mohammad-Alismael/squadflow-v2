@@ -12,6 +12,8 @@ import {
   postSchema,
   putSchema,
 } from "@/app/api/tasks/schema";
+import { HttpStatusCode } from "@/utils/HttpStatusCode";
+import { restructureComments } from "@/app/api/tasks/[taskId]/helper";
 
 export async function GET(request: Request, context: any) {
   const { params } = await context;
@@ -52,9 +54,17 @@ export async function PUT(request: Request, context: any) {
   const data = await request.json();
   validateSchema(putSchema, data);
   const userId = request.headers.get("uid");
+  if (!userId)
+    return NextResponse.json(
+      {
+        message: "server error",
+      },
+      { status: HttpStatusCode.INTERNAL_SERVER_ERROR }
+    );
   try {
-    const taskFound = await getTaskId(taskId);
-    const task = await updateTask(taskId, {
+    // for resting user id for created_by
+    data.comments = restructureComments(data.comments, userId);
+    await updateTask(taskId, {
       ...data,
       updated_by: userId,
     });

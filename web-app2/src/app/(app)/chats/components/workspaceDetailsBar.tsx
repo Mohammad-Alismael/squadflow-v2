@@ -1,8 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { getWorkspaceByIdPopulated } from "@/lib/workspace";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
 import SearchMessageInput from "@/app/(app)/chats/components/SearchMessageInput";
 
 async function WorkspaceDetailsBar({ workspaceId }: { workspaceId: string }) {

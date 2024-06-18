@@ -5,20 +5,23 @@ import { validateSchema } from "@/lib/helper/route.helper";
 import { postSchema } from "@/app/api/tasks/schema";
 import { getWorkspaceById } from "@/lib/workspace";
 import { revalidateTag } from "next/cache";
+import { restructureComments } from "@/app/api/tasks/[taskId]/helper";
+import { HttpStatusCode } from "@/utils/HttpStatusCode";
 
 export async function POST(request: Request) {
   const data = await request.json();
   validateSchema(postSchema, data);
   const userId = request.headers.get("uid");
+  if (!userId)
+    return NextResponse.json(
+      {
+        message: "server error",
+      },
+      { status: HttpStatusCode.INTERNAL_SERVER_ERROR }
+    );
   try {
-    data.comments = data.comments.map((item) => {
-      const x = item;
-      delete x["_id"];
-      delete x["created_at"];
-      x["created_by"] = userId as string;
-      return x;
-    });
-    console.log({ comments: data.comments });
+    // for reseting user id for created_by
+    data.comments = restructureComments(data.comments, userId);
     await getWorkspaceById(data.workspace);
     const task = await createTask({
       ...data,

@@ -31,7 +31,8 @@ function MessagesContainer({
         if (snapshot.exists()) {
           const conversations = snapshot.val();
           const mIds = Object.keys(conversations);
-          const list = [];
+          const list: any[] | ((prevState: MessageType[]) => MessageType[]) =
+            [];
           console.log(workspaceId, mIds);
           mIds.forEach((id) => {
             list.push({ messageId: id, ...conversations[id] });

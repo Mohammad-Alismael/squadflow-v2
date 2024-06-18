@@ -22,7 +22,7 @@ function Label({ data }: { data: WorkspaceLabel }) {
     <>
       <p
         onClick={included ? handleClickRemove : handleClick}
-        className={`px-1 py-1 border-2 border-gray-200 rounded-full text-[${data.color}]`}
+        className={`px-4 py-2 border-2 border-gray-200 rounded-full text-[${data.color}]`}
       >
         {data.title}
       </p>

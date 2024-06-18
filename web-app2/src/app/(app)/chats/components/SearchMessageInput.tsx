@@ -3,7 +3,7 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 
-function SearchMessageInput(props) {
+function SearchMessageInput() {
   const router = useRouter();
   const searchParams = useSearchParams();
 

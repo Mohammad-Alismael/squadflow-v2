@@ -53,5 +53,5 @@ export interface ICommentCreate {
   _id?: string;
   created_by: string;
   text: string;
-  created_at: string;
+  created_at?: string;
 }

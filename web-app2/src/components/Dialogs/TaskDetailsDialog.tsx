@@ -1,10 +1,6 @@
 "use client";
-import React, { ReactNode, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@/components/ui/label";
+import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "react-query";
@@ -20,10 +16,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/CommentContainer";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSkeleton";
+import { useUpdateTask } from "@/utils/hooks/task/useUpdateTask";
+import { revalidateURL } from "@/components/Dialogs/actions";
+import { useToast } from "@/components/ui/use-toast";
 
 function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
   const queryClient = useQueryClient();
-
+  const { toast } = useToast();
   const searchParams = useSearchParams();
   const taskId = searchParams.get("taskId");
   const {
@@ -42,6 +41,14 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
   } = useTaskPropertiesStore();
   const resetState = useTaskPropertiesStore((state) => state.resetState);
   const { data, isLoading, isRefetching } = useGetTasksById(taskId, true);
+  const {
+    mutate: updateMutation,
+    isLoading: isLoadingUpdate,
+    error,
+    isError,
+    isSuccess,
+  } = useUpdateTask();
+
   const handleUpdateClick = () => {
     const {
       taskId,
@@ -49,7 +56,7 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       description,
       taskDate,
       endTime,
-      column,
+      columnId,
       priority,
       participants,
       labels,
@@ -57,13 +64,15 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       attachments,
       comments,
     } = useTaskPropertiesStore.getState();
-    console.log("kkk", {
+    console.log({ taskDate, endTime }); // we need to fix this
+    updateMutation({
       taskId,
+      workspace: workspaceId,
+      columnId,
       title,
       description,
-      taskDate,
-      endTime,
-      column,
+      dueDate: taskDate,
+      dueTime: endTime,
       priority,
       participants,
       labels,
@@ -71,6 +80,17 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       attachments,
       comments,
     });
+    if (!isError) {
+      toast({
+        title: `successfully updated task`,
+      });
+
+      revalidateURL(workspaceId as string);
+      resetState();
+      window.history.replaceState(null, "", `/workspaces/${workspaceId}`);
+    }
+
+    if (isError) toast({ title: error });
   };
   useEffect(() => {
     if (!isLoading && data) {
@@ -110,9 +130,9 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
         window.history.replaceState(null, "", `/workspaces/${workspaceId}`);
       }}
     >
-      {isLoading && <TaskDetailsDialogSkeleton />}
-      {!isLoading && (
-        <DialogContent className="p-0 w-4/5 h-[80%]">
+      <DialogContent className="p-0 w-4/5 h-[80%]">
+        {isLoading && <TaskDetailsDialogSkeleton />}
+        {!isLoading && (
           <div className="w-full flex flex-row">
             <div className="w-1/2 p-4 space-y-2">
               <Title />
@@ -125,9 +145,9 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
               <Button
                 className="w-full bg-green-700"
                 onClick={handleUpdateClick}
-                disabled={isLoading}
+                disabled={isLoading || isLoadingUpdate}
               >
-                {!isLoading ? "update task" : "loading ..."}
+                {!isLoading && !isLoadingUpdate ? "update task" : "loading ..."}
               </Button>
             </div>
             <div className="w-1/2 p-4 bg-[#FBFAF8]">
@@ -155,8 +175,8 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
               </Tabs>
             </div>
           </div>
-        </DialogContent>
-      )}
+        )}
+      </DialogContent>
     </Dialog>
   );
 }
