@@ -6,7 +6,6 @@ export const useUpdateTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: any) => {
-      console.log(data);
       return updateTaskById(data.taskId, data);
     },
     onSuccess: async () => {},

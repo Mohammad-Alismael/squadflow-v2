@@ -4,6 +4,7 @@ import { child, getDatabase, onValue, ref } from "firebase/database";
 
 import Message from "@/app/(app)/chats/components/Message";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 export type MessageType = {
   messageId: string;
   created_at: number;
@@ -14,8 +15,8 @@ function MessagesContainer({
   communityId,
   userId,
 }: {
-  communityId: string;
-  userId: string;
+  userId: string | unknown;
+  communityId: string | unknown;
 }) {
   const searchParams = useSearchParams();
   const workspaceId = searchParams.get("workspaceId") as string;
@@ -54,12 +55,30 @@ function MessagesContainer({
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [data]);
-  if (!workspaceId) return <div>select workspace to read messages</div>;
+  if (!workspaceId)
+    return (
+      <div className="flex-1 flex flex-col items-center justify-centers">
+        <Image
+          src="./Team-goals-bro.svg"
+          width={500}
+          height={300}
+          alt="no workspaces"
+        />
+        <div className="flex flex-col items-center justify-center">
+          <h3 className="capitalize text-xl font-bold">
+            select workspace to read messages
+          </h3>
+          <h3 className="capitalize opacity-50">
+            try to create select workspaces or create new/join workspace(s)
+          </h3>
+        </div>
+      </div>
+    );
   if (workspaceId)
     return (
       <div
         ref={containerRef}
-        className="h-[85.5%] w-full overflow-y-auto flex flex-col items-start gap-2 p-4 bg-gray-200"
+        className="flex-1 w-full overflow-y-auto flex flex-col items-start gap-2 p-4 bg-gray-200"
       >
         {!data.length && <p>no messages</p>}
         {!!data.length &&

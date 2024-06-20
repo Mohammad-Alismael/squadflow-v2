@@ -66,18 +66,18 @@ export const getTaskById = async (taskId: string) => {
 
 export const updateTaskById = async (taskId: string, data: any) => {
   console.log({ taskId, data });
-  // const res = await fetch(
-  //   `${process.env.NEXT_PUBLIC_URL_API_ROUTE}/api/tasks/${taskId}`,
-  //   {
-  //     method: "PUT",
-  //     credentials: "include",
-  //     cache: "no-cache",
-  //     body: JSON.stringify(data),
-  //   }
-  // );
-  // if (res.ok) {
-  //   return res.json();
-  // } else await handleError(res);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL_API_ROUTE}/api/tasks/${taskId}`,
+    {
+      method: "PUT",
+      credentials: "include",
+      cache: "no-cache",
+      body: JSON.stringify(data),
+    }
+  );
+  if (res.ok) {
+    return res.json();
+  } else await handleError(res);
 };
 
 export const postCommentByTaskId = async (taskId: string, text: string) => {

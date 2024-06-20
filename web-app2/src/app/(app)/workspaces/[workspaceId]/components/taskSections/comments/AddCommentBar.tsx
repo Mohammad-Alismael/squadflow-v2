@@ -27,6 +27,7 @@ function AddCommentBar() {
       }),
       created_by: "user_auth_id",
     });
+    setText("");
   };
   return (
     <div className="flex w-full gap-3 items-stretch my-4">

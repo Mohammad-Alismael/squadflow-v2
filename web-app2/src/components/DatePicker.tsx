@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -13,28 +14,34 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
-import { useEffect } from "react";
 
 export function DatePicker() {
-  const [date, setDate] = React.useState<Date>();
-  const { setTaskDate } = useTaskPropertiesStore();
+  const [date, setDate] = useState<Date | null>(null);
+  const setTaskDate = useTaskPropertiesStore((state) => state.setTaskDate);
   const dueDate = useTaskPropertiesStore((state) => state.taskDate);
 
   useEffect(() => {
-    setTaskDate(date?.toLocaleDateString("en-GB"));
-  }, [date]);
-  useEffect(() => {
-    if (dueDate && dueDate !== "") {
-      const [day, month, year] = dueDate.split("/");
-      const dateObject: Date = new Date(year, month - 1, day);
-      setDate(dateObject);
-    }
-  }, []);
+    setDate(convertDate(dueDate));
+  }, [dueDate]);
+
+  const handleOnSelect = (e: Date | undefined) => {
+    if (!e) return;
+    setTaskDate(e.toLocaleDateString("en-GB"));
+    setDate(e);
+  };
+
+  const convertDate = (currentDate: string | undefined) => {
+    console.log({ currentDate });
+    if (!currentDate) return null;
+    const [day, month, year] = currentDate.split("/");
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant={"outline"}
+          variant="outline"
           className={cn(
             "w-[280px] justify-start text-left font-normal",
             !date && "text-muted-foreground"
@@ -48,7 +55,7 @@ export function DatePicker() {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={handleOnSelect}
           initialFocus
         />
       </PopoverContent>

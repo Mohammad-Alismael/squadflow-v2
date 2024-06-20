@@ -27,7 +27,7 @@ export interface ITask {
 }
 
 export interface TaskResponse {
-  _id?: string;
+  _id: string;
   workspace: Schema.Types.ObjectId;
   title: string;
   columnId: string;
@@ -45,9 +45,9 @@ export interface TaskResponse {
 
 export interface Comment {
   _id?: string;
-  user: PopulatedUser;
+  created_by: PopulatedUser;
   text: string;
-  created_at: Date;
+  created_at: string;
 }
 export interface ICommentCreate {
   _id?: string;

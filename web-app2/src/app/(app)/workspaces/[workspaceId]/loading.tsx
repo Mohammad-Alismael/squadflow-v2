@@ -6,7 +6,7 @@ Loading.propTypes = {};
 function Loading() {
   return (
     <div>
-      <p>loading,,,</p>
+      <p>loading workspace page ...</p>
     </div>
   );
 }

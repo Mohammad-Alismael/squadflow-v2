@@ -64,8 +64,7 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       attachments,
       comments,
     } = useTaskPropertiesStore.getState();
-    console.log({ taskDate, endTime }); // we need to fix this
-    updateMutation({
+    console.log({
       taskId,
       workspace: workspaceId,
       columnId,
@@ -80,17 +79,28 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       attachments,
       comments,
     });
+    updateMutation({
+      taskId,
+      workspace: workspaceId,
+      columnId,
+      title,
+      description,
+      dueDate: taskDate,
+      dueTime: endTime,
+      priority,
+      participants: participants.map((item) => item._id),
+      labels,
+      comments,
+    });
     if (!isError) {
       toast({
         title: `successfully updated task`,
       });
 
       revalidateURL(workspaceId as string);
-      resetState();
       window.history.replaceState(null, "", `/workspaces/${workspaceId}`);
-    }
-
-    if (isError) toast({ title: error });
+      resetState();
+    } else toast({ title: error });
   };
   useEffect(() => {
     if (!isLoading && data) {
@@ -108,7 +118,7 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
         _id,
       } = data;
       console.log("useEffect hook taskCard.dialog", data);
-      setTaskId(_id as string);
+      setTaskId(_id);
       setProjectId(workspaceId);
       setColumnId(columnId);
       setDescription(description);
@@ -117,11 +127,10 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       setEndTime(dueTime);
       setComments(comments);
       setPriority(priority);
-      // setAttachments(attachments);
       setParticipants(participants);
       setLabels(labels);
     }
-  }, [taskId, isLoading]);
+  }, [isLoading, JSON.stringify(data), workspaceId]);
   return (
     <Dialog
       open={taskId !== null}

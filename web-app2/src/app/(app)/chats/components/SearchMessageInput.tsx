@@ -16,18 +16,13 @@ function SearchMessageInput() {
 
     console.log(params.toString());
     router.replace(`/chats?${params.toString()}`);
-    // Update the URL with the new search parameters
-    // router.replace({
-    //   pathname: router.pathname,
-    //   query: params.toString(),
-    // });
   };
   return (
     <Input
       onChange={handleChange}
       type="text"
       placeholder="search for messages..."
-      className="w-1/4"
+      className="w-1/3"
     />
   );
 }

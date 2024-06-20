@@ -64,6 +64,7 @@ export async function PUT(request: Request, context: any) {
   try {
     // for resting user id for created_by
     data.comments = restructureComments(data.comments, userId);
+    console.log("put data", data);
     await updateTask(taskId, {
       ...data,
       updated_by: userId,

@@ -19,7 +19,7 @@ function Deadlines() {
       <div className="flex flex-col gap-1 w-1/2">
         <Label className="capitalize text-md font-bold">due time</Label>
         <Input
-          value={`${dueTime}:00`}
+          value={`${dueTime}`}
           type="time"
           className=""
           onChange={(e) => {

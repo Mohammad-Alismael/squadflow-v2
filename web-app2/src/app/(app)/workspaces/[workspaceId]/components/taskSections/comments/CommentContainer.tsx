@@ -36,8 +36,9 @@ function CommentContainer({ children }: { children: React.ReactNode }) {
           {comments.map((comment) =>
             comment.created_by === "user_auth_id" ? (
               <AuthComment
+                key={comment._id}
                 text={comment.text}
-                created_at={comment.created_at}
+                created_at={comment.created_at as string}
               />
             ) : (
               <Comment key={comment._id} data={comment} />

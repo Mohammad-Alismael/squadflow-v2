@@ -28,8 +28,8 @@ function SendBar({
     setText("");
   };
   return (
-    <div className="bg-gray-100">
-      <div className="flex flex-row gap-2 bg-white p-2 mx-2 rounded">
+    <div className="bg-gray-200 p-4">
+      <div className="flex flex-row gap-2 bg-white p-2 rounded">
         <Input
           type="text"
           name="message"

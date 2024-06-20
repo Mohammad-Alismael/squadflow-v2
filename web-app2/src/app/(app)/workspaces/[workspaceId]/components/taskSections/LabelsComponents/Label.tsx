@@ -19,14 +19,12 @@ function Label({ data }: { data: WorkspaceLabel }) {
   const included = labels.map((item) => item._id).includes(data._id);
 
   return (
-    <>
-      <p
-        onClick={included ? handleClickRemove : handleClick}
-        className={`px-4 py-2 border-2 border-gray-200 rounded-full text-[${data.color}]`}
-      >
-        {data.title}
-      </p>
-    </>
+    <p
+      onClick={included ? handleClickRemove : handleClick}
+      className={`px-4 py-2 border-2 border-gray-200 rounded-full bg-[${data.color}]`}
+    >
+      {data.title}
+    </p>
   );
 }
 

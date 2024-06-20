@@ -17,10 +17,10 @@ function Workspace({
 }) {
   return (
     <div
-      onClick={() => redirectWorkspaceChat(workspace._id)}
+      onClick={() => redirectWorkspaceChat(workspace?._id)}
       key={workspace._id}
       className={clsx(
-        "rounded-md p-4 space-y-1",
+        "rounded-md p-4 space-y-1 bg-white",
         selectedWorkspaceId === workspace._id
           ? "border-2 border-green-800"
           : "border-2 border-gray-100"

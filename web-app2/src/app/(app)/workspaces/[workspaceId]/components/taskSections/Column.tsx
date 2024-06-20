@@ -27,7 +27,9 @@ function Column() {
           <SelectContent>
             {!isLoading &&
               data?.map((column) => (
-                <SelectItem value={column._id}>{column.title}</SelectItem>
+                <SelectItem key={column._id} value={column._id}>
+                  {column.title}
+                </SelectItem>
               ))}
           </SelectContent>
         </Select>

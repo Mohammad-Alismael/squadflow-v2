@@ -29,11 +29,11 @@ async function Page({
           <p className="text-sm opacity-50">never try to give up.</p>
         </div>
       </Navbar>
-      <div className="flex flex-row gap-x-4 flex-grow h-[89%]">
+      <div className="flex flex-row gap-x-0 flex-grow h-[89%]">
         <Suspense fallback={<p>loading ...</p>}>
           <WorkspacesList selectedWorkspaceId={searchParams["workspaceId"]} />
         </Suspense>
-        <div className="h-full w-3/4 float-right ">
+        <div className="h-full w-3/4 float-right flex flex-col">
           <Suspense fallback={<p>loading ...</p>}>
             <WorkspaceDetailsBar workspaceId={searchParams["workspaceId"]} />
           </Suspense>

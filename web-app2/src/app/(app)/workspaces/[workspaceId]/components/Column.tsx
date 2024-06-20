@@ -50,7 +50,7 @@ function Column({
               </div>
             )}
           </Droppable>
-          <CreateTaskDialog columnId={data._id} />
+          <CreateTaskDialog key={data._id} columnId={data._id} />
         </div>
       )}
     </Draggable>
