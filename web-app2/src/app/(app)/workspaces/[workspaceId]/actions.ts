@@ -1,8 +1,8 @@
 "use server";
 
-import { getTaskId, updateColumnId } from "@/lib/tasks";
+import { deleteTask, getTaskId, updateColumnId } from "@/lib/tasks";
 import { ObjectId } from "mongodb";
-import { getWorkspaceById } from "@/lib/workspace";
+import { deleteWorkspaceById, getWorkspaceById } from "@/lib/workspace";
 import { IWorkspace, WorkspaceColumn } from "@/utils/@types/workspace";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
@@ -29,5 +29,9 @@ export const updateColumnIdForTaskId = async (
     new ObjectId(columnId)
   );
   revalidateTag("tasks");
-  console.log({ res });
+};
+
+export const handleDeleteTask = async (id: string) => {
+  await deleteTask(new ObjectId(id));
+  revalidateTag("tasks");
 };

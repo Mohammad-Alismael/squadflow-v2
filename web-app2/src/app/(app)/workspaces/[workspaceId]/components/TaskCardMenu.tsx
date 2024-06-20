@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
+import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,14 +9,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { EllipsisVerticalIcon } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { handleDeleteWorkspace } from "@/app/(app)/workspaces/actions";
+import { handleDeleteTask } from "@/app/(app)/workspaces/[workspaceId]/actions";
 
-function WorkspaceMenu({ workspaceId }: { workspaceId: string }) {
+function TaskCardMenu({ taskId }: { taskId: string }) {
   const router = useRouter();
 
   const handleChange = async () => {
-    await handleDeleteWorkspace(workspaceId);
+    await handleDeleteTask(taskId);
   };
 
   return (
@@ -33,14 +33,6 @@ function WorkspaceMenu({ workspaceId }: { workspaceId: string }) {
         <DropdownMenuItem
           onClick={(e) => {
             e.stopPropagation();
-            router.replace(`/workspaces?workspaceId=${workspaceId}`);
-          }}
-        >
-          Edit
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={(e) => {
-            e.stopPropagation();
             handleChange();
           }}
         >
@@ -51,4 +43,4 @@ function WorkspaceMenu({ workspaceId }: { workspaceId: string }) {
   );
 }
 
-export default WorkspaceMenu;
+export default TaskCardMenu;

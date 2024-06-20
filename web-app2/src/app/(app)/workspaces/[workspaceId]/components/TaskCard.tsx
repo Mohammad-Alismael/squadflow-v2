@@ -7,6 +7,7 @@ import TaskLabels from "@/app/(app)/workspaces/[workspaceId]/components/TaskLabe
 import TaskParticipants from "@/app/(app)/workspaces/[workspaceId]/components/TaskParticipants";
 import { Draggable } from "@hello-pangea/dnd";
 import { clsx } from "clsx";
+import TaskCardMenu from "@/app/(app)/workspaces/[workspaceId]/components/TaskCardMenu";
 
 const TaskCard = ({ data, index }: { data: TaskResponse; index: number }) => {
   const { _id, title } = data;
@@ -28,7 +29,7 @@ const TaskCard = ({ data, index }: { data: TaskResponse; index: number }) => {
             >
               <div className="flex justify-between items-center">
                 <p>{title}</p>
-                <MoreVertical size={20} />
+                <TaskCardMenu taskId={_id} />
               </div>
               <TaskParticipants assigness={data.participants} />
               <p className="flex text-gray-400 gap-1">
@@ -38,12 +39,14 @@ const TaskCard = ({ data, index }: { data: TaskResponse; index: number }) => {
                   : `until ${data.dueDate}`}
                 {data.dueTime && data.dueTime !== "" && `, ${data.dueTime}`}
               </p>
-              <div className="flex items-end justify-between self-end">
+              <div className="flex items-end justify-between ">
                 {!!data.labels.length && <TaskLabels labels={data.labels} />}
-                <div className="flex flex-row text-gray-400 gap-1">
-                  <span>{data.comments.length}</span>
-                  <MessageCircle size={20} />
-                </div>
+                {!!data.comments.length && (
+                  <div className="flex flex-row text-gray-400 gap-1 self-end">
+                    <span>{data.comments.length}</span>
+                    <MessageCircle size={20} />
+                  </div>
+                )}
               </div>
             </Card>
           </Link>
