@@ -30,9 +30,11 @@ async function Page({
         </div>
       </Navbar>
       <div className="flex flex-row gap-x-0 flex-grow h-[89%]">
-        <Suspense fallback={<p>loading ...</p>}>
-          <WorkspacesList selectedWorkspaceId={searchParams["workspaceId"]} />
-        </Suspense>
+        <div className="flex flex-col w-1/4 float-left">
+          <Suspense fallback={<p>loading ...</p>}>
+            <WorkspacesList selectedWorkspaceId={searchParams["workspaceId"]} />
+          </Suspense>
+        </div>
         <div className="h-full w-3/4 float-right flex flex-col">
           <Suspense fallback={<p>loading ...</p>}>
             <WorkspaceDetailsBar workspaceId={searchParams["workspaceId"]} />

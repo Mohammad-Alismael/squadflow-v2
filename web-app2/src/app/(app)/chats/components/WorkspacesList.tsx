@@ -29,12 +29,12 @@ async function WorkspacesList({
   const data: IWorkspace[] = await fetchWorkspaces();
 
   return (
-    <div className={clsx("h-full w-1/4 float-left")}>
+    <>
       <div className="bg-white flex flex-row items-center justify-between p-4 border-r-2 border-gray-200 rounded-tl">
         <h4 className="text-xl font-bold capitalize ">workspaces</h4>
         <SettingsIcon className="w-6 h-6" />
       </div>
-      <div className="flex flex-col h-full space-y-2 p-4 bg-gray-300">
+      <div className="flex-1 flex flex-col space-y-2 p-4 bg-gray-300">
         {data.map((workspace) => {
           return (
             <Workspace
@@ -45,7 +45,7 @@ async function WorkspacesList({
           );
         })}
       </div>
-    </div>
+    </>
   );
 }
 
