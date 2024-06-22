@@ -33,7 +33,10 @@ async function Page({ params }: { params: { workspaceId: string } }) {
         />
       </div>
 
-      <TaskDetailsDialog workspaceId={workspace?._id} />
+      <TaskDetailsDialog
+        workspaceId={workspace?._id}
+        revertBackTo={`/workspaces/${workspace?._id}`}
+      />
     </div>
   );
 }

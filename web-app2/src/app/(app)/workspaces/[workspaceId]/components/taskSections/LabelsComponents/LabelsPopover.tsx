@@ -11,11 +11,12 @@ import Label from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/
 import { useGetWorkspaceLabelsById } from "@/utils/hooks/workspace/useGetWorkspaceLabelsById";
 import AddItem from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesComponents/AddItem";
 import AddLabelPopover from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/AddLabelPopover";
+import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 
 LabelsPopover.propTypes = {};
 
 function LabelsPopover({ children }: { children: ReactNode }) {
-  const { workspaceId } = useParams();
+  const workspaceId = useTaskPropertiesStore((state) => state.projectId);
   const { data, isLoading } = useGetWorkspaceLabelsById(
     workspaceId as string,
     true

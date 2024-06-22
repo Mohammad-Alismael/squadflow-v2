@@ -125,16 +125,17 @@ async function deleteTasksByWorkspaceId(workspaceId: ObjectId) {
 const updateTask = async (taskId: string, updateData: ITask) => {
   try {
     // Find the task by ID and update it
-    const updatedTask = await Task.findByIdAndUpdate(taskId, updateData, {
+    // Return the updated task
+    return await Task.findByIdAndUpdate(taskId, updateData, {
       new: true,
     });
-
-    // Return the updated task
-    return updatedTask;
   } catch (error) {
     // Handle error
     console.error("Error updating task:", error);
-    throw new Error("Failed to update task");
+    throw new CustomError(
+      "Failed to update task",
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 

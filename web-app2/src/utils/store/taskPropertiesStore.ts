@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { PopulatedUser } from "@/utils/@types/user";
 import { WorkspaceLabel } from "@/utils/@types/workspace";
 import { ICommentCreate } from "@/utils/@types/task";
+import { devtools } from "zustand/middleware";
 
 interface Task {
   taskId: string;
@@ -97,63 +98,63 @@ const handleAddLabel = (
   return [...existingLabels, newlabel];
 };
 
-const useTaskPropertiesStore = create<State & Actions>((set) => ({
-  ...initialState,
-  setTaskId: (payload) => set({ taskId: payload }),
-  setProjectId: (payload) => set({ projectId: payload }),
-  setColumnId: (payload) => set({ columnId: payload }),
-  setTitle: (payload) => set({ title: payload }),
-  setDescription: (payload) => set({ description: payload }),
-  setTaskDate: (payload) => set({ taskDate: payload }),
-  setEndTime: (payload) => set({ endTime: payload }),
-  setColumn: (payload) => set({ column: payload }),
-  setPriority: (payload) => set({ priority: payload }),
-  setParticipants: (payload) => set({ participants: payload }),
-  addParticipant: (payload) =>
-    set((state) => ({
-      ...state,
-      participants: handleAddParticipant(state.participants, payload),
-    })),
-  removeParticipant: (payload) =>
-    set((state) => ({
-      ...state,
-      participants: handleRemoveParticipant(state.participants, payload),
-    })),
-  setLabels: (payload) => set({ labels: payload }),
-  addLabel: (payload) =>
-    set((state) => ({
-      ...state,
-      labels: handleAddLabel(state.labels, payload),
-    })),
-  removeLabel: (payload) =>
-    set((state) => ({
-      ...state,
-      labels: handleRemoveLabel(state.labels, payload),
-    })),
-  setSubTasks: (payload) => set({ subTasks: payload }),
-  addSubTasks: (newSubTask) =>
-    set((state) => ({ subTasks: [...state.subTasks, newSubTask] })),
-  setAttachments: (payload) => set({ attachments: payload }),
-  setComments: (payload) => set({ comments: payload }),
-  addComment: (newComment) =>
-    set((state) => ({ comments: [...state.comments, newComment] })),
-  resetState: () => set(initialState),
-  updateSubTask: (updatedSubTask) => {
-    set((state) => ({
-      subTasks: state.subTasks.map((task) => {
-        if (task.taskId === updatedSubTask.taskId) {
-          return { ...task, ...updatedSubTask }; // Update the specific subTask
-        }
-        return task; // Return unchanged subTask if it's not the one being updated
-      }),
-    }));
-  },
-  removeSubTask: (selectedTaskId) => {
-    set((state) => ({
-      subTasks: state.subTasks.filter((task) => task.taskId !== selectedTaskId),
-    }));
-  },
-}));
+const useTaskPropertiesStore = create<State & Actions>()(
+  devtools((set) => ({
+    ...initialState,
+    setTaskId: (payload) => set({ taskId: payload }),
+    setProjectId: (payload) => set({ projectId: payload }),
+    setColumnId: (payload) => set({ columnId: payload }),
+    setTitle: (payload) => set({ title: payload }),
+    setDescription: (payload) => set({ description: payload }),
+    setTaskDate: (payload) => set({ taskDate: payload }),
+    setEndTime: (payload) => set({ endTime: payload }),
+    setColumn: (payload) => set({ column: payload }),
+    setPriority: (payload) => set({ priority: payload }),
+    setParticipants: (payload) => set({ participants: payload }),
+    addParticipant: (payload) =>
+      set((state) => ({
+        participants: handleAddParticipant(state.participants, payload),
+      })),
+    removeParticipant: (payload) =>
+      set((state) => ({
+        participants: handleRemoveParticipant(state.participants, payload),
+      })),
+    setLabels: (payload) => set({ labels: payload }),
+    addLabel: (payload) =>
+      set((state) => ({
+        labels: handleAddLabel(state.labels, payload),
+      })),
+    removeLabel: (payload) =>
+      set((state) => ({
+        labels: handleRemoveLabel(state.labels, payload),
+      })),
+    setSubTasks: (payload) => set({ subTasks: payload }),
+    addSubTasks: (newSubTask) =>
+      set((state) => ({ subTasks: [...state.subTasks, newSubTask] })),
+    setAttachments: (payload) => set({ attachments: payload }),
+    setComments: (payload) => set({ comments: payload }),
+    addComment: (newComment) =>
+      set((state) => ({ comments: [...state.comments, newComment] })),
+    resetState: () => set(initialState),
+    updateSubTask: (updatedSubTask) => {
+      set((state) => ({
+        subTasks: state.subTasks.map((task) => {
+          if (task.taskId === updatedSubTask.taskId) {
+            return { ...task, ...updatedSubTask };
+          }
+          return task;
+        }),
+      }));
+    },
+    removeSubTask: (selectedTaskId) => {
+      set((state) => ({
+        subTasks: state.subTasks.filter(
+          (task) => task.taskId !== selectedTaskId
+        ),
+      }));
+    },
+  }))
+);
 
 interface TaskSelectors {
   getTaskId: () => string;

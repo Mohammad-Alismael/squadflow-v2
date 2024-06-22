@@ -17,7 +17,7 @@ function FullPageCalendar() {
 
   const workspaceId = searchParams.get("workspace");
   const taskId = searchParams.get("taskId");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([
     {
       title: "Meeting",
@@ -60,18 +60,22 @@ function FullPageCalendar() {
   };
   useEffect(() => {
     console.log(workspaceId);
+    setLoading(true);
     workspaceId &&
-      fetchTasksForCalendar(workspaceId).then((r) => {
-        const rest = r.map((item) => ({
-          title: item.title,
-          taskId: item._id,
-          workspaceId: item.workspace,
-          start: item.dueDate ? parseDate(item.dueDate) : "",
-          end: item.dueDate ? parseDate(item.dueDate) : "",
-        }));
-        setEvents(rest);
-        setLoading(false);
-      });
+      fetchTasksForCalendar(workspaceId)
+        .then((r) => {
+          const rest = r.map((item) => ({
+            title: item.title,
+            taskId: item._id,
+            workspaceId: item.workspace,
+            start: item.dueDate ? parseDate(item.dueDate) : "",
+            end: item.dueDate ? parseDate(item.dueDate) : "",
+          }));
+          setEvents(rest);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
   }, [workspaceId]);
   return (
     <div>
@@ -102,7 +106,12 @@ function FullPageCalendar() {
           style={{ height: "86vh" }}
         />
       )}
-      {workspaceId && taskId && <TaskDetailsDialog workspaceId={workspaceId} />}
+      {workspaceId && taskId && (
+        <TaskDetailsDialog
+          workspaceId={workspaceId}
+          revertBackTo={`/calendars?workspace=${workspaceId}`}
+        />
+      )}
     </div>
   );
 }

@@ -7,15 +7,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useGetWorkspaceParticipantsById } from "@/utils/hooks/workspace/useGetWorkspaceParticipantsById";
-import { useParams } from "next/navigation";
 import AddAssignee from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesComponents/AddAssignee";
+import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 
 AssigneePopover.propTypes = {};
 
 function AssigneePopover({ children }: { children: ReactNode }) {
-  const { workspaceId } = useParams();
+  const workspaceId = useTaskPropertiesStore((state) => state.projectId);
   const { data, isLoading } = useGetWorkspaceParticipantsById(
-    workspaceId as string,
+    workspaceId,
     true,
     true
   );

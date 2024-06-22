@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "react-query";
 import { useGetTasksById } from "@/utils/hooks/task/useGetTasksById";
@@ -20,7 +20,13 @@ import { useUpdateTask } from "@/utils/hooks/task/useUpdateTask";
 import { revalidateURL } from "@/components/Dialogs/actions";
 import { useToast } from "@/components/ui/use-toast";
 
-function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
+function TaskDetailsDialog({
+  workspaceId,
+  revertBackTo,
+}: {
+  workspaceId: string;
+  revertBackTo: string;
+}) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const searchParams = useSearchParams();
@@ -64,21 +70,6 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       attachments,
       comments,
     } = useTaskPropertiesStore.getState();
-    console.log({
-      taskId,
-      workspace: workspaceId,
-      columnId,
-      title,
-      description,
-      dueDate: taskDate,
-      dueTime: endTime,
-      priority,
-      participants,
-      labels,
-      subTasks,
-      attachments,
-      comments,
-    });
     updateMutation({
       taskId,
       workspace: workspaceId,
@@ -98,8 +89,7 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       });
 
       revalidateURL(workspaceId as string);
-      window.history.replaceState(null, "", `/workspaces/${workspaceId}`);
-      resetState();
+      window.history.replaceState(null, "", revertBackTo);
     } else toast({ title: error });
   };
   useEffect(() => {
@@ -130,13 +120,13 @@ function TaskDetailsDialog({ workspaceId }: { workspaceId: string }) {
       setParticipants(participants);
       setLabels(labels);
     }
-  }, [isLoading, JSON.stringify(data), workspaceId]);
+  }, [isLoading, JSON.stringify(data), workspaceId, taskId]);
   return (
     <Dialog
       open={taskId !== null}
       onOpenChange={() => {
         resetState();
-        window.history.replaceState(null, "", `/workspaces/${workspaceId}`);
+        window.history.replaceState(null, "", revertBackTo);
       }}
     >
       <DialogContent className="p-0 w-4/5 h-[80%]">

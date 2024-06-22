@@ -10,17 +10,20 @@ import {
 import { useGetWorkspaceColumnsById } from "@/utils/hooks/workspace/useGetWorkspaceColumnsById";
 import { useParams } from "next/navigation";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Column() {
-  const { workspaceId } = useParams();
+  const workspaceId = useTaskPropertiesStore((state) => state.projectId);
+  const { setColumnId } = useTaskPropertiesStore();
+
   const columnId = useTaskPropertiesStore((state) => state.columnId);
   const { data, isLoading } = useGetWorkspaceColumnsById(workspaceId as string);
   return (
     <div className="flex flex-row items-center gap-8">
       <h3 className="font-bold">column</h3>
-      {isLoading && <p>loading ...</p>}
+      {isLoading && <Skeleton className="h-10 w-40" />}
       {!isLoading && (
-        <Select defaultValue={columnId}>
+        <Select onValueChange={setColumnId} defaultValue={columnId}>
           <SelectTrigger className="w-[160px] h-[41px] bg-gray-100">
             <SelectValue placeholder="select order list" />
           </SelectTrigger>

@@ -1,15 +1,10 @@
 import React, { Suspense } from "react";
-import PropTypes from "prop-types";
 import Navbar from "@/components/Navbar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { handleWriteMessage } from "@/app/(app)/chats/actions";
 import SendBar from "@/app/(app)/chats/components/SendBar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
 import MessagesContainer from "@/app/(app)/chats/components/MessagesContainer";
-import Message from "@/app/(app)/chats/components/Message";
 import WorkspacesList from "@/app/(app)/chats/components/WorkspacesList";
 import WorkspaceDetailsBar from "@/app/(app)/chats/components/workspaceDetailsBar";
 
