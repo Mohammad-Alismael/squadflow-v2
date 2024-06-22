@@ -1,10 +1,12 @@
-import React from "react";
+import React, { Suspense } from "react";
 import PropTypes from "prop-types";
 import Navbar from "@/components/Navbar";
+import FullPageCalendar from "@/app/(app)/calendars/components/FullPageCalendar";
+import WorkspaceTabs from "@/app/(app)/calendars/components/WorkspaceTabs";
 
 Page.propTypes = {};
 
-function Page(props) {
+function Page() {
   return (
     <div>
       <Navbar>
@@ -13,7 +15,12 @@ function Page(props) {
           <p className="text-sm opacity-50">never try to give up.</p>
         </div>
       </Navbar>
-      this is page for calendars
+      <div className="w-full h-full bg-white flex flex-col flex-grow p-4 rounded space-y-2">
+        <Suspense fallback={<p>loading ...</p>}>
+          <WorkspaceTabs />
+        </Suspense>
+        <FullPageCalendar />
+      </div>
     </div>
   );
 }

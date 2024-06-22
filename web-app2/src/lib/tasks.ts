@@ -101,6 +101,13 @@ async function getTasksByWorkspaceId(workspaceId: ObjectId) {
   return Task.find({ workspace: workspaceId });
 }
 
+async function getTasksByWorkspaceIdForCalendar(workspaceId: ObjectId) {
+  await init();
+  return Task.find({ workspace: workspaceId }).select(
+    "_id title workspace dueDate"
+  );
+}
+
 async function getTasksByWorkspaceIdAndColumnId(
   workspaceId: ObjectId,
   columnId: ObjectId
@@ -196,5 +203,6 @@ export {
   getTasksByWorkspaceId,
   getTasksByWorkspaceIdAndColumnId,
   getTaskIdPopulated,
+  getTasksByWorkspaceIdForCalendar,
   updateColumnId,
 };

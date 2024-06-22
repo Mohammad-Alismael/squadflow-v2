@@ -9,55 +9,29 @@ const ColumnsContainer = dynamic(
     ssr: false,
   }
 );
-import { cookies } from "next/headers";
 import dynamic from "next/dynamic";
-
-const fetchWorkspace = async (workspaceId: string) => {
-  if (!workspaceId) return null;
-  const res = await fetch(
-    `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}`,
-    {
-      next: { revalidate: 1 },
-      method: "GET",
-      headers: { Cookie: cookies().toString() },
-    }
-  );
-  if (res.ok) {
-    return res.json();
-  }
-  return null;
-};
-export const fetchTasksForWorkspace = async (workspaceId: string) => {
-  const res = await fetch(
-    `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}/tasks`,
-    {
-      next: { tags: ["tasks"] },
-      method: "GET",
-      headers: { Cookie: cookies().toString() },
-      cache: "no-cache",
-    }
-  );
-  if (res.ok) {
-    return res.json();
-  }
-  return [];
-};
+import {
+  getTasksForWorkspace,
+  fetchWorkspace,
+} from "@/utils/actions/workspace-actions";
 
 async function Page({ params }: { params: { workspaceId: string } }) {
   const workspaceData = fetchWorkspace(params.workspaceId);
-  const workspaceTasks = fetchTasksForWorkspace(params.workspaceId);
+  const workspaceTasks = getTasksForWorkspace(params.workspaceId);
   const [workspace, tasks] = await Promise.all([workspaceData, workspaceTasks]);
   return (
     <div className="h-full flex flex-col">
       <Suspense fallback={<p>loading...</p>}>
         <WorkspaceNavbar workspaceId={params.workspaceId} />
       </Suspense>
-      <Header className="mb-2" workspaceId={params.workspaceId} />
-      <ColumnsContainer
-        workspaceId={workspace?._id}
-        columns={workspace?.columns}
-        tasks={tasks}
-      />
+      <div className="flex-1 space-y-2.5">
+        <Header className="" workspaceId={params.workspaceId} />
+        <ColumnsContainer
+          workspaceId={workspace?._id}
+          columns={workspace?.columns}
+          tasks={tasks}
+        />
+      </div>
 
       <TaskDetailsDialog workspaceId={workspace?._id} />
     </div>

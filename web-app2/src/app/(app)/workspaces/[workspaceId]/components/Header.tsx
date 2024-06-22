@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { clsx } from "clsx";
 import ParticipantsHeader from "@/app/(app)/workspaces/[workspaceId]/components/ParticipantsHeader";
+import { Input } from "@/components/ui/input";
 
 Header.propTypes = {};
 
@@ -31,6 +32,13 @@ function Header({
       )}
     >
       <div className="flex flex-row items-center gap-4">
+        <Input
+          type="text"
+          placeholder="search for task title ..."
+          // className="w-1/4"
+        />
+      </div>
+      <div className="flex flex-row items-center justify-between gap-2">
         <Select>
           <SelectTrigger className="w-[180px] bg-white">
             <SelectValue placeholder="group by" />
@@ -41,9 +49,6 @@ function Header({
             <SelectItem value="decending">oldest to latest</SelectItem>
           </SelectContent>
         </Select>
-        <ParticipantsHeader workspaceId={workspaceId} />
-      </div>
-      <div className="flex flex-row items-center justify-between gap-2">
         <Button className="capitalize bg-green-800">modify columns</Button>
         <WorkspaceMenu workspaceId={workspaceId} />
       </div>

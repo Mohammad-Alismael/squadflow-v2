@@ -23,7 +23,7 @@ const links: linkType[] = [
 
 const Sidebar = () => {
   return (
-    <div className="relative bg-white float-left h-full w-1/6 pt-4 pb-5">
+    <div className="relative bg-white float-left h-full w-1/6 pt-3 pb-5">
       <Link
         className="flex flex-row items-center gap-x-2.5 pl-4"
         href="/dashboard"
@@ -32,7 +32,7 @@ const Sidebar = () => {
         <span className="text-2xl font-bold capitalize">squadflow</span>
       </Link>
 
-      <hr className="mb-2 mt-4" />
+      <hr className="mb-1 mt-3" />
       <p className="opacity-50 mt-3 mb-1 mx-4 uppercase font-bold text-sm">
         overview
       </p>

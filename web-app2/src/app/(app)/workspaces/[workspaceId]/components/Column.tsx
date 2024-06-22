@@ -26,7 +26,7 @@ function Column({
           key={data._id}
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className="rounded-xl h-full w-1/4 bg-gray-300 p-4"
+          className="flex flex-col gap-y-2 rounded-xl h-[36rem] w-1/4 bg-gray-300 p-3"
         >
           <ColumnHeader
             length={tasks.length}

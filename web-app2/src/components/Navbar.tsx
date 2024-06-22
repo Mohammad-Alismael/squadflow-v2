@@ -13,7 +13,7 @@ async function Navbar({
 }>) {
   return (
     <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-      <div className="w-full flex items-start justify-between float-right py-4">
+      <div className="w-full flex items-start justify-between float-right py-2">
         {children}
         <div className="flex items-center justify-between gap-2">
           <SearchDialog>

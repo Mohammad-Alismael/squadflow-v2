@@ -1,5 +1,5 @@
 "use client";
-import React, { startTransition, useEffect, useOptimistic } from "react";
+import React, { startTransition, useOptimistic } from "react";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/Column";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { updateColumnIdForTaskId } from "@/app/(app)/workspaces/[workspaceId]/actions";
@@ -51,7 +51,8 @@ function ColumnsContainer({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="h-[84.5%] flex flex-row gap-4 py-2"
+            className="w-full flex-1 flex flex-row gap-4"
+            // className="w-full flex flex-row gap-4 bg-red-300"
           >
             {columns &&
               columns.map(

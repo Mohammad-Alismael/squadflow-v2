@@ -13,7 +13,7 @@ async function ParticipantsHeader({ workspaceId }: { workspaceId: string }) {
     <div className="flex items-center">
       {data &&
         data?.participants.map((participant) => (
-          <Avatar>
+          <Avatar className="w-8 h-8">
             <AvatarImage src="/avatars/01.png" />
             <AvatarFallback>{participant.user}</AvatarFallback>
           </Avatar>

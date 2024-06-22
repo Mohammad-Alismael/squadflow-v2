@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
+import { parseDate } from "@/utils/helper-date";
 
 export function DatePicker() {
   const [date, setDate] = useState<Date | null>(null);
@@ -33,8 +34,7 @@ export function DatePicker() {
   const convertDate = (currentDate: string | undefined) => {
     console.log({ currentDate });
     if (!currentDate) return null;
-    const [day, month, year] = currentDate.split("/");
-    return new Date(Number(year), Number(month) - 1, Number(day));
+    return parseDate(currentDate);
   };
 
   return (

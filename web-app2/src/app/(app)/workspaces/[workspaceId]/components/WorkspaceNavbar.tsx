@@ -4,6 +4,8 @@ import Navbar from "@/components/Navbar";
 import { cookies } from "next/headers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IWorkspace } from "@/utils/@types/workspace";
+import ParticipantsHeader from "@/app/(app)/workspaces/[workspaceId]/components/ParticipantsHeader";
+import AddItem from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesComponents/AddItem";
 
 export const fetchWorkspace = async (workspaceId: string) => {
   const res = await fetch(
@@ -26,6 +28,10 @@ async function WorkspaceNavbar({ workspaceId }: { workspaceId: string }) {
     <Navbar>
       <div className="">
         <p className="text-2xl capitalize font-bold">{data?.title}</p>
+        <div className="flex flex-row gap-2">
+          <ParticipantsHeader workspaceId={workspaceId} />
+          {/*<AddItem title="" />*/}
+        </div>
       </div>
     </Navbar>
   );

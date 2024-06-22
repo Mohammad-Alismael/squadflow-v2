@@ -15,7 +15,7 @@ const TaskCard = ({ data, index }: { data: TaskResponse; index: number }) => {
     <Draggable draggableId={_id as string} index={index}>
       {(provided, snapshot) => (
         <div
-          className={clsx("mt-2", snapshot.isDragging)}
+          className={clsx("", snapshot.isDragging)}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
@@ -23,7 +23,7 @@ const TaskCard = ({ data, index }: { data: TaskResponse; index: number }) => {
           <Link href={`?taskId=${_id}`} prefetch={false}>
             <Card
               className={clsx(
-                "p-3 space-y-1",
+                "p-2 space-y-1",
                 snapshot.isDragging && "bg-[#e6e6e6]"
               )}
             >
@@ -32,21 +32,23 @@ const TaskCard = ({ data, index }: { data: TaskResponse; index: number }) => {
                 <TaskCardMenu taskId={_id} />
               </div>
               <TaskParticipants assigness={data.participants} />
-              <p className="flex text-gray-400 gap-1">
-                <Calendar size={20} />
-                {!data.dueDate || data.dueDate === ""
-                  ? "no due date"
-                  : `until ${data.dueDate}`}
-                {data.dueTime && data.dueTime !== "" && `, ${data.dueTime}`}
-              </p>
-              <div className="flex items-end justify-between ">
-                {!!data.labels.length && <TaskLabels labels={data.labels} />}
+              <div className="flex flex-row items-center justify-between text-gray-400 gap-1">
+                <p className=" flex flex-row items-center gap-1">
+                  <Calendar size={20} />
+                  {!data.dueDate || data.dueDate === ""
+                    ? "no due date"
+                    : `${data.dueDate}`}
+                  {/*{data.dueTime && data.dueTime !== "" && `, ${data.dueTime}`}*/}
+                </p>
                 {!!data.comments.length && (
                   <div className="flex flex-row text-gray-400 gap-1 self-end">
                     <span>{data.comments.length}</span>
                     <MessageCircle size={20} />
                   </div>
                 )}
+              </div>
+              <div className="flex items-end justify-between ">
+                {!!data.labels.length && <TaskLabels labels={data.labels} />}
               </div>
             </Card>
           </Link>
