@@ -1,7 +1,7 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
 import { ObjectId } from "mongodb";
-import { ITask } from "@/utils/@types/task";
+import { IDashboardTask, ITask } from "@/utils/@types/task";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 
@@ -154,6 +154,47 @@ const deleteTask = async (taskId: ObjectId) => {
   }
 };
 
+const getAllTasksCreatedByUserOrParticipated = async (userId: ObjectId) => {
+  try {
+    const res = (await Task.find({
+      $or: [{ created_by: userId }, { participants: userId }],
+    })
+      .select("_id workspace title labels dueDate participants priority")
+      .populate({
+        path: "workspace",
+        select: "_id title",
+      })
+      .populate({
+        path: "participants",
+        select: "_id username email photoURL",
+      })
+      .exec()) as IDashboardTask[];
+    return res;
+  } catch (error) {
+    throw new Error("Failed to delete task");
+  }
+};
+
+const getAllTasksCreatedParticipated = async (userId: ObjectId) => {
+  try {
+    const res = await Task.find({
+      participants: userId,
+    })
+      .populate({
+        path: "workspace",
+        select: "_id title",
+      })
+      .populate({
+        path: "participants",
+        select: "_id username email photoURL",
+      })
+      .exec();
+    return res;
+  } catch (error) {
+    throw new Error("Failed to delete task");
+  }
+};
+
 async function getCommentsTaskId(taskId: ObjectId) {
   await init();
   try {
@@ -205,5 +246,7 @@ export {
   getTasksByWorkspaceIdAndColumnId,
   getTaskIdPopulated,
   getTasksByWorkspaceIdForCalendar,
+  getAllTasksCreatedByUserOrParticipated,
+  getAllTasksCreatedParticipated,
   updateColumnId,
 };

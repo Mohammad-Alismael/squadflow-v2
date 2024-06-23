@@ -15,17 +15,23 @@ export default async function Dashboard() {
     <div className="h-full flex flex-col">
       <Navbar>
         <div>
-          <p className="text-2xl">Hello, {payload?.username}</p>
+          <p className="text-2xl">Hello, {payload?.username as string}</p>
           <p className="text-sm opacity-50">never try to give up.</p>
         </div>
       </Navbar>
       <div className="flex-grow">
         <div className="w-2/3 h-full float-left pr-4">
-          <CurrentTaskList />
+          <Suspense fallback={<p>loading ...</p>}>
+            <CurrentTaskList />
+          </Suspense>
         </div>
         <div className="w-1/3 h-full float-right flex flex-col gap-4">
-          <TodayTasksDeadlines />
-          <AssignedTasks />
+          <Suspense fallback={<p>loading ...</p>}>
+            <TodayTasksDeadlines />
+          </Suspense>
+          <Suspense fallback={<p>loading ...</p>}>
+            <AssignedTasks />
+          </Suspense>
         </div>
       </div>
     </div>

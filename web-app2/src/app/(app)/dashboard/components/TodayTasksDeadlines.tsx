@@ -1,13 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
+import AssignedTask from "@/app/(app)/dashboard/components/AssignedTask";
 
 TodayTasksDeadlines.propTypes = {};
 
 function TodayTasksDeadlines() {
   return (
-    <div className="bg-white h-1/2">
-      {/*<h3 className="text-2xl">today's tasks</h3>*/}
-      <p>this will show all tasks are have deadline by today</p>
+    <div className="px-3 py-2.5 bg-white h-1/2 rounded-xl">
+      <h4 className="capitalize font-bold">tasks deadline by today</h4>
+      <div className="space-y-2 my-2 overflow-auto">
+        {/*<AssignedTask />*/}
+        {/*<AssignedTask />*/}
+        {/*<AssignedTask />*/}
+      </div>
     </div>
   );
 }

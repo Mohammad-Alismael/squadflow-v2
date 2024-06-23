@@ -55,3 +55,15 @@ export interface ICommentCreate {
   text: string;
   created_at?: string;
 }
+
+export interface IDashboardTask {
+  _id?: string;
+  workspace: { _id: Schema.Types.ObjectId; title: string };
+  title: string;
+  columnId: string;
+  participants: PopulatedUser[];
+  labels: string[];
+  dueDate: string;
+  dueTime: string;
+  priority: string;
+}
