@@ -27,6 +27,7 @@ async function WorkspacesList({
             />
           );
         })}
+        {data.length === 0 && <p>there's no workspaces</p>}
       </div>
     </>
   );

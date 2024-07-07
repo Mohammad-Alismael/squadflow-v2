@@ -1,5 +1,6 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
+import Workspace from "@/models/Workspace";
 import { ObjectId } from "mongodb";
 import { IDashboardTask, ITask } from "@/utils/@types/task";
 import CustomError from "@/utils/CustomError";
@@ -171,13 +172,14 @@ const getAllTasksCreatedByUserOrParticipated = async (userId: ObjectId) => {
       .exec()) as IDashboardTask[];
     return res;
   } catch (error) {
-    throw new Error("Failed to delete task");
+    console.log(error.message);
+    throw new Error(error.message);
   }
 };
 
 const getAllTasksCreatedParticipated = async (userId: ObjectId) => {
   try {
-    const res = await Task.find({
+    return await Task.find({
       participants: userId,
     })
       .populate({
@@ -189,9 +191,35 @@ const getAllTasksCreatedParticipated = async (userId: ObjectId) => {
         select: "_id username email photoURL",
       })
       .exec();
-    return res;
   } catch (error) {
-    throw new Error("Failed to delete task");
+    console.log(error);
+    throw new CustomError(error.message, HttpStatusCode.INTERNAL_SERVER_ERROR);
+  }
+};
+
+const getAllTasksDeadLineByToday = async (userId: ObjectId) => {
+  const today = new Date();
+  const formattedToday = `${String(today.getDate()).padStart(2, "0")}/${String(
+    today.getMonth() + 1
+  ).padStart(2, "0")}/${today.getFullYear()}`;
+
+  console.log("today", formattedToday);
+  try {
+    return await Task.find({
+      dueDate: formattedToday,
+    })
+      .populate({
+        path: "workspace",
+        select: "_id title",
+      })
+      .populate({
+        path: "participants",
+        select: "_id username email photoURL",
+      })
+      .exec();
+  } catch (error) {
+    console.log(error);
+    throw new CustomError(error.message, HttpStatusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -249,4 +277,5 @@ export {
   getAllTasksCreatedByUserOrParticipated,
   getAllTasksCreatedParticipated,
   updateColumnId,
+  getAllTasksDeadLineByToday,
 };

@@ -7,6 +7,7 @@ import Task from "@/models/task";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 import mongoose from "mongoose";
+import { IWorkspace } from "@/utils/@types/workspace";
 
 async function init() {
   await connectMongoDB();

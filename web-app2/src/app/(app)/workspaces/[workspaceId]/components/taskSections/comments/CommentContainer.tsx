@@ -31,8 +31,8 @@ function CommentContainer({ children }: { children: React.ReactNode }) {
   const comments = useTaskPropertiesStore((state) => state.comments);
   return (
     <CommentContainerContext.Provider value={{ comments }}>
-      <div className="relative h-full flex flex-col items-center justify-between">
-        <div className="space-y-2 w-full h-[80%] overflow-y-auto">
+      <div className="relative flex flex-col items-center justify-between">
+        <div className="space-y-2 w-full h-[30rem] overflow-y-auto">
           {comments.map((comment) =>
             comment.created_by === "user_auth_id" ? (
               <AuthComment

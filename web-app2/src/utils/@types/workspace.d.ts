@@ -1,4 +1,5 @@
 import { PopulatedUser } from "@/utils/@types/user";
+import { Schema } from "mongoose";
 
 interface IWorkspace {
   _id?: string;
@@ -29,7 +30,7 @@ export interface WorkspaceColumn {
 }
 
 export interface WorkspaceLabel {
-  _id: string;
+  _id: string | Schema.Types.ObjectId;
   title: string;
   color: string;
 }

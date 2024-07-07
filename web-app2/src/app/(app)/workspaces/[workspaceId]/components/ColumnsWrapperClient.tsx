@@ -6,7 +6,7 @@ import Loading from "@/app/(app)/workspaces/[workspaceId]/loading";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
 
-function ColumnsWrapper({
+function ColumnsWrapperClient({
   workspaceId,
   columns,
 }: {
@@ -35,4 +35,4 @@ function ColumnsWrapper({
     );
 }
 
-export default ColumnsWrapper;
+export default ColumnsWrapperClient;

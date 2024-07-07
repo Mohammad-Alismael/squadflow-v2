@@ -1,6 +1,6 @@
 import mongoose, { Schema, models } from "mongoose";
 
-const userSchema = new Schema(
+const workspaceSchema = new Schema(
   {
     created_by: { type: Schema.Types.ObjectId, ref: "User" },
     community: { type: Schema.Types.ObjectId, ref: "Community" },
@@ -28,5 +28,6 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-const Workspace = models.Workspace || mongoose.model("Workspace", userSchema);
+const Workspace =
+  models.Workspace || mongoose.model("Workspace", workspaceSchema);
 export default Workspace;

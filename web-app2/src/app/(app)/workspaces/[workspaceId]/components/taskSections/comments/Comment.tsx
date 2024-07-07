@@ -15,7 +15,7 @@ function Comment({ data }: { data: TaskResponse["comments"][0] }) {
         <div className="flex items-center gap-2">
           <div className="font-medium">{data.created_by.username}</div>
           <div className="text-xs text-gray-500 dark:text-gray-400">
-            {data.created_at.toString()}
+            {new Date(data.created_at.toString()).toLocaleDateString()}
           </div>
         </div>
         <div className="text-gray-500 dark:text-gray-400">{data.text}</div>

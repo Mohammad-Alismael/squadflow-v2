@@ -14,23 +14,25 @@ import {
   getTasksForWorkspace,
   fetchWorkspace,
 } from "@/utils/actions/workspace-actions";
+import ColumnsWrapperServer from "@/app/(app)/workspaces/[workspaceId]/components/ColumnsWrapperServer";
+import ColumnsContainerSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skeleton/ColumnsContainerSkeleton";
+import NavbarSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skeleton/NavbarSkeleton";
 
 async function Page({ params }: { params: { workspaceId: string } }) {
-  const workspaceData = fetchWorkspace(params.workspaceId);
-  const workspaceTasks = getTasksForWorkspace(params.workspaceId);
-  const [workspace, tasks] = await Promise.all([workspaceData, workspaceTasks]);
+  const workspace = await fetchWorkspace(params.workspaceId);
   return (
     <div className="h-full flex flex-col">
-      <Suspense fallback={<p>loading...</p>}>
+      <Suspense fallback={<NavbarSkeleton />}>
         <WorkspaceNavbar workspaceId={params.workspaceId} />
       </Suspense>
       <div className="flex-1 space-y-2.5">
         <Header className="" workspaceId={params.workspaceId} />
-        <ColumnsContainer
-          workspaceId={workspace?._id}
-          columns={workspace?.columns}
-          tasks={tasks}
-        />
+        <Suspense fallback={<ColumnsContainerSkeleton />}>
+          <ColumnsWrapperServer
+            workspaceId={workspace?._id}
+            columns={workspace?.columns}
+          />
+        </Suspense>
       </div>
 
       <TaskDetailsDialog

@@ -8,7 +8,7 @@ async function WorkspaceTabs() {
   const data: IWorkspace[] = await fetchWorkspaces();
   return (
     <Tabs defaultValue="account" className="w-[400px]">
-      <TabsList>
+      <TabsList defaultValue={data ? data[0].title : ""}>
         {data.map((item) => (
           <Link href={`?workspace=${item._id}`} prefetch={false}>
             <TabsTrigger key={item._id} value={item.title as string}>

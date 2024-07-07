@@ -149,8 +149,8 @@ function TaskDetailsDialog({
                 {!isLoading && !isLoadingUpdate ? "update task" : "loading ..."}
               </Button>
             </div>
-            <div className="w-1/2 p-4 bg-[#FBFAF8]">
-              <Tabs defaultValue="account" className="w-full h-[95%]">
+            <div className="w-1/2 h-full p-4 bg-[#FBFAF8]">
+              <Tabs defaultValue="account" className="w-full">
                 <TabsList className="w-full">
                   <TabsTrigger
                     value="account"

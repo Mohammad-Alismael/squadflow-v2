@@ -6,6 +6,7 @@ import { updateColumnIdForTaskId } from "@/app/(app)/workspaces/[workspaceId]/ac
 import { TaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 function ColumnsContainer({
   workspaceId,
@@ -75,6 +76,9 @@ function ColumnsContainer({
                 }
               )}
             {provided.placeholder}
+            {/*<div className="flex flex-col gap-y-2 rounded-xl h-[36rem] w-1/4 bg-transparent p-3">*/}
+            {/*  <Button className="w-full bg-green-700">+ new column</Button>*/}
+            {/*</div>*/}
           </div>
         )}
       </Droppable>

@@ -30,7 +30,7 @@ function AddCommentBar() {
     setText("");
   };
   return (
-    <div className="flex w-full gap-3 items-stretch my-4">
+    <div className="flex w-full gap-3 items-stretch my-2">
       <Avatar className="h-10 w-10 shrink-0">
         <img src="/placeholder.svg" alt="Avatar" />
         <AvatarFallback>JD</AvatarFallback>

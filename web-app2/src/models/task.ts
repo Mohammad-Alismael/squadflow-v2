@@ -1,5 +1,5 @@
 import mongoose, { Schema, models } from "mongoose";
-
+import "./workspace";
 const taskSchema = new Schema(
   {
     workspace: { type: Schema.Types.ObjectId, ref: "Workspace" },

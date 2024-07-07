@@ -62,7 +62,7 @@ export interface IDashboardTask {
   title: string;
   columnId: string;
   participants: PopulatedUser[];
-  labels: string[];
+  labels: { color: string; title: string; _id: Schema.Types.ObjectId }[];
   dueDate: string;
   dueTime: string;
   priority: string;

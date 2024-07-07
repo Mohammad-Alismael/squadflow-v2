@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { getTasksByWorkspaceIdForCalendar } from "@/lib/tasks";
 import { ObjectId } from "mongodb";
-
+import { delay } from "@/utils/actions/dashboard-actions";
 export const fetchWorkspaces = async () => {
   const res = await fetch(
     `${process.env.URL_API_ROUTE}/api/workspaces?participated=true`,
@@ -43,6 +43,7 @@ export const getTasksForWorkspace = async (workspaceId: string) => {
       cache: "no-cache",
     }
   );
+  // await delay(3000);
   if (res.ok) {
     return res.json();
   }
