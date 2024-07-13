@@ -49,6 +49,7 @@ const handleChangeRole = (
   });
 };
 const handleSetParticipants = (participants: ParticipantWorkspace[]) => {
+  console.log({ participants });
   return participants.map((participant) => ({
     user: participant.user,
     role: participant.role,

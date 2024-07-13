@@ -8,7 +8,7 @@ interface PropTypes {
 export const useGetWorkspaceById = (id: PropTypes["id"], enabled = true) => {
   return useQuery<IWorkspace, Error>({
     queryKey: [id],
-    enabled,
+    enabled: !!id,
     refetchOnWindowFocus: false,
     queryFn: () => fetchWorkspaceById(id),
   }) as UseQueryResult<IWorkspace, Error>;

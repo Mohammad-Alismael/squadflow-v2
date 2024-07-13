@@ -4,13 +4,19 @@ import { Input } from "@/components/ui/input";
 import Participant from "@/app/(app)/workspaces/components/Participant";
 import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
 import { useGetCommunity } from "@/utils/hooks/community/useGetCommunity";
+import UserComponentSkeleton from "@/components/Dialogs/components/UserComponentSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function FindParticipantsList() {
   const { data, isLoading } = useGetCommunity();
   const [keyword, setKeyword] = useState("");
   const { participants } = workspaceParticipantStore((state) => state);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return Array(3)
+      .fill(null)
+      .map((_, index) => <UserComponentSkeleton />);
+
   if (data?.data)
     return (
       <div className="">

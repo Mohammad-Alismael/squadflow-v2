@@ -25,12 +25,6 @@ function WorkspaceCard({ data }: { data: IWorkspace }) {
                 </Avatar>
               ))}
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <Progress value={data.progress} className="bg-green-800" />
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {data.progress}%
-              </span>
-            </div>
           </div>
         </CardContent>
       </Card>

@@ -34,17 +34,16 @@ import ParticipantsList from "@/components/Dialogs/components/ParticipantsList";
 import { formSchema } from "@/components/Dialogs/scehmas/workspaceSchema";
 import { useUpdateParticipants } from "@/utils/hooks/updateParticipants";
 import { useQueryClient } from "react-query";
+import ParticipantsComponentSkeleton from "@/components/Dialogs/components/ParticipantsComponentSkeleton";
 
 function UpdateWorkspaceDialog() {
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const workspaceId = searchParams.get("workspaceId") as string;
-  const [isLoading, setIsLoading] = useState(false);
   const { data: workspace, isLoading: isLoadingWorkspace } =
     useGetWorkspaceById(workspaceId);
 
   const { setParticipants, reset } = workspaceParticipantStore();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,9 +51,10 @@ function UpdateWorkspaceDialog() {
       participants: [],
     },
   });
-  const joinedParticipants = useUpdateParticipants(form);
+  const joinedParticipants = workspaceParticipantStore(
+    (state) => state.participants
+  );
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
     form.clearErrors();
     try {
       workspaceId && (await handleUpdateWorkspace(values, workspaceId));
@@ -64,20 +64,19 @@ function UpdateWorkspaceDialog() {
     } catch (error) {
       console.log(error);
       form.setError("participants", { type: "custom", message: error.message });
-    } finally {
-      setIsLoading(false);
     }
   }
 
   useEffect(() => {
-    if (!isLoadingWorkspace) {
-      workspace?.title && form.setValue("title", workspace?.title);
-      console.log(workspace?.participants);
-      workspace?.participants &&
-        form.setValue("participants", workspace?.participants);
+    if (!isLoadingWorkspace && workspace) {
+      console.log({ workspaceData: workspace });
+      form.reset({
+        title: workspace?.title,
+        participants: workspace?.participants,
+      });
       workspace?.participants && setParticipants(workspace?.participants);
     }
-  }, [workspaceId, isLoadingWorkspace, joinedParticipants]);
+  }, [workspaceId, isLoadingWorkspace]);
   return (
     <Dialog
       open={workspaceId !== null}
@@ -93,7 +92,7 @@ function UpdateWorkspaceDialog() {
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        {isLoadingWorkspace && <p>loading ...</p>}
+        {isLoadingWorkspace && <ParticipantsComponentSkeleton />}
         {!isLoadingWorkspace && (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -127,10 +126,10 @@ function UpdateWorkspaceDialog() {
               />
               <Button
                 type="submit"
-                disabled={isLoading}
+                disabled={form.formState.isSubmitting}
                 className="bg-green-700"
               >
-                {isLoading ? "loading ..." : "submit"}
+                {form.formState.isSubmitting ? "loading ..." : "submit"}
               </Button>
             </form>
           </Form>

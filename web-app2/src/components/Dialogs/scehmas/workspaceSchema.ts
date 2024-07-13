@@ -1,5 +1,8 @@
 import { z } from "zod";
-
+export type FormFields = {
+  title: string;
+  participants: { user: string; role: "admin" | "editor" | "viewer" }[];
+};
 export const formSchema = z.object({
   title: z.string().min(4).max(50),
   participants: z.array(
