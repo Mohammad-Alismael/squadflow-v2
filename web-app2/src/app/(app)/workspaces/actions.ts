@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import Workspace from "@/models/workspace";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { deleteWorkspaceById } from "@/lib/workspace";
 import { ObjectId } from "mongodb";

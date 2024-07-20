@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import { getCommunityById } from "@/lib/community";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 import { isAdminUserId } from "@/lib/helper/community.helper";
-import { ObjectId } from "mongodb";
 import { findUserByUserId } from "@/lib/users";
 export async function GET(request: Request) {
   const userId = request.headers.get("uid") as string;

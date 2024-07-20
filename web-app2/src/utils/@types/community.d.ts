@@ -17,15 +17,15 @@ export interface Participant {
   joined_at: Date;
 }
 
-export interface CommunityResponse {
+export type CommunityResponse = {
   _id: string;
   name: string;
   code: string;
   admin: PopulatedUser;
-  participants: {
+  participants: Array<{
     user: PopulatedUser;
     joined_at: string;
     _id: string;
-  }[];
+  }>;
   isAdmin: boolean;
-}
+};

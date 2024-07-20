@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  createCommunity,
-  findCommunityByAdmin,
-  getCommunityById,
-} from "@/lib/community";
-import Community from "@/models/community";
-import { updateUserCommunityId, updateUserToken } from "@/lib/users";
+import { getCommunityById, handleCommunityCreation } from "@/lib/community";
 
 export async function POST(request: Request) {
   const { name } = await request.json();
-
   const userId = request.headers.get("uid");
   const communityId = request.headers.get("cid");
   if (communityId !== "")
@@ -17,16 +10,13 @@ export async function POST(request: Request) {
       message:
         "you must leave your current community in order to create new one",
     });
-  const communityFound = await findCommunityByAdmin(userId as string);
-  if (!communityFound) {
-    const community = await createCommunity(userId as string, name as string);
-    const user = await updateUserCommunityId(userId as string, community._id);
-    await updateUserToken(user);
-    return NextResponse.json({ communityId: community._id }, { status: 201 });
-  } else
+  const newCommunityId = await handleCommunityCreation(userId as string, name);
+  if (!newCommunityId)
     return NextResponse.json({
       message: "already found created a communities",
     });
+  else
+    return NextResponse.json({ communityId: newCommunityId }, { status: 201 });
 }
 
 export async function GET(

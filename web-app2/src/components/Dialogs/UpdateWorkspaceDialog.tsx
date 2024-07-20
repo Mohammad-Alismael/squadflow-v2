@@ -57,9 +57,14 @@ function UpdateWorkspaceDialog() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     form.clearErrors();
     try {
-      workspaceId && (await handleUpdateWorkspace(values, workspaceId));
+      workspaceId &&
+        (await handleUpdateWorkspace(
+          { ...values, participants: joinedParticipants },
+          workspaceId
+        ));
       window.history.replaceState(null, "", "/workspaces");
       await queryClient.invalidateQueries([workspaceId]);
+      await queryClient.refetchQueries([workspaceId]);
       revalidateWorkspacePath();
     } catch (error) {
       console.log(error);

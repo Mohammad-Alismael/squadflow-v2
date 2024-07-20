@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
 import { handleLeaveCommunity } from "@/app/(app)/settings/actions";
-import { revalidatePath } from "next/cache";
 import CreateCommunityDialog from "@/components/Dialogs/CreateCommunityDialog";
 import { useRouter } from "next/navigation";
 

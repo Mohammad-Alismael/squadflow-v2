@@ -5,27 +5,39 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { clsx } from "clsx";
 import SubmitButton from "@/app/(app)/settings/components/SubmitButton";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 function JoinCommunityForm() {
+  const formSchema = z.object({
+    communityCode: z.string().max(20),
+  });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (data.communityCode === "") {
+      setSuccess(null);
+      setError("community code text field can't be empty");
+      return;
+    }
+    setError(null);
+    setSuccess(null);
+    try {
+      await handleJoinCommunityForm(data);
+      setSuccess("successfully joined the community");
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
   return (
     <form
-      action={async (formData: FormData) => {
-        if (formData.get("communityCode") === "") {
-          setSuccess(null);
-          setError("community code text field can't be empty");
-          return;
-        }
-        setError(null);
-        setSuccess(null);
-        try {
-          await handleJoinCommunityForm(formData);
-          setSuccess("successfully join the community");
-        } catch (error) {
-          // Capture the error message to display to the user
-          setError(error.message);
-        }
-      }}
+      onSubmit={handleSubmit(onSubmit)}
       className={clsx(
         "flex flex-row items-end gap-4",
         (success || error) && "items-center"
@@ -37,10 +49,13 @@ function JoinCommunityForm() {
           className="border-gray-200"
           placeholder="Community code"
           id="community-name"
-          name="communityCode"
+          {...register("communityCode", { required: true })}
         />
         {success && <span className="text-green-400">{success}</span>}
         {error && <span className="text-red-400">{error}</span>}
+        {errors.communityCode && (
+          <span className="text-red-400">Community code is required</span>
+        )}
       </div>
       <SubmitButton />
     </form>

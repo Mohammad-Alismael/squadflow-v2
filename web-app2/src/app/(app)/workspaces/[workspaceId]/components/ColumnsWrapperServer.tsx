@@ -1,26 +1,28 @@
-"use client";
 import React from "react";
-import ColumnsContainer from "@/app/(app)/workspaces/[workspaceId]/components/ColumnsContainer";
-import { useGetTasksByWorkspaceId } from "@/utils/hooks/workspace/useGetTasksByWorkspaceId";
-import Loading from "@/app/(app)/workspaces/[workspaceId]/loading";
+import dynamic from "next/dynamic";
+const ColumnsContainer = dynamic(
+  () =>
+    import("@/app/(app)/workspaces/[workspaceId]/components/ColumnsContainer"),
+  {
+    ssr: false,
+  }
+);
 import { WorkspaceColumn } from "@/utils/@types/workspace";
-import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
-import { getTasksForWorkspace } from "@/utils/actions/workspace-actions";
+import {
+  fetchWorkspace,
+  getTasksForWorkspace,
+} from "@/utils/actions/workspace-actions";
 
-async function ColumnsWrapperServer({
-  workspaceId,
-  columns,
-}: {
-  workspaceId: string;
-  columns: WorkspaceColumn[];
-}) {
-  const workspaceTasks = await getTasksForWorkspace(workspaceId);
-
+async function ColumnsWrapperServer({ workspaceId }: { workspaceId: string }) {
+  const workspace = fetchWorkspace(workspaceId);
+  const workspaceTasks = getTasksForWorkspace(workspaceId);
+  const [columns_, tasks] = await Promise.all([workspace, workspaceTasks]);
+  // you need to serialize the data if you are passing from server to client component
   return (
     <ColumnsContainer
       workspaceId={workspaceId}
-      columns={columns}
-      tasks={workspaceTasks}
+      columns={JSON.stringify(columns_.columns)}
+      tasks={JSON.stringify(tasks)}
     />
   );
 }

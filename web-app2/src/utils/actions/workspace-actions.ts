@@ -1,8 +1,13 @@
 "use server";
 import { cookies } from "next/headers";
-import { getTasksByWorkspaceIdForCalendar } from "@/lib/tasks";
+import {
+  getTasksByWorkspaceId,
+  getTasksByWorkspaceIdAndColumnId,
+  getTasksByWorkspaceIdForCalendar,
+} from "@/lib/tasks";
 import { ObjectId } from "mongodb";
-import { delay } from "@/utils/actions/dashboard-actions";
+import { getWorkspaceById } from "@/lib/workspace";
+
 export const fetchWorkspaces = async () => {
   const res = await fetch(
     `${process.env.URL_API_ROUTE}/api/workspaces?participated=true`,
@@ -20,34 +25,23 @@ export const fetchWorkspaces = async () => {
 
 export const fetchWorkspace = async (workspaceId: string) => {
   if (!workspaceId) return null;
-  const res = await fetch(
-    `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}`,
-    {
-      next: { revalidate: 1 },
-      method: "GET",
-      headers: { Cookie: cookies().toString() },
-    }
-  );
-  if (res.ok) {
-    return res.json();
-  }
-  return null;
+  return await getWorkspaceById(new ObjectId(workspaceId));
 };
-export const getTasksForWorkspace = async (workspaceId: string) => {
-  const res = await fetch(
-    `${process.env.URL_API_ROUTE}/api/workspaces/${workspaceId}/tasks`,
-    {
-      next: { tags: ["tasks"] },
-      method: "GET",
-      headers: { Cookie: cookies().toString() },
-      cache: "no-cache",
-    }
-  );
-  // await delay(3000);
-  if (res.ok) {
-    return res.json();
+export const getTasksForWorkspace = async (
+  workspaceId: string,
+  columnId?: string
+) => {
+  try {
+    return columnId
+      ? await getTasksByWorkspaceIdAndColumnId(
+          new ObjectId(workspaceId),
+          new ObjectId(columnId)
+        )
+      : await getTasksByWorkspaceId(new ObjectId(workspaceId));
+  } catch (e) {
+    console.log("tf", e);
+    throw e;
   }
-  return [];
 };
 
 export const fetchTasksForCalendar = async (workspaceId: string) => {

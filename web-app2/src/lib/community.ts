@@ -8,9 +8,13 @@ import {
   isUserIdInParticipantsList,
   removeUserId,
   generateRandomId,
+  isAdminUserId,
+  isNoOneInParticipants,
 } from "@/lib/helper/community.helper";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
+import { deleteWorkspacesByCommunityId } from "@/lib/workspace";
+import { updateUserCommunityId, updateUserToken } from "@/lib/users";
 
 async function init() {
   await connectMongoDB();
@@ -215,6 +219,49 @@ async function updateCommunity(community: ICommunity) {
   }
 }
 
+const handleCommunityExit = async (userId: string, code: string) => {
+  const foundCommunity = await findCommunityByCode(code as string);
+  const { _id, participants } = foundCommunity;
+
+  const isAdminUserId_ = isAdminUserId(foundCommunity.admin, userId as string);
+  if (isAdminUserId_ && isNoOneInParticipants(participants)) {
+    await deleteCommunityByCode(code as string);
+    await deleteWorkspacesByCommunityId(_id);
+    const user = await updateUserCommunityId(userId as string, ""); // reseting community id to empty string
+    await updateUserToken(user);
+    return {
+      message: "deleted your community, because no one joined your community",
+    };
+  }
+  if (isAdminUserId_) await replaceAdminByTheOldestMember(_id, participants);
+  else await leaveCommunityForParticipants(_id, userId as string, participants);
+
+  const user = await updateUserCommunityId(userId as string, ""); // reseting community id to empty string
+  await updateUserToken(user);
+  return { message: "success" };
+};
+const handleCommunityJoin = async (userId: string, code: string) => {
+  const communityId = await joinCommunityByCode(
+    userId as string,
+    code as string
+  );
+  const user = await updateUserCommunityId(userId as string, communityId);
+  return user;
+};
+const handleCommunityCreation = async (userId: string, name: string) => {
+  console.log(userId, name);
+  const communityFound = await findCommunityByAdmin(userId as string);
+  if (!communityFound) {
+    const community = await createCommunity(userId as string, name as string);
+    const user = await updateUserCommunityId(userId as string, community._id);
+    await updateUserToken(user);
+    return community._id;
+  }
+  throw new CustomError(
+    "admin already have a community",
+    HttpStatusCode.INTERNAL_SERVER_ERROR
+  );
+};
 export {
   createCommunity,
   generateRandomId,
@@ -226,4 +273,7 @@ export {
   updateCommunityAdmin,
   replaceAdminByTheOldestMember,
   deleteCommunityByCode,
+  handleCommunityExit,
+  handleCommunityJoin,
+  handleCommunityCreation,
 };

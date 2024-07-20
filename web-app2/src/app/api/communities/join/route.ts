@@ -1,4 +1,4 @@
-import { joinCommunityByCode } from "@/lib/community";
+import { handleCommunityJoin, joinCommunityByCode } from "@/lib/community";
 import { NextResponse } from "next/server";
 import { updateUserCommunityId, updateUserToken } from "@/lib/users";
 import { validateSchema } from "@/lib/helper/route.helper";
@@ -22,11 +22,7 @@ export async function POST(request: Request) {
       { status: HttpStatusCode.CONFLICT }
     );
   try {
-    const communityId = await joinCommunityByCode(
-      userId as string,
-      code as string
-    );
-    const user = await updateUserCommunityId(userId as string, communityId);
+    const user = await handleCommunityJoin(userId as string, code as string);
     if (!returnId) {
       await updateUserToken(user);
       return NextResponse.json({ message: "success" });

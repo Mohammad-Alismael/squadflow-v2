@@ -6,7 +6,6 @@ import { updateColumnIdForTaskId } from "@/app/(app)/workspaces/[workspaceId]/ac
 import { TaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
 
 function ColumnsContainer({
   workspaceId,
@@ -14,12 +13,14 @@ function ColumnsContainer({
   tasks,
 }: {
   workspaceId: string;
-  columns: WorkspaceColumn[];
-  tasks: TaskResponse[];
+  columns: string; // WorkspaceColumn[]
+  tasks: string;
 }) {
   const { toast } = useToast();
 
-  const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
+  const [optimisticTasks, setOptimisticTasks] = useOptimistic(
+    JSON.parse(tasks)
+  );
 
   const handleOnDragEnd = async (result: any) => {
     const { source, destination, draggableId, type } = result;
@@ -33,7 +34,7 @@ function ColumnsContainer({
     if (type === "task") {
       // Wrap the state update with startTransition
       startTransition(() => {
-        const newOptimisticTasks = optimisticTasks.map((task) => {
+        const newOptimisticTasks = optimisticTasks.map((task: TaskResponse) => {
           if (task._id === taskId) {
             return { ...task, columnId: toColumnId };
           } else return task;
@@ -44,7 +45,6 @@ function ColumnsContainer({
       await updateColumnIdForTaskId(taskId, toColumnId);
     }
   };
-
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
@@ -56,7 +56,7 @@ function ColumnsContainer({
             // className="w-full flex flex-row gap-4 bg-red-300"
           >
             {columns &&
-              columns.map(
+              JSON.parse(columns).map(
                 (column: {
                   _id: string;
                   order: number;
@@ -69,7 +69,7 @@ function ColumnsContainer({
                       workspaceId={workspaceId}
                       data={column}
                       tasks={optimisticTasks?.filter(
-                        (item) => item.columnId === column._id
+                        (item: TaskResponse) => item.columnId === column._id
                       )}
                     />
                   );

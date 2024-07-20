@@ -1,13 +1,9 @@
-"use client";
-
 import React from "react";
-import PropTypes from "prop-types";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { CardContent } from "@/components/ui/card";
 import { CommunityResponse } from "@/utils/@types/community";
-import { Avatar } from "@radix-ui/react-avatar";
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import DisplayParticipants from "@/app/(app)/settings/components/DisplayParticipants";
 
 function CommunityFound({ data }: { data: CommunityResponse }) {
   return (
@@ -36,13 +32,11 @@ function CommunityFound({ data }: { data: CommunityResponse }) {
         <Label htmlFor="community-participants">Community Participants</Label>
         <div className="flex items-center gap-2">
           {data.participants.length === 0 && <p>no participants</p>}
-          {!!data.participants.length &&
-            data.participants.slice(0, 7).map((participant) => (
-              <Avatar className="h-12 w-12">
-                <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
-                <AvatarFallback>{participant.user.username}</AvatarFallback>
-              </Avatar>
-            ))}
+          {!!data.participants.length && (
+            <DisplayParticipants
+              participants={JSON.parse(JSON.stringify(data.participants))}
+            />
+          )}
           {!!data.participants.length &&
             !!data.participants.slice(7).length && (
               <div className="text-gray-500 dark:text-gray-400">

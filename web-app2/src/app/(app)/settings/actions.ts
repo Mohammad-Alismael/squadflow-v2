@@ -5,129 +5,87 @@ import { redirect } from "next/navigation";
 import { generateAccessTokenFlat } from "@/lib/users";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
 import { handleError } from "@/utils/helper";
+import {
+  handleCommunityCreation,
+  handleCommunityExit,
+  handleCommunityJoin,
+} from "@/lib/community";
+import User from "@/models/user";
+import CustomError from "@/utils/CustomError";
+import bcrypt from "bcryptjs";
+import { ObjectId } from "mongodb";
 
-export const handleJoinCommunityForm = async (formData: FormData) => {
-  const response = await fetch(
-    `${process.env.URL_API_ROUTE}/api/communities/join?code=${formData.get(
-      "communityCode"
-    )}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookies().toString(),
-      },
-    }
+export const handleJoinCommunityForm = async (formData: {
+  communityCode: string;
+}) => {
+  const token = cookies().get("jwt");
+  if (!token) redirect("/auth");
+  const { payload } = await verifyJWTToken(token.value);
+  const user = await handleCommunityJoin(
+    payload?._id as string,
+    formData.communityCode as string
   );
-  if (response.status === 200) {
-    const token = cookies().get("jwt");
-    if (!token) redirect("/auth");
-    const { payload } = await verifyJWTToken(token.value);
-    const data = await response.json();
-    const newAuthToken = {
-      _id: payload?._id,
-      username: payload?.username,
-      email: payload?.email,
-      communityId: data["communityId"],
-      photoURL: payload?.photoURL,
-    };
-    cookies().set({
-      name: "jwt",
-      value: generateAccessTokenFlat(newAuthToken),
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-    });
-    revalidatePath("/settings");
-  }
-
-  await handleError(response);
-};
-
-export const handleJoinCommunity = async (code: string) => {
-  const response = await fetch(
-    `${process.env.URL_API_ROUTE}/api/communities/join?code=${code}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookies().toString(),
-      },
-    }
-  );
-  if (response.status === 200) revalidatePath("/settings");
-
-  await handleError(response);
-};
-
-export const handleLeaveCommunityForm = async (formData: FormData) => {
-  const response = await fetch(
-    `${process.env.URL_API_ROUTE}/api/communities/leave?code=${formData.get(
-      "communityCode"
-    )}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookies().toString(),
-      },
-    }
-  );
-  if (response.status === 200) revalidatePath("/settings");
-
-  await handleError(response);
+  cookies().set({
+    name: "jwt",
+    value: generateAccessTokenFlat(user),
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  });
+  revalidatePath("/settings");
 };
 
 export const handleLeaveCommunity = async (code: string) => {
-  const response = await fetch(
-    `${process.env.URL_API_ROUTE}/api/communities/leave?code=${code}&returnId=true`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookies().toString(),
-      },
-    }
-  );
-  if (response.status === 200) {
+  try {
     const token = cookies().get("jwt");
     if (!token) redirect("/auth");
     const { payload } = await verifyJWTToken(token.value);
-    const newAuthToken = {
-      _id: payload?._id,
-      username: payload?.username,
-      email: payload?.email,
-      communityId: "",
-      photoURL: payload?.photoURL,
-    };
-    cookies().set({
-      name: "jwt",
-      value: generateAccessTokenFlat(newAuthToken),
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-    });
+    const message = await handleCommunityExit(payload?._id as string, code);
     revalidatePath("/settings");
+    return message;
+  } catch (e) {
+    console.log(e);
+    throw e;
   }
-
-  await handleError(response);
 };
 
 export const handleCreateCommunity = async (form: { name: string }) => {
-  // update auth token after you create
-  const response = await fetch(`${process.env.URL_API_ROUTE}/api/communities`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: cookies().toString(),
-    },
-    body: JSON.stringify(form),
-  });
+  try {
+    const token = cookies().get("jwt");
+    if (!token) redirect("/auth");
+    const { payload } = await verifyJWTToken(token.value);
+    const communityId = await handleCommunityCreation(
+      payload?._id as string,
+      form.name
+    );
+    console.log(communityId);
+    communityId && revalidatePath("/settings");
+    return communityId;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
 
-  const data = await response.json();
-  revalidatePath("/settings");
-  return data;
+export const handleChangePassword = async (
+  password: string,
+  newPassword: string
+) => {
+  const token = cookies().get("jwt");
+  if (!token) redirect("/auth");
+  const { payload } = await verifyJWTToken(token.value);
+  const user = await User.findById(new ObjectId(payload?._id));
+  if (!user) {
+    throw new CustomError("user not found", 401);
+  }
+  const passwordsMatch = await bcrypt.compare(password, user.password);
+  if (!passwordsMatch) {
+    throw new CustomError("your password is incorrect", 401);
+  }
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await User.updateOne(
+    { _id: new ObjectId(payload?._id) },
+    { password: hashedPassword }
+  );
 };

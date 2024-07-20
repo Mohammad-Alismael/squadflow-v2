@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import CommunitySection from "@/app/(app)/settings/sections/CommunitySection";
 import GeneralSection from "@/app/(app)/settings/sections/GeneralSection";
+import SecuritySection from "@/app/(app)/settings/sections/SecuritySection";
 
 Page.propTypes = {};
 
@@ -81,32 +82,7 @@ function Page() {
           </Card>
         </TabsContent>
         <TabsContent value="security">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Security Settings</CardTitle>
-              <CardDescription>Manage your security settings.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-1">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="new-password">New Password</Label>
-                <Input id="new-password" type="password" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="confirm-password">Confirm Password</Label>
-                <Input id="confirm-password" type="password" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>
-                <CheckIcon className="mr-2 h-4 w-4" />
-                Save changes
-              </Button>
-            </CardFooter>
-          </Card>
+          <SecuritySection />
         </TabsContent>
         <TabsContent value="notifications">
           <Card className="h-full">

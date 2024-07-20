@@ -14,6 +14,7 @@ import {
 import { clsx } from "clsx";
 import ParticipantsHeader from "@/app/(app)/workspaces/[workspaceId]/components/ParticipantsHeader";
 import { Input } from "@/components/ui/input";
+import ModifyColumnsDialog from "@/components/Dialogs/ModifyColumnsDialog";
 
 Header.propTypes = {};
 
@@ -49,7 +50,9 @@ function Header({
             <SelectItem value="decending">oldest to latest</SelectItem>
           </SelectContent>
         </Select>
-        <Button className="capitalize bg-green-800">modify columns</Button>
+        <ModifyColumnsDialog workspaceId={workspaceId}>
+          <Button className="capitalize bg-green-800">modify columns</Button>
+        </ModifyColumnsDialog>
         <WorkspaceMenu workspaceId={workspaceId} />
       </div>
     </div>

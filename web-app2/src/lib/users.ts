@@ -84,13 +84,19 @@ export function generateAccessTokenFlat(user: {
     }
   );
 }
-async function login(username: string, password: string) {
-  await init();
+
+async function checkMatchPassword(username: string, password: string) {
   const user = await User.findOne({ username });
   if (!user) {
     throw new CustomError("user not found", 401);
   }
   const passwordsMatch = await bcrypt.compare(password, user.password);
+  return { user, passwordsMatch };
+}
+
+async function login(username: string, password: string) {
+  await init();
+  const { user, passwordsMatch } = await checkMatchPassword(username, password);
 
   if (!passwordsMatch) {
     throw new CustomError("incorrect user name or password", 401);

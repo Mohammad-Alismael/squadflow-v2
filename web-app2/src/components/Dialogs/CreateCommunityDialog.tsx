@@ -37,11 +37,15 @@ function CreateCommunityDialog({ children }: { children: ReactNode }) {
       name: "",
     },
   });
-  const [isLoading, setIsLoading] = useState(false);
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    await handleCreateCommunity(values);
-    setIsLoading(false);
+    try {
+      await handleCreateCommunity(values);
+    } catch (error) {
+      form.setError("root", {
+        type: "custom",
+        message: error.message,
+      });
+    }
   }
   return (
     <Dialog>
@@ -55,12 +59,17 @@ function CreateCommunityDialog({ children }: { children: ReactNode }) {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {form.formState.errors.root && (
+              <span className="text-red-500">
+                {form.formState.errors.root.message}
+              </span>
+            )}
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>workspace title</FormLabel>
+                  <FormLabel>community name</FormLabel>
                   <FormControl>
                     <Input placeholder="community name..." {...field} />
                   </FormControl>
@@ -68,8 +77,12 @@ function CreateCommunityDialog({ children }: { children: ReactNode }) {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading} className="bg-green-700">
-              {isLoading ? "loading ..." : "submit"}
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="bg-green-700"
+            >
+              {form.formState.isSubmitting ? "loading ..." : "submit"}
             </Button>
           </form>
         </Form>
