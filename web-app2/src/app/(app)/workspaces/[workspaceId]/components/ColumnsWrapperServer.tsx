@@ -21,8 +21,8 @@ async function ColumnsWrapperServer({ workspaceId }: { workspaceId: string }) {
   return (
     <ColumnsContainer
       workspaceId={workspaceId}
-      columns={JSON.stringify(columns_.columns)}
-      tasks={JSON.stringify(tasks)}
+      columns={JSON.parse(JSON.stringify(columns_.columns))}
+      tasks={JSON.parse(JSON.stringify(tasks))}
     />
   );
 }

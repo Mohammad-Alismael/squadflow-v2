@@ -27,7 +27,11 @@ export const getAllTasksCreatedParticipatedAction = async () => {
   if (!token) redirect("/auth");
   const { payload } = await verifyJWTToken(token.value);
   const userId = payload?._id as string;
-  const res = await getAllTasksCreatedParticipated(new ObjectId(userId));
+  const communityId = payload?.communityId as string;
+  const res = await getAllTasksCreatedParticipated(
+    new ObjectId(userId),
+    new ObjectId(communityId)
+  );
   return res;
 };
 export const getAllTasksDeadLineByTodayAction = async () => {
@@ -35,6 +39,10 @@ export const getAllTasksDeadLineByTodayAction = async () => {
   if (!token) redirect("/auth");
   const { payload } = await verifyJWTToken(token.value);
   const userId = payload?._id as string;
-  const res = await getAllTasksDeadLineByToday(new ObjectId(userId));
+  const communityId = payload?.communityId as string;
+  const res = await getAllTasksDeadLineByToday(
+    new ObjectId(userId),
+    new ObjectId(communityId)
+  );
   return res;
 };

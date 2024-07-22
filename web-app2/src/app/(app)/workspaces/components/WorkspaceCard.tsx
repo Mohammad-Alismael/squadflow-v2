@@ -1,12 +1,12 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 import { IWorkspace } from "@/utils/@types/workspace";
 
 function WorkspaceCard({ data }: { data: IWorkspace }) {
+  console.log(data.participants[0]);
   return (
     <Link href={`/workspaces/${data._id}`} passHref>
       <Card className="">
@@ -20,7 +20,7 @@ function WorkspaceCard({ data }: { data: IWorkspace }) {
             <div className="mt-4 flex items-center gap-2">
               {data.participants.map((participant) => (
                 <Avatar>
-                  <AvatarImage src="/avatars/01.png" />
+                  <AvatarImage src={participant.user.photoURL} />
                   <AvatarFallback>{participant.user.username}</AvatarFallback>
                 </Avatar>
               ))}

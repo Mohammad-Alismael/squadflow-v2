@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 import { getStorage } from "firebase/storage";
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyB3BL9ffB_VX9vuAeR0DGod_QX769pOMcM",
   authDomain: "squadflow-fd473.firebaseapp.com",
   databaseURL:

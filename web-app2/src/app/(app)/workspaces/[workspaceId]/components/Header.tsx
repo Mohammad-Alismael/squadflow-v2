@@ -15,6 +15,7 @@ import { clsx } from "clsx";
 import ParticipantsHeader from "@/app/(app)/workspaces/[workspaceId]/components/ParticipantsHeader";
 import { Input } from "@/components/ui/input";
 import ModifyColumnsDialog from "@/components/Dialogs/ModifyColumnsDialog";
+import TasksSearch from "@/app/(app)/workspaces/[workspaceId]/components/TasksSearch";
 
 Header.propTypes = {};
 
@@ -32,13 +33,7 @@ function Header({
         className
       )}
     >
-      <div className="flex flex-row items-center gap-4">
-        <Input
-          type="text"
-          placeholder="search for task title ..."
-          // className="w-1/4"
-        />
-      </div>
+      <TasksSearch workspaceId={workspaceId} />
       <div className="flex flex-row items-center justify-between gap-2">
         <Select>
           <SelectTrigger className="w-[180px] bg-white">

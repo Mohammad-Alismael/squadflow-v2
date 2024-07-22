@@ -6,11 +6,18 @@ import { Input } from "@/components/ui/input";
 import SearchDialog from "@/components/Dialogs/SearchDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { verifyJWTToken } from "@/lib/helper/route.helper";
 async function Navbar({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookie = cookies().get("jwt");
+  if (!cookie) redirect("/auth");
+  const { payload } = await verifyJWTToken(cookie.value);
+
   return (
     <Suspense fallback={<Skeleton className="h-12 w-full" />}>
       <div className="w-full flex items-start justify-between float-right py-2">
@@ -29,8 +36,10 @@ async function Navbar({
           />
           <Link href="/settings">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={payload?.photoURL as string} />
+              <AvatarFallback>
+                {payload?.username ? payload?.username?.substring(0, 2) : "PD"}
+              </AvatarFallback>
             </Avatar>
           </Link>
         </div>

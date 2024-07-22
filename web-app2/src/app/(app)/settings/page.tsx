@@ -10,18 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   BellIcon,
   CheckIcon,
@@ -46,7 +34,7 @@ function Page() {
         </div>
       </Navbar>
       <Tabs className="flex-1" defaultValue="general">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="general">
             <SettingsIcon className="mr-2 h-4 w-4" />
             General
@@ -55,10 +43,10 @@ function Page() {
             <LockIcon className="mr-2 h-4 w-4" />
             Security
           </TabsTrigger>
-          <TabsTrigger value="notifications">
-            <BellIcon className="mr-2 h-4 w-4" />
-            Notifications
-          </TabsTrigger>
+          {/*<TabsTrigger value="notifications">*/}
+          {/*  <BellIcon className="mr-2 h-4 w-4" />*/}
+          {/*  Notifications*/}
+          {/*</TabsTrigger>*/}
           <TabsTrigger value="community">
             <UsersIcon className="mr-2 h-4 w-4" />
             Community
@@ -73,51 +61,45 @@ function Page() {
               </CardDescription>
             </CardHeader>
             <GeneralSection />
-            <CardFooter>
-              <Button>
-                <CheckIcon className="mr-2 h-4 w-4" />
-                Save changes
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="security">
           <SecuritySection />
         </TabsContent>
-        <TabsContent value="notifications">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Notification Settings</CardTitle>
-              <CardDescription>
-                Manage your notification preferences.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-1">
-                <Label htmlFor="notification-frequency">
-                  Notification Frequency
-                </Label>
-                <Select defaultValue="daily">
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select frequency" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="realtime">Real-time</SelectItem>
-                    <SelectItem value="hourly">Hourly</SelectItem>
-                    <SelectItem value="daily">Daily</SelectItem>
-                    <SelectItem value="weekly">Weekly</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>
-                <CheckIcon className="mr-2 h-4 w-4" />
-                Save changes
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+        {/*<TabsContent value="notifications">*/}
+        {/*  <Card className="h-full">*/}
+        {/*    <CardHeader>*/}
+        {/*      <CardTitle>Notification Settings</CardTitle>*/}
+        {/*      <CardDescription>*/}
+        {/*        Manage your notification preferences.*/}
+        {/*      </CardDescription>*/}
+        {/*    </CardHeader>*/}
+        {/*    <CardContent className="space-y-4">*/}
+        {/*      <div className="space-y-1">*/}
+        {/*        <Label htmlFor="notification-frequency">*/}
+        {/*          Notification Frequency*/}
+        {/*        </Label>*/}
+        {/*        <Select defaultValue="daily">*/}
+        {/*          <SelectTrigger className="w-full">*/}
+        {/*            <SelectValue placeholder="Select frequency" />*/}
+        {/*          </SelectTrigger>*/}
+        {/*          <SelectContent>*/}
+        {/*            <SelectItem value="realtime">Real-time</SelectItem>*/}
+        {/*            <SelectItem value="hourly">Hourly</SelectItem>*/}
+        {/*            <SelectItem value="daily">Daily</SelectItem>*/}
+        {/*            <SelectItem value="weekly">Weekly</SelectItem>*/}
+        {/*          </SelectContent>*/}
+        {/*        </Select>*/}
+        {/*      </div>*/}
+        {/*    </CardContent>*/}
+        {/*    <CardFooter>*/}
+        {/*      <Button>*/}
+        {/*        <CheckIcon className="mr-2 h-4 w-4" />*/}
+        {/*        Save changes*/}
+        {/*      </Button>*/}
+        {/*    </CardFooter>*/}
+        {/*  </Card>*/}
+        {/*</TabsContent>*/}
         <TabsContent value="community">
           <Suspense fallback={<p>loading ...</p>}>
             <CommunitySection />

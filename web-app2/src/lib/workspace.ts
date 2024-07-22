@@ -112,7 +112,27 @@ async function getWorkspacesByCommunityIdPopulated(communityId: string) {
   const workspaces = await Workspace.find({ community: communityId })
     .populate({
       path: "participants.user",
-      select: "_id username email role",
+      select: "_id username email role photoURL",
+    })
+    .exec();
+  if (!workspaces) {
+    throw new Error("workspace not found");
+  }
+  return workspaces;
+}
+
+async function getWorkspacesByCommunityIdPopulatedWithUserId(
+  communityId: string,
+  userId: string
+) {
+  await init();
+  const workspaces = await Workspace.find({
+    community: communityId,
+    "participants.user": userId, // Ensure the user is a participant
+  })
+    .populate({
+      path: "participants.user",
+      select: "_id username email role photoURL",
     })
     .exec();
   if (!workspaces) {
@@ -220,4 +240,5 @@ export {
   getWorkspacesByCommunityAndUser,
   getWorkspacesByCommunityIdPopulated,
   getWorkspaceByIdPopulated,
+  getWorkspacesByCommunityIdPopulatedWithUserId,
 };

@@ -6,6 +6,7 @@ import { updateColumnIdForTaskId } from "@/app/(app)/workspaces/[workspaceId]/ac
 import { TaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { useToast } from "@/components/ui/use-toast";
+import { useSearchParams } from "next/navigation";
 
 function ColumnsContainer({
   workspaceId,
@@ -13,14 +14,12 @@ function ColumnsContainer({
   tasks,
 }: {
   workspaceId: string;
-  columns: string; // WorkspaceColumn[]
-  tasks: string;
+  columns: WorkspaceColumn[];
+  tasks: TaskResponse[];
 }) {
   const { toast } = useToast();
-
-  const [optimisticTasks, setOptimisticTasks] = useOptimistic(
-    JSON.parse(tasks)
-  );
+  const searchParams = useSearchParams();
+  const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
 
   const handleOnDragEnd = async (result: any) => {
     const { source, destination, draggableId, type } = result;
@@ -56,7 +55,7 @@ function ColumnsContainer({
             // className="w-full flex flex-row gap-4 bg-red-300"
           >
             {columns &&
-              JSON.parse(columns).map(
+              columns.map(
                 (column: {
                   _id: string;
                   order: number;
@@ -69,7 +68,13 @@ function ColumnsContainer({
                       workspaceId={workspaceId}
                       data={column}
                       tasks={optimisticTasks?.filter(
-                        (item: TaskResponse) => item.columnId === column._id
+                        (item: TaskResponse) =>
+                          item.columnId === column._id &&
+                          item.title.includes(
+                            searchParams.get("keyword")
+                              ? (searchParams.get("keyword") as string)
+                              : ""
+                          )
                       )}
                     />
                   );

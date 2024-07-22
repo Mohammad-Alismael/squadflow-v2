@@ -1,12 +1,17 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import Workspace from "@/models/workspace";
 import { cookies, headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { deleteWorkspaceById } from "@/lib/workspace";
+import {
+  deleteWorkspaceById,
+  getWorkspacesByCommunityIdPopulated,
+  getWorkspacesByCommunityIdPopulatedWithUserId,
+} from "@/lib/workspace";
 import { ObjectId } from "mongodb";
 import { handleError } from "@/utils/helper";
+import { verifyJWTToken } from "@/lib/helper/route.helper";
+import { IWorkspace } from "@/utils/@types/workspace";
 
 export const redirectToggle = (type: string) => {
   redirect(`/workspaces?view=${type}`);
@@ -50,4 +55,18 @@ export const revalidateWorkspacePath = () => {
 export const handleDeleteWorkspace = async (id: string) => {
   await deleteWorkspaceById(new ObjectId(id));
   revalidatePath("/workspaces");
+};
+
+export const fetchWorkspaces = async () => {
+  const token = cookies().get("jwt");
+  if (!token) redirect("/auth");
+  const { payload } = await verifyJWTToken(token.value);
+  const userId = payload?._id as string;
+  const communityId = payload?.communityId as string;
+  if (communityId === "") return [];
+  const workspaces = await getWorkspacesByCommunityIdPopulatedWithUserId(
+    communityId,
+    userId
+  );
+  return workspaces as IWorkspace[];
 };

@@ -3,21 +3,10 @@ import WorkspaceCard from "@/app/(app)/workspaces/components/WorkspaceCard";
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
 import WorkspaceList from "@/app/(app)/workspaces/components/WorkspaceList";
 import { IWorkspace } from "@/utils/@types/workspace";
-import { cookies } from "next/headers";
-export const fetchWorkspaces = async () => {
-  const res = await fetch(`${process.env.URL_API_ROUTE}/api/workspaces`, {
-    method: "GET",
-    headers: { Cookie: cookies().toString() },
-    cache: "no-cache",
-  });
-  if (res.ok) {
-    return res.json();
-  }
-  return [];
-};
+import { fetchWorkspaces } from "@/app/(app)/workspaces/actions";
+
 async function WorkspacesContainer({ viewType }: { viewType?: string }) {
   const data: IWorkspace[] = await fetchWorkspaces();
-
   return (
     <>
       {data.length === 0 && <NoWorkspacesFound />}

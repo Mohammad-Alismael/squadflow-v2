@@ -1,6 +1,5 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
-import Workspace from "@/models/Workspace";
 import { ObjectId } from "mongodb";
 import { IDashboardTask, ITask } from "@/utils/@types/task";
 import CustomError from "@/utils/CustomError";
@@ -177,13 +176,17 @@ const getAllTasksCreatedByUserOrParticipated = async (userId: ObjectId) => {
   }
 };
 
-const getAllTasksCreatedParticipated = async (userId: ObjectId) => {
+const getAllTasksCreatedParticipated = async (
+  userId: ObjectId,
+  communityId: ObjectId
+) => {
   try {
     return await Task.find({
       participants: userId,
     })
       .populate({
         path: "workspace",
+        match: { community: communityId },
         select: "_id title",
       })
       .populate({
@@ -197,19 +200,21 @@ const getAllTasksCreatedParticipated = async (userId: ObjectId) => {
   }
 };
 
-const getAllTasksDeadLineByToday = async (userId: ObjectId) => {
+const getAllTasksDeadLineByToday = async (
+  userId: ObjectId,
+  communityId: ObjectId
+) => {
   const today = new Date();
   const formattedToday = `${String(today.getDate()).padStart(2, "0")}/${String(
     today.getMonth() + 1
   ).padStart(2, "0")}/${today.getFullYear()}`;
-
-  console.log("today", formattedToday);
   try {
     return await Task.find({
       dueDate: formattedToday,
     })
       .populate({
         path: "workspace",
+        match: { community: communityId },
         select: "_id title",
       })
       .populate({
