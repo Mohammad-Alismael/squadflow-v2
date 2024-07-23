@@ -29,9 +29,7 @@ async function CurrentTaskList({
             )
             .map((task) => <AssignedTask key={task._id} data={task} />)}
         {!selectedWorkspaceId &&
-          tasks
-            .slice(0, 5)
-            .map((task) => <AssignedTask key={task._id} data={task} />)}
+          tasks.map((task) => <AssignedTask key={task._id} data={task} />)}
         {tasks.length === 0 && <NoTasksFound />}
       </div>
     </div>

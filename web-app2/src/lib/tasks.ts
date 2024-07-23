@@ -123,6 +123,7 @@ async function deleteTasksByWorkspaceId(workspaceId: ObjectId) {
 }
 
 const updateTask = async (taskId: string, updateData: ITask) => {
+  await init();
   try {
     // Find the task by ID and update it
     // Return the updated task
@@ -154,24 +155,34 @@ const deleteTask = async (taskId: ObjectId) => {
   }
 };
 
-const getAllTasksCreatedByUserOrParticipated = async (userId: ObjectId) => {
+const getAllTasksCreatedByUserOrParticipated = async (
+  userId: ObjectId,
+  communityId: ObjectId
+): Promise<IDashboardTask[]> => {
+  await init();
   try {
-    const res = (await Task.find({
+    const tasks = (await Task.find({
       $or: [{ created_by: userId }, { participants: userId }],
     })
-      .select("_id workspace title labels dueDate participants priority")
       .populate({
         path: "workspace",
+        match: {
+          $and: [{ community: communityId }, { "participants.user": userId }],
+        },
         select: "_id title",
       })
+      .select("_id workspace title labels dueDate participants priority")
       .populate({
         path: "participants",
         select: "_id username email photoURL",
       })
       .exec()) as IDashboardTask[];
-    return res;
+
+    // Filter out tasks that do not have a populated workspace
+    const filteredTasks = tasks.filter((task) => task.workspace !== null);
+    return filteredTasks;
   } catch (error) {
-    console.log(error.message);
+    console.error("Error fetching tasks:", error.message);
     throw new Error(error.message);
   }
 };
@@ -180,13 +191,16 @@ const getAllTasksCreatedParticipated = async (
   userId: ObjectId,
   communityId: ObjectId
 ) => {
+  await init();
   try {
-    return await Task.find({
+    const tasks = await Task.find({
       participants: userId,
     })
       .populate({
         path: "workspace",
-        match: { community: communityId },
+        match: {
+          $and: [{ community: communityId }, { "participants.user": userId }],
+        },
         select: "_id title",
       })
       .populate({
@@ -194,6 +208,9 @@ const getAllTasksCreatedParticipated = async (
         select: "_id username email photoURL",
       })
       .exec();
+    // Filter out tasks that do not have a populated workspace
+    const filteredTasks = tasks.filter((task) => task.workspace !== null);
+    return filteredTasks;
   } catch (error) {
     console.log(error);
     throw new CustomError(error.message, HttpStatusCode.INTERNAL_SERVER_ERROR);
@@ -204,17 +221,20 @@ const getAllTasksDeadLineByToday = async (
   userId: ObjectId,
   communityId: ObjectId
 ) => {
+  await init();
   const today = new Date();
   const formattedToday = `${String(today.getDate()).padStart(2, "0")}/${String(
     today.getMonth() + 1
   ).padStart(2, "0")}/${today.getFullYear()}`;
   try {
-    return await Task.find({
+    const tasks = await Task.find({
       dueDate: formattedToday,
     })
       .populate({
         path: "workspace",
-        match: { community: communityId },
+        match: {
+          $and: [{ community: communityId }, { "participants.user": userId }],
+        },
         select: "_id title",
       })
       .populate({
@@ -222,6 +242,9 @@ const getAllTasksDeadLineByToday = async (
         select: "_id username email photoURL",
       })
       .exec();
+    // Filter out tasks that do not have a populated workspace
+    const filteredTasks = tasks.filter((task) => task.workspace !== null);
+    return filteredTasks;
   } catch (error) {
     console.log(error);
     throw new CustomError(error.message, HttpStatusCode.INTERNAL_SERVER_ERROR);

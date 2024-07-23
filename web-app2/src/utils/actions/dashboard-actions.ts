@@ -16,9 +16,13 @@ export const getAllTasksAction = async () => {
   if (!token) redirect("/auth");
   const { payload } = await verifyJWTToken(token.value);
   const userId = payload?._id as string;
+  const communityId = payload?.communityId as string;
+  if (communityId === "") return [];
   const res = await getAllTasksCreatedByUserOrParticipated(
-    new ObjectId(userId)
+    new ObjectId(userId),
+    new ObjectId(communityId)
   );
+  console.log("getAllTasksAction", res);
   return res;
 };
 
@@ -28,10 +32,12 @@ export const getAllTasksCreatedParticipatedAction = async () => {
   const { payload } = await verifyJWTToken(token.value);
   const userId = payload?._id as string;
   const communityId = payload?.communityId as string;
+  if (communityId === "") return [];
   const res = await getAllTasksCreatedParticipated(
     new ObjectId(userId),
     new ObjectId(communityId)
   );
+  console.log("getAllTasksCreatedParticipatedAction", res);
   return res;
 };
 export const getAllTasksDeadLineByTodayAction = async () => {
@@ -40,9 +46,11 @@ export const getAllTasksDeadLineByTodayAction = async () => {
   const { payload } = await verifyJWTToken(token.value);
   const userId = payload?._id as string;
   const communityId = payload?.communityId as string;
+  if (communityId === "") return [];
   const res = await getAllTasksDeadLineByToday(
     new ObjectId(userId),
     new ObjectId(communityId)
   );
+  console.log("getAllTasksDeadLineByTodayAction", res);
   return res;
 };
