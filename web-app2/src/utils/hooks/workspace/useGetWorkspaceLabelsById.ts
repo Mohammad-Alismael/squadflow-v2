@@ -14,13 +14,10 @@ interface PropTypes {
   details: boolean;
   enabled: boolean;
 }
-export const useGetWorkspaceLabelsById = (
-  id: PropTypes["id"],
-  enabled = true
-) => {
+export const useGetWorkspaceLabelsById = (id: PropTypes["id"]) => {
   return useQuery<WorkspaceLabel[], Error>({
     queryKey: [`labels-${id}`],
-    enabled,
+    enabled: !!id,
     refetchOnWindowFocus: false,
     queryFn: () => fetchWorkspaceLabels(id),
   }) as UseQueryResult<WorkspaceLabel[], Error>;

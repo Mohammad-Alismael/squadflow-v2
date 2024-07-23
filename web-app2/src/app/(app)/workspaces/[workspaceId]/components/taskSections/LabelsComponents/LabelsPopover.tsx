@@ -17,10 +17,7 @@ LabelsPopover.propTypes = {};
 
 function LabelsPopover({ children }: { children: ReactNode }) {
   const workspaceId = useTaskPropertiesStore((state) => state.projectId);
-  const { data, isLoading } = useGetWorkspaceLabelsById(
-    workspaceId as string,
-    true
-  );
+  const { data, isLoading } = useGetWorkspaceLabelsById(workspaceId as string);
   return (
     <Popover>
       <PopoverTrigger>{children}</PopoverTrigger>

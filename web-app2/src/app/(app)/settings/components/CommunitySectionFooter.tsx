@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
-import { handleLeaveCommunity } from "@/app/(app)/settings/actions";
+import { handleLeaveCommunity } from "@/utils/actions/settings-actions";
 import CreateCommunityDialog from "@/components/Dialogs/CreateCommunityDialog";
 import { useRouter } from "next/navigation";
 

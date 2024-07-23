@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -25,12 +25,11 @@ import { useParams } from "next/navigation";
 import { useCreateTask } from "@/utils/hooks/task/useCreateTask";
 import { useToast } from "@/components/ui/use-toast";
 import { revalidateURL } from "@/components/Dialogs/actions";
+import { revalidateWorkspacePath } from "@/app/(app)/workspaces/actions";
 import { useQueryClient } from "react-query";
 
 function CreateTaskDialog({ columnId }: { columnId: string }) {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-
   const { workspaceId } = useParams();
   const {
     mutate: createMutation,
@@ -40,9 +39,10 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
     isSuccess,
   } = useCreateTask();
   const [open, setOpen] = useState(false);
-
+  const queryClient = useQueryClient();
   const reset = useTaskPropertiesStore((state) => state.resetState);
-  const handleCreateTask = () => {
+  const setProjectId = useTaskPropertiesStore((state) => state.setProjectId);
+  const handleCreateTask = async () => {
     const {
       taskId,
       title,
@@ -75,14 +75,18 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
       toast({
         title: `successfully created task`,
       });
-
+      await queryClient.invalidateQueries([workspaceId]);
+      await queryClient.refetchQueries([workspaceId]);
       revalidateURL(workspaceId as string);
       setOpen(false);
       reset();
     }
 
-    if (isError) toast({ title: error });
+    if (isError) toast({ title: error?.message });
   };
+  useEffect(() => {
+    workspaceId && setProjectId(workspaceId as string);
+  }, [workspaceId]);
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild>

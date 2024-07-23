@@ -74,7 +74,6 @@ function UpdateWorkspaceDialog() {
 
   useEffect(() => {
     if (!isLoadingWorkspace && workspace) {
-      console.log({ workspaceData: workspace });
       form.reset({
         title: workspace?.title,
         participants: workspace?.participants,

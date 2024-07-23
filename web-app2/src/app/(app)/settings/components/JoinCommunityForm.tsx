@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { handleJoinCommunityForm } from "@/app/(app)/settings/actions";
+import { handleJoinCommunityForm } from "@/utils/actions/settings-actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { clsx } from "clsx";

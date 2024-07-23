@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckIcon } from "lucide-react";
-import { handleChangeUserProfile } from "@/app/(app)/settings/actions";
+import { handleChangeUserProfile } from "@/utils/actions/settings-actions";
 import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({

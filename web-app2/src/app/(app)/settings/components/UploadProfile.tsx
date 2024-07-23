@@ -3,7 +3,7 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UploadIcon } from "lucide-react";
-import { saveProfileImg } from "@/app/(app)/settings/actions";
+import { saveProfileImg } from "@/utils/actions/settings-actions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/use-toast";
 

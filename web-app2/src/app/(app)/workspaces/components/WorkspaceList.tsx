@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
+import { IWorkspace } from "@/utils/@types/workspace";
 
 WorkspaceList.propTypes = {};
 

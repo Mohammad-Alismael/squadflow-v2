@@ -12,13 +12,10 @@ interface PropTypes {
   details: boolean;
   enabled: boolean;
 }
-export const useGetWorkspaceColumnsById = (
-  id: PropTypes["id"],
-  enabled = true
-) => {
+export const useGetWorkspaceColumnsById = (id: PropTypes["id"]) => {
   return useQuery<WorkspaceColumn[], Error>({
     queryKey: [`columns-${id}`],
-    enabled,
+    enabled: !!id,
     refetchOnWindowFocus: false,
     queryFn: () => fetchWorkspaceColumns(id),
   }) as UseQueryResult<WorkspaceColumn[], Error>;

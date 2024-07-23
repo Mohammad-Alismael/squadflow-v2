@@ -24,8 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { handleCreateWorkspace } from "@/app/(app)/workspaces/actions";
-import { handleCreateCommunity } from "@/app/(app)/settings/actions";
+import { handleCreateCommunity } from "@/utils/actions/settings-actions";
 
 function CreateCommunityDialog({ children }: { children: ReactNode }) {
   const formSchema = z.object({

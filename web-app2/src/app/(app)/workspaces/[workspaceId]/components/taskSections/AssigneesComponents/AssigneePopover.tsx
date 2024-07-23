@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, Suspense } from "react";
+import React, { ReactNode, Suspense, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Popover,
@@ -16,13 +16,16 @@ function AssigneePopover({ children }: { children: ReactNode }) {
   const workspaceId = useTaskPropertiesStore((state) => state.projectId);
   const { data, isLoading } = useGetWorkspaceParticipantsById(
     workspaceId,
-    true,
     true
   );
+  console.log("workspaceId", workspaceId);
+  console.log("useGetWorkspaceParticipantsById", data);
+  useEffect(() => {
+    !isLoading && console.log(data);
+  }, [workspaceId, isLoading]);
   return (
     <Popover>
       <PopoverTrigger>{children}</PopoverTrigger>
-
       <PopoverContent>
         {isLoading && <p>loading ...</p>}
         <div className="space-y-2">

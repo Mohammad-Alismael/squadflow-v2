@@ -1,5 +1,6 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { WorkspaceParticipants } from "@/utils/@types/workspace";
+// import { fetchWorkspaceParticipants } from "@/utils/actions/workspace-actions";
 import { fetchWorkspaceParticipants } from "@/lib/api/workspace";
 interface PropTypes {
   id: string;
@@ -8,12 +9,11 @@ interface PropTypes {
 }
 export const useGetWorkspaceParticipantsById = (
   id: PropTypes["id"],
-  details = false,
-  enabled = true
+  details = false
 ) => {
   return useQuery<WorkspaceParticipants[], Error>({
     queryKey: [`participants-${id}`],
-    enabled,
+    enabled: !!id,
     refetchOnWindowFocus: false,
     queryFn: () => fetchWorkspaceParticipants(id, details),
   }) as UseQueryResult<WorkspaceParticipants[], Error>;

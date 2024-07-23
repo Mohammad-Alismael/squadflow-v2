@@ -13,7 +13,7 @@ import Label from "@/components/Label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
-import { handleChangePassword } from "@/app/(app)/settings/actions";
+import { handleChangePassword } from "@/utils/actions/settings-actions";
 import { useFormStatus } from "react-dom";
 import { useToast } from "@/components/ui/use-toast";
 
