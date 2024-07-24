@@ -17,7 +17,7 @@ function Workspace({
 }) {
   return (
     <div
-      onClick={() => redirectWorkspaceChat(workspace?._id)}
+      onClick={() => redirectWorkspaceChat(workspace?._id as string)}
       key={workspace._id}
       className={clsx(
         "rounded-md p-4 space-y-1 bg-white",

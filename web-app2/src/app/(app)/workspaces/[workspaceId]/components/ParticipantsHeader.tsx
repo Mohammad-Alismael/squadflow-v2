@@ -1,21 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { IWorkspace } from "@/utils/@types/workspace";
-import { fetchWorkspace } from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceNavbar";
-
-ParticipantsHeader.propTypes = {};
+import { IWorkspace, WorkspaceParticipants } from "@/utils/@types/workspace";
+import { getWorkspaceByIdPopulated } from "@/lib/workspace";
+import { ObjectId } from "mongodb";
 
 async function ParticipantsHeader({ workspaceId }: { workspaceId: string }) {
-  const data: IWorkspace = await fetchWorkspace(workspaceId);
+  const data = await getWorkspaceByIdPopulated(new ObjectId(workspaceId));
 
   return (
     <div className="flex items-center">
       {data &&
-        data?.participants.map((participant) => (
+        data?.participants.map((participant: WorkspaceParticipants) => (
           <Avatar className="w-8 h-8">
-            <AvatarImage src="/avatars/01.png" />
-            <AvatarFallback>{participant.user}</AvatarFallback>
+            <AvatarImage src={participant.user.photoURL} />
+            <AvatarFallback>{participant.user.username}</AvatarFallback>
           </Avatar>
         ))}
     </div>

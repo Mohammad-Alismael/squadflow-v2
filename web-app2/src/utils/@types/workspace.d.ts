@@ -7,10 +7,7 @@ interface IWorkspace {
   updated_by?: string;
   community?: string;
   title?: string;
-  participants: Array<{
-    user: string;
-    role: string;
-  }>;
+  participants: Array<WorkspaceParticipants>;
   columns?: WorkspaceColumn[];
   labels?: { color: string; title: string }[];
   progress?: number;

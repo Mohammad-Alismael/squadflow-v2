@@ -13,7 +13,9 @@ function Message({
   data: MessageType;
   currentUserId: string;
 }) {
-  const { data: userData, isLoading } = useGetUserById(data.created_by);
+  const { data: userData, isLoading } = useGetUserById(
+    data.created_by as string
+  );
   if (isLoading) return <MessageSkeleton />;
   if (userData)
     return (

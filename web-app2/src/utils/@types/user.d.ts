@@ -11,4 +11,5 @@ export interface PopulatedUser {
   _id: string;
   username: string;
   email: string;
+  photoURL: string;
 }

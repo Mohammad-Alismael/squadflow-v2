@@ -7,29 +7,34 @@ import { clsx } from "clsx";
 import SubmitButton from "@/app/(app)/settings/components/SubmitButton";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 function JoinCommunityForm() {
   const formSchema = z.object({
     communityCode: z.string().max(20),
   });
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (data.communityCode === "") {
       setSuccess(null);
-      setError("community code text field can't be empty");
+      setError("Community code text field can't be empty");
       return;
     }
     setError(null);
     setSuccess(null);
     try {
       await handleJoinCommunityForm(data);
-      setSuccess("successfully joined the community");
+      setSuccess("Successfully joined the community");
     } catch (error: any) {
       setError(error.message);
     }

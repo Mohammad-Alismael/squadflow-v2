@@ -3,9 +3,9 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UploadIcon } from "lucide-react";
-import { saveProfileImg } from "@/utils/actions/settings-actions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/use-toast";
+import { saveProfileImg } from "@/utils/actions/settings-actions";
 
 function UploadProfile({
   username,
@@ -14,7 +14,7 @@ function UploadProfile({
   username: string;
   photoURL: string;
 }) {
-  const [selectedImage, setSelectedImage] = useState<string>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { toast } = useToast();
   const [isLaoding, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>("");

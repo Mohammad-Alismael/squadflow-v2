@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-import PropTypes from "prop-types";
 import Navbar from "@/components/Navbar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -25,6 +24,7 @@ import SecuritySection from "@/app/(app)/settings/sections/SecuritySection";
 Page.propTypes = {};
 
 function Page() {
+  // i'm planning to add notification system for tasks deadline and assgiment
   return (
     <div className="w-full">
       <Navbar>

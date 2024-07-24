@@ -7,10 +7,21 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 export type MessageType = {
   messageId: string;
+  created_by: string;
   created_at: number;
   text: string;
   timestamp: string;
 };
+
+function extracted(conversations: { [x: string]: any }) {
+  const mIds = Object.keys(conversations);
+  const list: any[] | ((prevState: MessageType[]) => MessageType[]) = [];
+  mIds.forEach((id) => {
+    list.push({ messageId: id, ...conversations[id] });
+  });
+  return list;
+}
+
 function MessagesContainer({
   communityId,
   userId,
@@ -31,13 +42,7 @@ function MessagesContainer({
       async (snapshot) => {
         if (snapshot.exists()) {
           const conversations = snapshot.val();
-          const mIds = Object.keys(conversations);
-          const list: any[] | ((prevState: MessageType[]) => MessageType[]) =
-            [];
-          console.log(workspaceId, mIds);
-          mIds.forEach((id) => {
-            list.push({ messageId: id, ...conversations[id] });
-          });
+          const list = extracted(conversations);
           setData(list);
         }
       },
@@ -52,6 +57,7 @@ function MessagesContainer({
 
   useEffect(() => {
     if (containerRef.current) {
+      // @ts-ignore
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [data]);
@@ -88,7 +94,7 @@ function MessagesContainer({
               <Message
                 key={item.messageId}
                 data={item}
-                currentUserId={userId}
+                currentUserId={userId as string}
               />
             ))}
       </div>

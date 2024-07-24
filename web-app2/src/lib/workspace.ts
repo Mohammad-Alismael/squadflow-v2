@@ -7,7 +7,7 @@ import Task from "@/models/task";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 import mongoose from "mongoose";
-import { IWorkspace } from "@/utils/@types/workspace";
+import { IWorkspace, WorkspaceParticipants } from "@/utils/@types/workspace";
 
 async function init() {
   await connectMongoDB();
@@ -84,7 +84,7 @@ async function getWorkspaceByIdPopulated(workspaceId: ObjectId) {
   const workspace = await Workspace.findOne({ _id: workspaceId })
     .populate({
       path: "participants.user",
-      select: "_id username email role",
+      select: "_id username email role photoURL",
     })
     .exec();
   if (!workspace) {

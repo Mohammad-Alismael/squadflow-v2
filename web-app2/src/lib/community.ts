@@ -16,7 +16,7 @@ import { HttpStatusCode } from "@/utils/HttpStatusCode";
 import { deleteWorkspacesByCommunityId } from "@/lib/workspace";
 import { updateUserCommunityId, updateUserToken } from "@/lib/users";
 
-async function init() {
+export async function init() {
   await connectMongoDB();
 }
 
@@ -220,6 +220,7 @@ async function updateCommunity(community: ICommunity) {
 }
 
 const handleCommunityExit = async (userId: string, code: string) => {
+  await init();
   const foundCommunity = await findCommunityByCode(code as string);
   const { _id, participants } = foundCommunity;
 
@@ -241,6 +242,7 @@ const handleCommunityExit = async (userId: string, code: string) => {
   return { message: "success" };
 };
 const handleCommunityJoin = async (userId: string, code: string) => {
+  await init();
   const communityId = await joinCommunityByCode(
     userId as string,
     code as string
@@ -249,7 +251,7 @@ const handleCommunityJoin = async (userId: string, code: string) => {
   return user;
 };
 const handleCommunityCreation = async (userId: string, name: string) => {
-  console.log(userId, name);
+  await init();
   const communityFound = await findCommunityByAdmin(userId as string);
   if (!communityFound) {
     const community = await createCommunity(userId as string, name as string);

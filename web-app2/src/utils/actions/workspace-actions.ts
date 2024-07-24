@@ -12,13 +12,13 @@ import {
   getWorkspacesByCommunityIdPopulated,
 } from "@/lib/workspace";
 import { getUserAuthFromJWT } from "@/utils/helper";
-import { WorkspaceParticipants } from "@/utils/@types/workspace";
+import { IWorkspace, WorkspaceParticipants } from "@/utils/@types/workspace";
 import { PopulatedUser } from "@/utils/@types/user";
 
 export const fetchWorkspaces = async () => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   const workspaces = await getWorkspacesByCommunityAndUser(communityId, userId);
-  return workspaces;
+  return workspaces as IWorkspace[];
 };
 
 export const fetchWorkspace = async (workspaceId: string) => {

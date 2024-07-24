@@ -6,12 +6,11 @@ import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 import { IWorkspace } from "@/utils/@types/workspace";
 
 function WorkspaceCard({ data }: { data: IWorkspace }) {
-  console.log(data.participants[0]);
   return (
     <Link href={`/workspaces/${data._id}`} passHref>
       <Card className="">
         <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
-          <CardTitle className="text-xl">{data.title}</CardTitle>
+          <CardTitle className="text-xl truncate w-72">{data.title}</CardTitle>
           <WorkspaceMenu workspaceId={data._id as string} />
         </CardHeader>
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { IWorkspace } from "@/utils/@types/workspace";
 import Workspace from "@/app/(app)/chats/components/Workspace";
 import { SettingsIcon } from "lucide-react";
 import { fetchWorkspaces } from "@/utils/actions/workspace-actions";
@@ -9,7 +8,7 @@ async function WorkspacesList({
 }: {
   selectedWorkspaceId: string;
 }) {
-  const data: IWorkspace[] = await fetchWorkspaces();
+  const data = await fetchWorkspaces();
 
   return (
     <>
@@ -22,7 +21,7 @@ async function WorkspacesList({
           return (
             <Workspace
               key={workspace._id}
-              workspace={workspace}
+              workspace={JSON.parse(JSON.stringify(workspace))}
               selectedWorkspaceId={selectedWorkspaceId}
             />
           );

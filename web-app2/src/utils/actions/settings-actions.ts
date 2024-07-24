@@ -1,9 +1,11 @@
+"use server";
 import { findUserByUserId, generateAccessTokenFlat } from "@/lib/users";
 import {
   getCommunityById,
   handleCommunityCreation,
   handleCommunityExit,
   handleCommunityJoin,
+  init,
 } from "@/lib/community";
 import { isAdminUserId } from "@/lib/helper/community.helper";
 import { getUserAuthFromJWT } from "@/utils/helper";
@@ -14,7 +16,6 @@ import { ObjectId } from "mongodb";
 import CustomError from "@/utils/CustomError";
 import bcrypt from "bcryptjs";
 import { put } from "@vercel/blob";
-import { PopulatedUser } from "@/utils/@types/user";
 import { WorkspaceParticipants } from "@/utils/@types/workspace";
 
 export const fetchCommunity = async () => {
@@ -34,12 +35,6 @@ export const fetchCommunity = async () => {
       (participant: WorkspaceParticipants) =>
         participant.user._id.toString() !== userId
     );
-    console.log({
-      ...communityFound["_doc"],
-      participants: participantsWithoutUserId,
-      isAdmin,
-      status: 200,
-    });
     return {
       ...communityFound["_doc"],
       participants: participantsWithoutUserId,
@@ -105,6 +100,7 @@ export const handleChangePassword = async (
   newPassword: string
 ) => {
   const payload = await getUserAuthFromJWT();
+  await init();
   const user = await User.findById(new ObjectId(payload?._id as string));
   if (!user) {
     throw new CustomError("user not found", 401);
@@ -124,6 +120,7 @@ export const handleChangeUserProfile = async (
   username: string,
   email: string
 ) => {
+  await init();
   const payload = await getUserAuthFromJWT();
   if (payload?.username === username && payload?.email === email) {
     throw new CustomError("you need to change some text fields", 401);
@@ -165,6 +162,7 @@ export const handleChangeUserProfile = async (
 };
 
 export const saveProfileImg = async (formData: FormData) => {
+  await init();
   const payload = await getUserAuthFromJWT();
   const file = formData.get("file") as File;
   const userId = payload?._id as string;
