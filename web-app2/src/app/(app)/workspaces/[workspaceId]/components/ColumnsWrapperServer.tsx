@@ -7,7 +7,6 @@ const ColumnsContainer = dynamic(
     ssr: false,
   }
 );
-import { WorkspaceColumn } from "@/utils/@types/workspace";
 import {
   fetchWorkspace,
   getTasksForWorkspace,

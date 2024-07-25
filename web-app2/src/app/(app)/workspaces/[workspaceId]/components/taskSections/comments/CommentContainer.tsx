@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SendIcon } from "lucide-react";
 import { usePostComment } from "@/utils/hooks/task/usePostComment";
+import { getRoleValue, USER_ROLES } from "@/utils/helper";
 type CommentContainerProps = {
   comments: ICommentCreate[];
 };
@@ -52,9 +53,9 @@ function CommentContainer({ children }: { children: React.ReactNode }) {
 }
 CommentContainer.AddCommentLocal = AddCommentLocal;
 
-function AddCommentLocal() {
-  const { comments } = useCommentContainerContext();
-  return <AddCommentBar />;
+function AddCommentLocal({ userRole }: { userRole: string | undefined }) {
+  if (userRole !== USER_ROLES.viewer) return <AddCommentBar />;
+  else return null;
 }
 
 function AddCommentServer() {

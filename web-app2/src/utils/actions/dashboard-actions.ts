@@ -42,3 +42,8 @@ export const getAllTasksDeadLineByTodayAction = async () => {
   console.log("getAllTasksDeadLineByTodayAction", res);
   return res;
 };
+
+export const handleLogout = () => {
+  cookies().set("jwt", "", { expires: new Date(0) });
+  redirect("/auth");
+};

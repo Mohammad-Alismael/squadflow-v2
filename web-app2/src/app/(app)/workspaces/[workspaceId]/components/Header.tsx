@@ -16,16 +16,19 @@ import ParticipantsHeader from "@/app/(app)/workspaces/[workspaceId]/components/
 import { Input } from "@/components/ui/input";
 import ModifyColumnsDialog from "@/components/Dialogs/ModifyColumnsDialog";
 import TasksSearch from "@/app/(app)/workspaces/[workspaceId]/components/TasksSearch";
+import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
+import { USER_ROLES } from "@/utils/helper";
 
 Header.propTypes = {};
 
-function Header({
+async function Header({
   workspaceId,
   className,
 }: {
   workspaceId: string;
   className: string;
 }) {
+  const role = await getWorkspacePrivilege(workspaceId);
   return (
     <div
       className={clsx(
@@ -45,10 +48,14 @@ function Header({
             <SelectItem value="decending">oldest to latest</SelectItem>
           </SelectContent>
         </Select>
-        <ModifyColumnsDialog workspaceId={workspaceId}>
-          <Button className="capitalize bg-green-800">modify columns</Button>
-        </ModifyColumnsDialog>
-        <WorkspaceMenu workspaceId={workspaceId} />
+        {role !== USER_ROLES.viewer && (
+          <ModifyColumnsDialog workspaceId={workspaceId}>
+            <Button className="capitalize bg-green-800">modify columns</Button>
+          </ModifyColumnsDialog>
+        )}
+        {role === USER_ROLES.admin && (
+          <WorkspaceMenu workspaceId={workspaceId} />
+        )}
       </div>
     </div>
   );

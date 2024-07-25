@@ -6,10 +6,10 @@ import CreateTaskDialog from "@/components/Dialogs/CreateTaskDialog";
 import ColumnHeader from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeader";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
-import { useGetTasksByColumnId } from "@/utils/hooks/task/useGetTasksByColumnId";
-import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
 import { clsx } from "clsx";
-import { useQueryClient } from "react-query";
+import { useGetWorkspacePrivilege } from "@/utils/hooks/workspace/useGetWorkspacePrivilege";
+import { getRoleValue, USER_ROLES } from "@/utils/helper";
+import { Skeleton } from "@/components/ui/skeleton";
 function Column({
   data,
   workspaceId,
@@ -19,6 +19,7 @@ function Column({
   tasks: any;
   workspaceId: string;
 }) {
+  const { data: role, isLoading } = useGetWorkspacePrivilege(workspaceId);
   return (
     <Draggable draggableId={data._id} index={data.order}>
       {(provided, snapshot) => (
@@ -50,7 +51,10 @@ function Column({
               </div>
             )}
           </Droppable>
-          <CreateTaskDialog key={data._id} columnId={data._id} />
+          {isLoading && <Skeleton className="h-14 w-full" />}
+          {!isLoading && role !== getRoleValue(USER_ROLES.viewer) && (
+            <CreateTaskDialog key={data._id} columnId={data._id} />
+          )}
         </div>
       )}
     </Draggable>

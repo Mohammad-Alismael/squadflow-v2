@@ -9,19 +9,14 @@ import {
   LogOut,
   Folder,
 } from "react-feather";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-async function logout() {
-  cookies().set("jwt", "", { expires: new Date(0) });
-}
+import { handleLogout } from "@/utils/actions/dashboard-actions";
+
 const SidebarLogoutButton = () => {
   return (
     <form
       className="w-full absolute bottom-2 left-0 border-t-2 pt-1"
       action={async () => {
-        "use server";
-        await logout();
-        redirect("/auth");
+        handleLogout();
       }}
     >
       <button

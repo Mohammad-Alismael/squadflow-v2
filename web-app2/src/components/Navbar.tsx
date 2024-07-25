@@ -20,16 +20,9 @@ async function Navbar({
 
   return (
     <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-      <div className="w-full flex items-start justify-between float-right py-2">
+      <div className="w-full flex flex-wrap items-start justify-between py-2">
         {children}
         <div className="flex items-center justify-between gap-2">
-          <SearchDialog>
-            <Input
-              type="text"
-              className="w-96 h-[36px]"
-              placeholder="search for anything ..."
-            />
-          </SearchDialog>
           <Bell
             size={30}
             className="p-1 bg-white rounded-xl h-[36px] w-[36px]"

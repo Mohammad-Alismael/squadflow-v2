@@ -22,3 +22,12 @@ export const getUserAuthFromJWT = async () => {
     communityId: string;
   };
 };
+export enum USER_ROLES {
+  viewer = "viewer",
+  editor = "editor",
+  admin = "admin",
+}
+
+export function getRoleValue(roleKey: USER_ROLES): string {
+  return USER_ROLES[roleKey];
+}

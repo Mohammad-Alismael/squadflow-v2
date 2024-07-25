@@ -19,6 +19,8 @@ import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSke
 import { useUpdateTask } from "@/utils/hooks/task/useUpdateTask";
 import { revalidateURL } from "@/components/Dialogs/actions";
 import { useToast } from "@/components/ui/use-toast";
+import { useGetWorkspacePrivilege } from "@/utils/hooks/workspace/useGetWorkspacePrivilege";
+import { getRoleValue, USER_ROLES } from "@/utils/helper";
 
 function TaskDetailsDialog({
   workspaceId,
@@ -28,6 +30,9 @@ function TaskDetailsDialog({
   revertBackTo: string;
 }) {
   const queryClient = useQueryClient();
+  const { data: role, isLoading: isLoadingPrivilege } =
+    useGetWorkspacePrivilege(workspaceId);
+
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const taskId = searchParams.get("taskId");
@@ -141,13 +146,17 @@ function TaskDetailsDialog({
               <Labels />
               <Deadlines />
               <Description />
-              <Button
-                className="w-full bg-green-700"
-                onClick={handleUpdateClick}
-                disabled={isLoading || isLoadingUpdate}
-              >
-                {!isLoading && !isLoadingUpdate ? "update task" : "loading ..."}
-              </Button>
+              {!isLoadingPrivilege && role !== getRoleValue(USER_ROLES.viewer) && (
+                <Button
+                  className="w-full bg-green-700"
+                  onClick={handleUpdateClick}
+                  disabled={isLoading || isLoadingUpdate}
+                >
+                  {!isLoading && !isLoadingUpdate
+                    ? "update task"
+                    : "loading ..."}
+                </Button>
+              )}
             </div>
             <div className="w-1/2 h-full p-4 bg-[#FBFAF8]">
               <Tabs defaultValue="account" className="w-full">
@@ -167,7 +176,7 @@ function TaskDetailsDialog({
                 </TabsList>
                 <TabsContent value="account" className="h-full">
                   <CommentContainer>
-                    <CommentContainer.AddCommentLocal />
+                    <CommentContainer.AddCommentLocal userRole={role} />
                   </CommentContainer>
                 </TabsContent>
                 <TabsContent value="password">coming soon</TabsContent>

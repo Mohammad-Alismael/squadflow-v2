@@ -26,15 +26,15 @@ export default async function Dashboard({
           <p className="text-sm opacity-50">never try to give up.</p>
         </div>
       </Navbar>
-      <div className="flex-1">
-        <div className="w-2/3 h-full float-left pr-4">
+      <div className="space-y-4 md:flex-1 md:space-y-0">
+        <div className="w-full h-96 md:w-2/3 md:h-full float-left md:pr-4">
           <Suspense fallback={<CurrentTaskListSkeleton />}>
             <CurrentTaskList
               selectedWorkspaceId={searchParams["workspaceId"]}
             />
           </Suspense>
         </div>
-        <div className="w-1/3 h-full float-right flex flex-col gap-4">
+        <div className="w-full md:w-1/3 md:h-full float-right flex flex-col gap-4">
           <Suspense fallback={<TodayTaskDeadlinesSkeleton />}>
             <TodayTasksDeadlines
               selectedWorkspaceId={searchParams["workspaceId"]}

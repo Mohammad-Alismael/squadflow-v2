@@ -14,9 +14,11 @@ import {
 import { getUserAuthFromJWT } from "@/utils/helper";
 import { IWorkspace, WorkspaceParticipants } from "@/utils/@types/workspace";
 import { PopulatedUser } from "@/utils/@types/user";
+import Workspace from "@/models/workspace";
 
 export const fetchWorkspaces = async () => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
+  if (communityId === "") return [];
   const workspaces = await getWorkspacesByCommunityAndUser(communityId, userId);
   return workspaces as IWorkspace[];
 };
@@ -52,15 +54,7 @@ export const fetchWorkspaceParticipants = async (
   workspaceId: string,
   withDetails: boolean
 ) => {
-  console.log(
-    "fetchWorkspaceParticipants called with workspaceId:",
-    workspaceId,
-    "and withDetails:",
-    withDetails
-  );
-
   const { _id: userId, communityId } = await getUserAuthFromJWT();
-  console.log("User auth info:", userId, communityId);
   try {
     if (withDetails) {
       const result = await getWorkspaceParticipants(new ObjectId(workspaceId));
@@ -69,7 +63,6 @@ export const fetchWorkspaceParticipants = async (
           return item.user._id !== userId;
         }
       );
-      console.log("Participants with details:", listWithoutUserId);
       return listWithoutUserId as WorkspaceParticipants[];
     } else {
       const res = await getWorkspaceById(new ObjectId(workspaceId));
@@ -78,11 +71,30 @@ export const fetchWorkspaceParticipants = async (
           return item.user !== userId;
         }
       );
-      console.log("Participants without details:", listWithoutUserId);
       return listWithoutUserId as WorkspaceParticipants[];
     }
   } catch (error) {
     console.log(error.message);
+    throw error;
+  }
+};
+
+export const getWorkspacePrivilege = async (workspaceId: string) => {
+  try {
+    const { _id: userId, communityId } = await getUserAuthFromJWT();
+    const result = await Workspace.aggregate([
+      { $match: { _id: new ObjectId(workspaceId) } },
+      { $unwind: "$participants" },
+      { $match: { "participants.user": new ObjectId(userId) } },
+      { $project: { _id: 0, role: "$participants.role" } },
+    ]);
+    if (result.length === 0) {
+      return null; // No matching participant found
+    }
+
+    return result[0].role;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };

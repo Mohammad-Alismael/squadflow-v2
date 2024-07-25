@@ -4,10 +4,13 @@ import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 import { IWorkspace } from "@/utils/@types/workspace";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
+import { USER_ROLES } from "@/utils/helper";
 
 WorkspaceList.propTypes = {};
 
-function WorkspaceList({ data }: { data: IWorkspace }) {
+async function WorkspaceList({ data }: { data: IWorkspace }) {
+  const role = await getWorkspacePrivilege(data._id as string);
   return (
     <div>
       <Link href={`/workspaces/${data._id}`} passHref>
@@ -24,7 +27,9 @@ function WorkspaceList({ data }: { data: IWorkspace }) {
                 ))}
               </div>
             </div>
-            <WorkspaceMenu workspaceId={data._id as string} />
+            {role === USER_ROLES.admin && (
+              <WorkspaceMenu workspaceId={data._id as string} />
+            )}
           </div>
         </div>
       </Link>

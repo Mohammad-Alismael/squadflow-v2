@@ -1,9 +1,11 @@
+"use client";
 import Image from "next/image";
 import logo from "../../public/squadflow-v2-logo.png";
 import Link from "next/link";
 import { linkType } from "@/utils/@types/types";
 import SidebarLink from "@/components/SidearLink";
-import SidebarLogoutButton from "@/components/SidebarLogoutButton";
+import React, { useState } from "react";
+import SidebarLogoutButton from "./SidebarLogoutButton";
 
 const links: linkType[] = [
   { label: "Dashboard", icon: "Grid", link: "/dashboard" },
@@ -23,13 +25,15 @@ const links: linkType[] = [
 
 const Sidebar = () => {
   return (
-    <div className="relative bg-white float-left h-full w-1/6 pt-3 pb-5">
+    <div className="relative bg-white float-left h-full hidden lg:w-1/6 lg:block pt-3 pb-5">
       <Link
         className="flex flex-row items-center gap-x-2.5 pl-4"
         href="/dashboard"
       >
         <Image src={logo} alt="logo" priority width={50} height={50} />
-        <span className="text-2xl font-bold capitalize">squadflow</span>
+        <span className="sm:text-2xl text-sm font-bold capitalize">
+          squadflow
+        </span>
       </Link>
 
       <hr className="mb-1 mt-3" />
@@ -45,5 +49,4 @@ const Sidebar = () => {
     </div>
   );
 };
-
 export default Sidebar;
