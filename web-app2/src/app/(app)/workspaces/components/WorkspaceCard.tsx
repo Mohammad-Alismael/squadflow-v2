@@ -11,7 +11,7 @@ async function WorkspaceCard({ data }: { data: IWorkspace }) {
   const role = await getWorkspacePrivilege(data._id as string);
   return (
     <Link href={`/workspaces/${data._id}`} passHref>
-      <Card className="">
+      <Card className="w-full">
         <CardHeader className="px-2 py-0 m-0 flex flex-row items-center justify-between">
           <CardTitle className="text-xl truncate w-72">{data.title}</CardTitle>
           {role === USER_ROLES.admin && (

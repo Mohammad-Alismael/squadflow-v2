@@ -19,8 +19,10 @@ async function Navbar({
   return (
     <Suspense fallback={<Skeleton className="h-12 w-full" />}>
       <div className="w-full flex flex-wrap items-start justify-between py-2">
-        <SidebarMobile />
-        {children}
+        <div className="flex items-center gap-2">
+          <SidebarMobile />
+          {children}
+        </div>
         <div className="flex items-center justify-between gap-2">
           <Bell
             size={30}
