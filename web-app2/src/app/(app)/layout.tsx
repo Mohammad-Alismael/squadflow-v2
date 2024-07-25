@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import React, { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
-import SidebarLogoutButton from "@/components/SidebarLogoutButton";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

@@ -1,14 +1,12 @@
 import React, { Suspense } from "react";
-import PropTypes from "prop-types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell } from "react-feather";
-import { Input } from "@/components/ui/input";
-import SearchDialog from "@/components/Dialogs/SearchDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
+import SidebarMobile from "@/components/Sidebar-mobile";
 async function Navbar({
   children,
 }: Readonly<{
@@ -21,6 +19,7 @@ async function Navbar({
   return (
     <Suspense fallback={<Skeleton className="h-12 w-full" />}>
       <div className="w-full flex flex-wrap items-start justify-between py-2">
+        <SidebarMobile />
         {children}
         <div className="flex items-center justify-between gap-2">
           <Bell

@@ -7,7 +7,7 @@ import SidebarLink from "@/components/SidearLink";
 import React, { useState } from "react";
 import SidebarLogoutButton from "./SidebarLogoutButton";
 
-const links: linkType[] = [
+export const links: linkType[] = [
   { label: "Dashboard", icon: "Grid", link: "/dashboard" },
   { label: "Workspaces", icon: "Folder", link: "/workspaces" },
   {
