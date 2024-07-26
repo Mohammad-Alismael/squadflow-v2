@@ -17,7 +17,7 @@ export default async function Dashboard({
 }) {
   const cookie = cookies().get("jwt");
   if (!cookie) redirect("/auth");
-  const { payload } = await verifyJWTToken(cookie?.value);
+  const payload = await verifyJWTToken(cookie?.value);
   return (
     <div className="h-full flex flex-col">
       <Navbar>

@@ -9,7 +9,7 @@ import UpdateUserForm from "@/app/(app)/settings/components/UpdateUserForm";
 async function GeneralSection() {
   const cookie = cookies().get("jwt");
   if (!cookie) redirect("/auth");
-  const { payload } = await verifyJWTToken(cookie.value);
+  const payload = await verifyJWTToken(cookie.value);
 
   return (
     <CardContent className="space-y-4">

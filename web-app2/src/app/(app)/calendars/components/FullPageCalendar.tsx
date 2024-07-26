@@ -43,9 +43,8 @@ function FullPageCalendar() {
     router.push(pathname + "?" + createQueryString("taskId", event.taskId));
   };
   useEffect(() => {
-    console.log(workspaceId);
     setLoading(true);
-    fetchTasksForCalendar(workspaceId)
+    fetchTasksForCalendar(workspaceId as string)
       .then((r) => {
         const rest = r.map((item) => ({
           title: item.title,
@@ -60,9 +59,12 @@ function FullPageCalendar() {
         setLoading(false);
       });
   }, [workspaceId]);
+  // @ts-ignore
   return (
     <div>
-      {!loading && events.length === 0 && <NoWorkspacesFound />}
+      {!loading && events.length === 0 && (
+        <NoWorkspacesFound className="h-full" />
+      )}
       {loading && (
         <div
           style={{

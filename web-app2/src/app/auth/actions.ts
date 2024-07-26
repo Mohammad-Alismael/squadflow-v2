@@ -7,8 +7,6 @@ import {
   login,
 } from "@/lib/users";
 import bcrypt from "bcryptjs";
-import { cookies } from "next/headers";
-import { verifyJWTToken } from "@/lib/helper/route.helper";
 
 export async function signup(
   username: string,

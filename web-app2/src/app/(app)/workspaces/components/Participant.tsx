@@ -41,11 +41,11 @@ function Participant({
   return (
     <div
       className={clsx(
-        "py-3 px-4 flex flex-row justify-between items-center gap-4 hover:bg-gray-100 transition-colors",
+        "py-3 px-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-4 hover:bg-gray-100 transition-colors",
         showDelete && "bg-gray-100"
       )}
     >
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
         <Avatar>
           <AvatarImage
             src="https://github.com/shadcn.png"
@@ -58,9 +58,9 @@ function Participant({
           <span className="text-sm text-gray-600">{user.email}</span>
         </div>
       </div>
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4 mt-2 md:mt-0">
         <Select onValueChange={handleChange} defaultValue={role_}>
-          <SelectTrigger className="w-[120px] h-[36px] border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200">
+          <SelectTrigger className="w-full md:w-[120px] h-[36px] border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200">
             <SelectValue placeholder="Select role" />
           </SelectTrigger>
           <SelectContent>
@@ -71,7 +71,7 @@ function Participant({
         </Select>
         <button
           onClick={handleSelectClick}
-          className="bg-green-500 text-white rounded-md py-1 px-3 hover:bg-blue-600 transition-colors focus:outline-none focus:ring focus:ring-blue-300"
+          className="w-full md:w-auto bg-green-500 text-white rounded-md py-1 px-3 hover:bg-blue-600 transition-colors focus:outline-none focus:ring focus:ring-blue-300"
         >
           {showDelete ? "Unselect" : "Select"}
         </button>

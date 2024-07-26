@@ -5,12 +5,10 @@ import { cookies, headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import {
   deleteWorkspaceById,
-  getWorkspacesByCommunityIdPopulated,
   getWorkspacesByCommunityIdPopulatedWithUserId,
 } from "@/lib/workspace";
 import { ObjectId } from "mongodb";
-import { handleError } from "@/utils/helper";
-import { verifyJWTToken } from "@/lib/helper/route.helper";
+import { getUserAuthFromJWT, handleError } from "@/utils/helper";
 import { IWorkspace } from "@/utils/@types/workspace";
 
 export const redirectToggle = (type: string) => {
@@ -58,9 +56,7 @@ export const handleDeleteWorkspace = async (id: string) => {
 };
 
 export const fetchWorkspaces = async () => {
-  const token = cookies().get("jwt");
-  if (!token) redirect("/auth");
-  const { payload } = await verifyJWTToken(token.value);
+  const payload = await getUserAuthFromJWT();
   const userId = payload?._id as string;
   const communityId = payload?.communityId as string;
   if (communityId === "") return [];

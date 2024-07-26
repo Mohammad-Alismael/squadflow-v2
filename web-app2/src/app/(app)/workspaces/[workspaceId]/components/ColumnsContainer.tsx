@@ -7,6 +7,7 @@ import { TaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
+import { useMediaQuery } from "@/utils/hooks/use-media-query";
 
 function ColumnsContainer({
   workspaceId,
@@ -17,6 +18,7 @@ function ColumnsContainer({
   columns: WorkspaceColumn[];
   tasks: TaskResponse[];
 }) {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
@@ -51,8 +53,7 @@ function ColumnsContainer({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="w-full flex-1 flex flex-row gap-4"
-            // className="w-full flex flex-row gap-4 bg-red-300"
+            className="w-full h-full flex flex-row gap-4 overflow-x-auto"
           >
             {columns &&
               columns.map(

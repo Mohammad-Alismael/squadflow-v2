@@ -12,7 +12,7 @@ async function Page({ params }: { params: { workspaceId: string } }) {
       <Suspense fallback={<NavbarSkeleton />}>
         <WorkspaceNavbar workspaceId={params.workspaceId} />
       </Suspense>
-      <div className="flex-1 space-y-2.5">
+      <div className="space-y-2.5">
         <Suspense fallback={<p>loading..</p>}>
           <Header className="" workspaceId={params.workspaceId} />
         </Suspense>

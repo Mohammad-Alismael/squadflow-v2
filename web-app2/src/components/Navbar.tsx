@@ -14,11 +14,11 @@ async function Navbar({
 }>) {
   const cookie = cookies().get("jwt");
   if (!cookie) redirect("/auth");
-  const { payload } = await verifyJWTToken(cookie.value);
+  const payload = await verifyJWTToken(cookie.value);
 
   return (
     <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-      <div className="w-full flex flex-wrap items-start justify-between py-2">
+      <div className="w-full flex flex-wrap items-center justify-between py-2">
         <div className="flex items-center gap-2">
           <SidebarMobile />
           {children}
@@ -32,7 +32,7 @@ async function Navbar({
             <Avatar>
               <AvatarImage src={payload?.photoURL as string} />
               <AvatarFallback>
-                {payload?.username ? payload?.username?.substring(0, 2) : "PD"}
+                {payload?.username ? payload?.username.substring(0, 2) : "PD"}
               </AvatarFallback>
             </Avatar>
           </Link>

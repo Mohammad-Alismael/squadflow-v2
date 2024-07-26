@@ -19,7 +19,7 @@ function FindParticipantsList() {
 
   if (data?.data)
     return (
-      <div className="">
+      <div className="w-full">
         <Input
           type="text"
           placeholder="search by username..."

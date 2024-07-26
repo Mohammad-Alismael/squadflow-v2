@@ -13,7 +13,7 @@ export async function handleError(response: Response) {
 export const getUserAuthFromJWT = async () => {
   const token = cookies().get("jwt");
   if (!token) redirect("/auth");
-  const { payload } = await verifyJWTToken(token.value);
+  const payload = await verifyJWTToken(token.value);
   return payload as {
     _id: string;
     email: string;

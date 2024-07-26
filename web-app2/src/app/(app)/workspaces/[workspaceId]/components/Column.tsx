@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import TaskCard from "../components/TaskCard";
-import { ITask, TaskResponse } from "@/utils/@types/task";
+import { TaskResponse } from "@/utils/@types/task";
 import CreateTaskDialog from "@/components/Dialogs/CreateTaskDialog";
 import ColumnHeader from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeader";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
@@ -27,7 +27,7 @@ function Column({
           key={data._id}
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className="flex flex-col gap-y-2 rounded-xl h-[36rem] w-1/4 bg-gray-300 p-3"
+          className="flex flex-col gap-y-2 rounded-xl h-[36rem] min-w-80 sm:w-auto bg-gray-300 p-3"
         >
           <ColumnHeader
             length={tasks.length}

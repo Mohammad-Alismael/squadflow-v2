@@ -20,16 +20,21 @@ function Workspace({
       onClick={() => redirectWorkspaceChat(workspace?._id as string)}
       key={workspace._id}
       className={clsx(
-        "rounded-md p-4 space-y-1 bg-white",
+        "rounded-md p-4 md:p-5 space-y-1 bg-white",
         selectedWorkspaceId === workspace._id
           ? "border-2 border-green-800"
           : "border-2 border-gray-100"
       )}
     >
-      <p>{workspace.title}</p>
-      <div className="flex flex-row">
+      <p className="min-w-32 truncate text-sm md:text-base lg:text-lg">
+        {workspace.title}
+      </p>
+      <div className="flex flex-row flex-wrap">
         {workspace.participants.map((participant) => (
-          <Avatar className="w-8 h-8">
+          <Avatar
+            key={participant.user.username}
+            className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10"
+          >
             <AvatarImage src="/avatars/01.png" />
             <AvatarFallback>{participant.user.username}</AvatarFallback>
           </Avatar>

@@ -2,7 +2,6 @@
 import React from "react";
 import ColumnsContainer from "@/app/(app)/workspaces/[workspaceId]/components/ColumnsContainer";
 import { useGetTasksByWorkspaceId } from "@/utils/hooks/workspace/useGetTasksByWorkspaceId";
-import Loading from "@/app/(app)/workspaces/[workspaceId]/loading";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import ColumnSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnSkeleton";
 

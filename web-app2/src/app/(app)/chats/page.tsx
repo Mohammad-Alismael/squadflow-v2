@@ -15,7 +15,7 @@ async function Page({
 }) {
   const cookie = cookies().get("jwt");
   if (!cookie) redirect("/auth");
-  const { payload } = await verifyJWTToken(cookie?.value);
+  const payload = await verifyJWTToken(cookie?.value);
   return (
     <div className="h-full flex flex-col">
       <Navbar>
@@ -25,15 +25,27 @@ async function Page({
         </div>
       </Navbar>
       <div className="flex flex-row gap-x-0 flex-grow h-[89%]">
-        <div className="flex flex-col w-1/4 float-left">
+        <div className="hidden md:flex flex-col w-1/4 float-left">
           <Suspense fallback={<p>loading ...</p>}>
             <WorkspacesList selectedWorkspaceId={searchParams["workspaceId"]} />
           </Suspense>
         </div>
-        <div className="h-full w-3/4 float-right flex flex-col">
+        <div className="h-full w-full md:w-3/4 float-right flex flex-col">
           <Suspense fallback={<p>loading ...</p>}>
             <WorkspaceDetailsBar workspaceId={searchParams["workspaceId"]} />
           </Suspense>
+          {(!searchParams["workspaceId"] ||
+            searchParams["workspaceId"] === "") && (
+            <div className="flex md:hidden flex-col w-full float-left">
+              {/*for mobile view*/}
+              <Suspense fallback={<p>loading ...</p>}>
+                <WorkspacesList
+                  selectedWorkspaceId={searchParams["workspaceId"]}
+                />
+              </Suspense>
+              {/*ends here*/}
+            </div>
+          )}
           <MessagesContainer
             userId={payload?._id}
             communityId={payload?.communityId}

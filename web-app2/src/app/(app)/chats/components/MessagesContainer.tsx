@@ -63,7 +63,7 @@ function MessagesContainer({
   }, [data]);
   if (!workspaceId)
     return (
-      <div className="flex-1 flex flex-col items-center justify-centers">
+      <div className="hidden flex-1 md:flex flex-col items-center justify-centers">
         <Image
           src="./Team-goals-bro.svg"
           width={500}

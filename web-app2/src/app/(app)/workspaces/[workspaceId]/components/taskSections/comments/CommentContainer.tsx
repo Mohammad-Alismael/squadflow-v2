@@ -1,9 +1,8 @@
 "use client";
-import React, { useContext, useOptimistic, useState } from "react";
+import React, { useContext, useState } from "react";
 import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import AuthComment from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AuthComment";
-import Comment from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/Comment";
 import { ICommentCreate } from "@/utils/@types/task";
 import { v4 as uuidv4 } from "uuid";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -11,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SendIcon } from "lucide-react";
 import { usePostComment } from "@/utils/hooks/task/usePostComment";
-import { getRoleValue, USER_ROLES } from "@/utils/helper";
+import { USER_ROLES } from "@/utils/helper";
 type CommentContainerProps = {
   comments: ICommentCreate[];
 };

@@ -24,5 +24,11 @@ export const verifyJWTToken = async (token: string) => {
     algorithms: ["HS256"],
   });
 
-  return { payload };
+  return payload as {
+    _id: string;
+    email: string;
+    username: string;
+    photoURL: string;
+    communityId: string;
+  };
 };

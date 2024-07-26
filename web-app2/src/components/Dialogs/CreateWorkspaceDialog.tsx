@@ -73,7 +73,7 @@ function CreateWorkspaceDialog() {
           create workspace
         </Button>
       </DialogTrigger>
-      <DialogContent className="">
+      <DialogContent className="w-80 sm:w-auto">
         <DialogHeader>
           <DialogTitle className="capitalize">create workspace</DialogTitle>
           <DialogDescription>

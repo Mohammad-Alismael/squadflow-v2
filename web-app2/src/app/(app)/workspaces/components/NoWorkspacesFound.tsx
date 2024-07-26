@@ -1,9 +1,11 @@
 import React from "react";
 import Image from "next/image";
 
-function NoWorkspacesFound() {
+function NoWorkspacesFound({ className = "" }: { className?: string }) {
   return (
-    <div className="w-full flex flex-col items-center justify-center">
+    <div
+      className={`w-full flex flex-col items-center justify-center ${className}`}
+    >
       <Image
         src="./Team-goals-bro.svg"
         width={500}

@@ -20,7 +20,7 @@ function FindParticipantsDialog({ children }: { children: React.ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-80 md:w-auto">
         <DialogHeader>
           <DialogTitle className="capitalize">find participants</DialogTitle>
           <DialogDescription>

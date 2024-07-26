@@ -1,9 +1,7 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { fetchCommunity } from "@/app/(app)/settings/requests";
 import { CommunityResponse, ICommunity } from "@/utils/@types/community";
-interface PropTypes {
-  enabled: boolean;
-}
+
 interface RESULT {
   data: CommunityResponse | null;
   status: number;

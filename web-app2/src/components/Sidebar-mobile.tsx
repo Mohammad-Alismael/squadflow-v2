@@ -16,7 +16,7 @@ function SidebarMobile() {
   return (
     <div className="block lg:hidden">
       <Drawer direction="left">
-        <DrawerTrigger>
+        <DrawerTrigger className="bg-white rounded-full p-2">
           <MenuIcon />
         </DrawerTrigger>
         <DrawerContent className="py-4">

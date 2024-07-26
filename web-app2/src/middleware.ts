@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/auth", request.url));
     }
 
-    const { payload } = await verifyJWTToken(token.value);
+    const payload = await verifyJWTToken(token.value);
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers);
     if (payload?._id && payload?.communityId !== null) {

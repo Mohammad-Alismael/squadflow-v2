@@ -21,11 +21,21 @@ async function AssignedTasks({
             .filter(
               (task) => task.workspace._id.toString() === selectedWorkspaceId
             )
-            .map((task) => <AssignedTask key={task._id} data={task} />)}
+            .map((task) => (
+              <AssignedTask
+                key={task._id}
+                data={JSON.parse(JSON.stringify(task))}
+              />
+            ))}
         {!selectedWorkspaceId &&
           tasks
             .slice(0, 5)
-            .map((task) => <AssignedTask key={task._id} data={task} />)}
+            .map((task) => (
+              <AssignedTask
+                key={task._id}
+                data={JSON.parse(JSON.stringify(task))}
+              />
+            ))}
         {tasks.length === 0 && <NoTasksFound />}
       </div>
     </div>
