@@ -15,7 +15,7 @@ interface IWorkspace {
 
 interface WorkspaceParticipants {
   user: PopulatedUser;
-  role: string;
+  role: "admin" | "editor" | "viewer";
   _id: string;
 }
 

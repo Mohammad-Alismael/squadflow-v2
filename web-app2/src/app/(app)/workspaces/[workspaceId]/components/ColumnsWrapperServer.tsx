@@ -17,6 +17,7 @@ async function ColumnsWrapperServer({ workspaceId }: { workspaceId: string }) {
   const workspaceTasks = getTasksForWorkspace(workspaceId);
   const [columns_, tasks] = await Promise.all([workspace, workspaceTasks]);
   // you need to serialize the data if you are passing from server to client component
+  // return <p>{JSON.stringify(tasks)}</p>;
   return (
     <ColumnsContainer
       workspaceId={workspaceId}

@@ -6,34 +6,45 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "next/navigation";
+import { useGetUserAuth } from "@/utils/hooks/user/useGetUserAuth";
+import { Skeleton } from "@/components/ui/skeleton";
 
 AddCommentBar.propTypes = {};
 
 function AddCommentBar() {
   const { addComment } = useTaskPropertiesStore();
   const [text, setText] = useState("");
+  const { data: userData, isLoading } = useGetUserAuth();
+
   const handleAddComment = () => {
-    addComment({
-      _id: uuidv4(),
-      text,
-      created_at: new Date().toLocaleDateString("en-GB", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      }),
-      created_by: "user_auth_id",
-    });
+    !isLoading &&
+      userData &&
+      addComment({
+        _id: uuidv4(),
+        text,
+        created_at: new Date().toLocaleDateString("en-GB", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }),
+        created_by: {
+          _id: "",
+          username: userData.username,
+          email: userData.email,
+          photoURL: userData.photoURL,
+        },
+      });
     setText("");
   };
+  if (isLoading) return <Skeleton className="h-10 w-full" />;
   return (
     <div className="flex w-full gap-3 items-stretch my-2">
-      <Avatar className="h-10 w-10 shrink-0">
-        <img src="/placeholder.svg" alt="Avatar" />
-        <AvatarFallback>JD</AvatarFallback>
+      <Avatar className="border w-10 h-10">
+        <img src={userData?.photoURL} alt="@shadcn" />
+        <AvatarFallback>{userData?.username}</AvatarFallback>
       </Avatar>
       <div className="w-[90%]">
         <Input

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { PopulatedUser } from "@/utils/@types/user";
 import { WorkspaceLabel } from "@/utils/@types/workspace";
-import { ICommentCreate } from "@/utils/@types/task";
+import { Comment, ICommentCreate, TaskResponse } from "@/utils/@types/task";
 import { devtools } from "zustand/middleware";
 
 interface Task {
@@ -24,7 +24,7 @@ interface State {
   labels: WorkspaceLabel[];
   subTasks: Task[];
   attachments: string[];
-  comments: ICommentCreate[];
+  comments: Comment[];
 }
 
 interface Actions {
@@ -46,8 +46,8 @@ interface Actions {
   setSubTasks: (payload: Task[]) => void;
   addSubTasks: (newSubTask: Task) => void;
   setAttachments: (payload: string[]) => void;
-  setComments: (payload: ICommentCreate[]) => void;
-  addComment: (newComment: ICommentCreate) => void;
+  setComments: (payload: Comment[]) => void;
+  addComment: (newComment: Comment) => void;
   resetState: () => void;
   updateSubTask: (updatedSubTask: Task) => void;
   removeSubTask: (selectedTaskId: string) => void;
@@ -170,7 +170,7 @@ interface TaskSelectors {
   getLabels: () => WorkspaceLabel[];
   getSubTasks: () => Task[];
   getAttachments: () => string[];
-  getComments: () => ICommentCreate[];
+  getComments: () => Comment[];
 }
 
 const useTaskSelectors = (

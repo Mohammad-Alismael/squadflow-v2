@@ -9,14 +9,12 @@ function TaskParticipants({
 }) {
   return (
     <div className="flex flex-row">
-      {assigness.map((item) => {
-        return (
-          <Avatar key={item._id} className="w-8 h-8">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        );
-      })}
+      {assigness.map((item, index) => (
+        <Avatar key={`${item._id}-${index}`} className="w-8 h-8">
+          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      ))}
     </div>
   );
 }

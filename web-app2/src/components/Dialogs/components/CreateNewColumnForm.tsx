@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +14,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { clsx } from "clsx";
+import { createNewColumn } from "@/utils/actions/workspace-actions";
+import { useQueryClient } from "react-query";
+import { revalidateURL } from "@/components/Dialogs/actions";
 
 CreateNewColumnForm.propTypes = {};
 const formSchema = z.object({
@@ -22,17 +24,29 @@ const formSchema = z.object({
     message: "title must be at least 4 characters.",
   }),
 });
-function CreateNewColumnForm() {
+function CreateNewColumnForm({
+  workspaceId,
+  columnsLength,
+}: {
+  workspaceId: string;
+  columnsLength: number;
+}) {
+  const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await createNewColumn(workspaceId, {
+      ...values,
+      order: columnsLength,
+      color: "#000",
+    });
+    await queryClient.invalidateQueries([workspaceId]);
+    await queryClient.refetchQueries([workspaceId]);
+    revalidateURL(workspaceId as string);
   }
   return (
     <Form {...form}>
@@ -56,7 +70,9 @@ function CreateNewColumnForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">create column</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? "loading ..." : "create column"}
+        </Button>
       </form>
     </Form>
   );

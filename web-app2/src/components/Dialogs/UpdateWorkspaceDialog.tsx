@@ -75,10 +75,10 @@ function UpdateWorkspaceDialog() {
   useEffect(() => {
     if (!isLoadingWorkspace && workspace) {
       form.reset({
-        title: workspace?.title,
-        participants: workspace?.participants,
+        title: workspace.title,
+        participants: workspace.participants ?? [],
       });
-      workspace?.participants && setParticipants(workspace?.participants);
+      workspace.participants && setParticipants(workspace.participants);
     }
   }, [workspaceId, isLoadingWorkspace]);
   return (

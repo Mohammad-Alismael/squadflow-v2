@@ -1,7 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import ListToggle from "@/app/(app)/workspaces/components/ListToggle";
-import CreateWorkspaceDialog from "@/components/Dialogs/CreateWorkspaceDialog";
 import { Button } from "@/components/ui/button";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 import {
@@ -12,16 +9,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { clsx } from "clsx";
-import ParticipantsHeader from "@/app/(app)/workspaces/[workspaceId]/components/ParticipantsHeader";
-import { Input } from "@/components/ui/input";
 import ModifyColumnsDialog from "@/components/Dialogs/ModifyColumnsDialog";
 import TasksSearch from "@/app/(app)/workspaces/[workspaceId]/components/TasksSearch";
 import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
 import { USER_ROLES } from "@/utils/helper";
 
-Header.propTypes = {};
+WorkspaceHeader.propTypes = {};
 
-async function Header({
+async function WorkspaceHeader({
   workspaceId,
   className,
 }: {
@@ -61,4 +56,4 @@ async function Header({
   );
 }
 
-export default Header;
+export default WorkspaceHeader;

@@ -16,16 +16,16 @@ import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantSto
 function Participant({
   user,
   showDelete = false,
-  role = "",
+  role = "admin",
 }: {
   user: PopulatedUser;
   showDelete: boolean;
-  role?: string;
+  role?: "admin" | "editor" | "viewer";
 }) {
   const { addParticipant, removeParticipant, changeRole } =
     workspaceParticipantStore();
-  const [role_, setRole_] = useState(role);
-  const handleChange = (value: string) => {
+  const [role_, setRole_] = useState<"admin" | "editor" | "viewer">(role);
+  const handleChange = (value: "admin" | "editor" | "viewer") => {
     setRole_(value);
     !showDelete && addParticipant({ user: user._id, role: value });
     showDelete && changeRole({ user: user._id, role: value });

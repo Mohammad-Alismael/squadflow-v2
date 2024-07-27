@@ -18,7 +18,6 @@ function ColumnsContainer({
   columns: WorkspaceColumn[];
   tasks: TaskResponse[];
 }) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);

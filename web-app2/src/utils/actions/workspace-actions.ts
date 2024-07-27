@@ -15,6 +15,7 @@ import { getUserAuthFromJWT } from "@/utils/helper";
 import { IWorkspace, WorkspaceParticipants } from "@/utils/@types/workspace";
 import { PopulatedUser } from "@/utils/@types/user";
 import Workspace from "@/models/workspace";
+import Task from "@/models/task";
 
 export const fetchWorkspaces = async () => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
@@ -93,6 +94,38 @@ export const getWorkspacePrivilege = async (workspaceId: string) => {
     }
 
     return result[0].role;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const createNewColumn = async (
+  workspaceId: string,
+  newColumn: {
+    order: number;
+    title: string;
+    color: string;
+  }
+) => {
+  try {
+    await Workspace.updateOne(
+      { _id: workspaceId },
+      { $push: { columns: newColumn } }
+    );
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const deleteColumn = async (workspaceId: string, columnId: string) => {
+  try {
+    await Workspace.updateOne(
+      { _id: workspaceId },
+      { $pull: { columns: { _id: columnId } } }
+    );
+    await Task.deleteMany({ columnId });
   } catch (error) {
     console.log(error);
     throw error;

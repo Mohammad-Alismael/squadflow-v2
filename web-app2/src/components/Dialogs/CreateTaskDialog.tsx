@@ -25,7 +25,6 @@ import { useParams } from "next/navigation";
 import { useCreateTask } from "@/utils/hooks/task/useCreateTask";
 import { useToast } from "@/components/ui/use-toast";
 import { revalidateURL } from "@/components/Dialogs/actions";
-import { revalidateWorkspacePath } from "@/app/(app)/workspaces/actions";
 import { useQueryClient } from "react-query";
 
 function CreateTaskDialog({ columnId }: { columnId: string }) {

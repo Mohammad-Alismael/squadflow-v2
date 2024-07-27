@@ -26,29 +26,30 @@ function FindParticipantsList() {
           onChange={(e) => setKeyword(e.target.value)}
         />
         <div className="mt-2">
-          {data.data.participants
-            .filter((participant) =>
-              participant.user.username.includes(keyword)
-            )
-            .map((participant, index) => {
-              const isIncluded = participants
-                .map((item) => item.user)
-                .includes(participant.user._id);
-              const userFound = participants.find(
-                (item) => item.user === participant.user._id
-              );
-              return (
-                <>
-                  <Participant
-                    key={participant._id}
-                    user={participant.user}
-                    showDelete={isIncluded}
-                    role={userFound ? userFound.role : ""}
-                  />
-                  {index !== data?.data.participants.length - 1 && <hr />}
-                </>
-              );
-            })}
+          {data.data &&
+            data.data.participants
+              .filter((participant) =>
+                participant.user.username.includes(keyword)
+              )
+              .map((participant, index) => {
+                const isIncluded = participants
+                  .map((item) => item.user)
+                  .includes(participant.user._id);
+                const userFound = participants.find(
+                  (item) => item.user === participant.user._id
+                );
+                return (
+                  <>
+                    <Participant
+                      key={participant._id}
+                      user={participant.user}
+                      showDelete={isIncluded}
+                      role={userFound ? userFound.role : ""}
+                    />
+                    {index !== data.data.participants.length - 1 && <hr />}
+                  </>
+                );
+              })}
         </div>
       </div>
     );
