@@ -1,14 +1,24 @@
 import { useMutation, useQueryClient } from "react-query";
-import { createWorkspaceLabel } from "@/lib/api/workspace";
-import { createTask, updateTaskById } from "@/lib/api/task";
+import { handleUpdateTask } from "@/utils/actions/workspace-actions";
+import { toast } from "@/components/ui/use-toast";
+import { revalidateURL } from "@/components/Dialogs/actions";
 
-export const useUpdateTask = () => {
+export const useUpdateTask = (workspaceId: string, revertBackTo: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => {
-      return updateTaskById(data.taskId, data);
+    mutationFn: async (data: any) => await handleUpdateTask(data),
+    onSuccess: async () => {
+      toast({
+        title: `Successfully updated task`,
+      });
+
+      revalidateURL(workspaceId as string);
+      window.history.replaceState(null, "", revertBackTo);
     },
-    onSuccess: async () => {},
+    onError: (error: any) => {
+      // handle error, e.g., show a toast notification
+      toast({ title: error.message || "Error updating task" });
+    },
     mutationKey: ["update-task"],
   });
 };

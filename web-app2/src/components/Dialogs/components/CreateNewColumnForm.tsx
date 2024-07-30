@@ -39,17 +39,33 @@ function CreateNewColumnForm({
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await createNewColumn(workspaceId, {
-      ...values,
-      order: columnsLength,
-      color: "#000",
-    });
-    await queryClient.invalidateQueries([workspaceId]);
-    await queryClient.refetchQueries([workspaceId]);
-    revalidateURL(workspaceId as string);
+    try {
+      await createNewColumn(workspaceId, {
+        ...values,
+        order: columnsLength,
+        color: "#000",
+      });
+      await queryClient.invalidateQueries([
+        workspaceId,
+        `columns-${workspaceId}`,
+      ]);
+      await queryClient.refetchQueries([workspaceId]);
+      await queryClient.refetchQueries([`columns-${workspaceId}`]);
+      revalidateURL(workspaceId as string);
+    } catch (error) {
+      form.setError("root", {
+        type: "custom",
+        message: error.message,
+      });
+    }
   }
   return (
     <Form {...form}>
+      {form.formState.errors.root && (
+        <span className="text-red-500">
+          {form.formState.errors.root.message}
+        </span>
+      )}
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className={clsx(

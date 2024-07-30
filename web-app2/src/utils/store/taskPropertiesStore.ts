@@ -1,8 +1,9 @@
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 import { PopulatedUser } from "@/utils/@types/user";
 import { WorkspaceLabel } from "@/utils/@types/workspace";
-import { Comment, ICommentCreate, TaskResponse } from "@/utils/@types/task";
-import { devtools } from "zustand/middleware";
+import { Comment } from "@/utils/@types/task";
+import { shallow } from "zustand/shallow";
 
 interface Task {
   taskId: string;
@@ -10,7 +11,7 @@ interface Task {
   // Add other properties as needed
 }
 
-interface State {
+export interface ITaskState {
   taskId: string;
   projectId: string;
   columnId: string;
@@ -18,7 +19,6 @@ interface State {
   description: string;
   taskDate: string;
   endTime: string;
-  column: string;
   priority: string;
   participants: PopulatedUser[];
   labels: WorkspaceLabel[];
@@ -35,7 +35,6 @@ interface Actions {
   setDescription: (payload: string) => void;
   setTaskDate: (payload: string) => void;
   setEndTime: (payload: string) => void;
-  setColumn: (payload: string) => void;
   setPriority: (payload: string) => void;
   setParticipants: (payload: PopulatedUser[]) => void;
   addParticipant: (payload: PopulatedUser) => void;
@@ -49,11 +48,12 @@ interface Actions {
   setComments: (payload: Comment[]) => void;
   addComment: (newComment: Comment) => void;
   resetState: () => void;
+  resetCustomState: (customState?: Partial<ITaskState>) => void;
   updateSubTask: (updatedSubTask: Task) => void;
   removeSubTask: (selectedTaskId: string) => void;
 }
 
-const initialState: State = {
+const initialState: ITaskState = {
   taskId: "",
   projectId: "",
   columnId: "",
@@ -61,7 +61,6 @@ const initialState: State = {
   description: "task description",
   taskDate: "",
   endTime: "",
-  column: "",
   priority: "low",
   participants: [],
   labels: [],
@@ -71,89 +70,117 @@ const initialState: State = {
 };
 
 const handleAddParticipant = (
-  existingParticpants: State["participants"],
+  existingParticpants: ITaskState["participants"],
   newParticipant: PopulatedUser
 ) => {
   return [...existingParticpants, newParticipant];
 };
 
 const handleRemoveParticipant = (
-  existingParticpants: State["participants"],
+  existingParticpants: ITaskState["participants"],
   newParticipant: PopulatedUser
 ) => {
   return existingParticpants.filter((item) => item._id !== newParticipant._id);
 };
 
 const handleRemoveLabel = (
-  existingLabels: State["labels"],
+  existingLabels: ITaskState["labels"],
   newlabel: WorkspaceLabel
 ) => {
   return existingLabels.filter((item) => item._id !== newlabel._id);
 };
 
 const handleAddLabel = (
-  existingLabels: State["labels"],
+  existingLabels: ITaskState["labels"],
   newlabel: WorkspaceLabel
 ) => {
   return [...existingLabels, newlabel];
 };
 
-const useTaskPropertiesStore = create<State & Actions>()(
-  devtools((set) => ({
-    ...initialState,
-    setTaskId: (payload) => set({ taskId: payload }),
-    setProjectId: (payload) => set({ projectId: payload }),
-    setColumnId: (payload) => set({ columnId: payload }),
-    setTitle: (payload) => set({ title: payload }),
-    setDescription: (payload) => set({ description: payload }),
-    setTaskDate: (payload) => set({ taskDate: payload }),
-    setEndTime: (payload) => set({ endTime: payload }),
-    setColumn: (payload) => set({ column: payload }),
-    setPriority: (payload) => set({ priority: payload }),
-    setParticipants: (payload) => set({ participants: payload }),
-    addParticipant: (payload) =>
-      set((state) => ({
-        participants: handleAddParticipant(state.participants, payload),
-      })),
-    removeParticipant: (payload) =>
-      set((state) => ({
-        participants: handleRemoveParticipant(state.participants, payload),
-      })),
-    setLabels: (payload) => set({ labels: payload }),
-    addLabel: (payload) =>
-      set((state) => ({
-        labels: handleAddLabel(state.labels, payload),
-      })),
-    removeLabel: (payload) =>
-      set((state) => ({
-        labels: handleRemoveLabel(state.labels, payload),
-      })),
-    setSubTasks: (payload) => set({ subTasks: payload }),
-    addSubTasks: (newSubTask) =>
-      set((state) => ({ subTasks: [...state.subTasks, newSubTask] })),
-    setAttachments: (payload) => set({ attachments: payload }),
-    setComments: (payload) => set({ comments: payload }),
-    addComment: (newComment) =>
-      set((state) => ({ comments: [...state.comments, newComment] })),
-    resetState: () => set(initialState),
-    updateSubTask: (updatedSubTask) => {
-      set((state) => ({
-        subTasks: state.subTasks.map((task) => {
-          if (task.taskId === updatedSubTask.taskId) {
-            return { ...task, ...updatedSubTask };
-          }
-          return task;
-        }),
-      }));
-    },
-    removeSubTask: (selectedTaskId) => {
-      set((state) => ({
-        subTasks: state.subTasks.filter(
-          (task) => task.taskId !== selectedTaskId
-        ),
-      }));
-    },
-  }))
+const useTaskPropertiesStore = create<ITaskState & Actions>()(
+  devtools(
+    (set) => ({
+      ...initialState,
+      setTaskId: (payload) => set((state) => ({ ...state, taskId: payload })),
+      setProjectId: (payload) =>
+        set((state) => ({ ...state, projectId: payload })),
+      setColumnId: (payload) =>
+        set((state) => ({ ...state, columnId: payload })),
+      setTitle: (payload) => set((state) => ({ ...state, title: payload })),
+      setDescription: (payload) =>
+        set((state) => ({ ...state, description: payload })),
+      setTaskDate: (payload) =>
+        set((state) => ({ ...state, taskDate: payload })),
+      setEndTime: (payload) => set((state) => ({ ...state, endTime: payload })),
+      setPriority: (payload) =>
+        set((state) => ({ ...state, priority: payload })),
+      setParticipants: (payload) =>
+        set((state) => ({ ...state, participants: payload })),
+      addParticipant: (payload) =>
+        set((state) => ({
+          ...state,
+          participants: handleAddParticipant(state.participants, payload),
+        })),
+      removeParticipant: (payload) =>
+        set((state) => ({
+          ...state,
+          participants: handleRemoveParticipant(state.participants, payload),
+        })),
+      setLabels: (payload) => set((state) => ({ ...state, labels: payload })),
+      addLabel: (payload) =>
+        set((state) => ({
+          ...state,
+          labels: handleAddLabel(state.labels, payload),
+        })),
+      removeLabel: (payload) =>
+        set((state) => ({
+          ...state,
+          labels: handleRemoveLabel(state.labels, payload),
+        })),
+      setSubTasks: (payload) =>
+        set((state) => ({ ...state, subTasks: payload })),
+      addSubTasks: (newSubTask) =>
+        set((state) => ({
+          ...state,
+          subTasks: [...state.subTasks, newSubTask],
+        })),
+      setAttachments: (payload) =>
+        set((state) => ({ ...state, attachments: payload })),
+      setComments: (payload) =>
+        set((state) => ({ ...state, comments: payload })),
+      addComment: (newComment) =>
+        set((state) => ({
+          ...state,
+          comments: [...state.comments, newComment],
+        })),
+      resetState: () => set(initialState),
+      resetCustomState: (customState) =>
+        set((state) => ({ ...initialState, ...customState })),
+      updateSubTask: (updatedSubTask) => {
+        set((state) => ({
+          ...state,
+          subTasks: state.subTasks.map((task) => {
+            if (task.taskId === updatedSubTask.taskId) {
+              return { ...task, ...updatedSubTask };
+            }
+            return task;
+          }),
+        }));
+      },
+      removeSubTask: (selectedTaskId) => {
+        set((state) => ({
+          ...state,
+          subTasks: state.subTasks.filter(
+            (task) => task.taskId !== selectedTaskId
+          ),
+        }));
+      },
+    }),
+    {
+      enabled: true,
+      name: "useTaskPropertiesStore",
+    }
+  )
 );
 
 interface TaskSelectors {
@@ -164,7 +191,6 @@ interface TaskSelectors {
   getDescription: () => string;
   getTaskDate: () => string;
   getEndTime: () => string;
-  getColumn: () => string;
   getPriority: () => string;
   getParticipants: () => PopulatedUser[];
   getLabels: () => WorkspaceLabel[];
@@ -176,20 +202,19 @@ interface TaskSelectors {
 const useTaskSelectors = (
   useStore: typeof useTaskPropertiesStore
 ): TaskSelectors => ({
-  getTaskId: () => useStore.getState().taskId,
-  getProjectId: () => useStore.getState().projectId,
-  getColumnId: () => useStore.getState().columnId,
-  getTitle: () => useStore.getState().title,
-  getDescription: () => useStore.getState().description,
-  getTaskDate: () => useStore.getState().taskDate,
-  getEndTime: () => useStore.getState().endTime,
-  getColumn: () => useStore.getState().column,
-  getPriority: () => useStore.getState().priority,
-  getParticipants: () => useStore.getState().participants,
-  getLabels: () => useStore.getState().labels,
-  getSubTasks: () => useStore.getState().subTasks,
-  getAttachments: () => useStore.getState().attachments,
-  getComments: () => useStore.getState().comments,
+  getTaskId: () => useStore((state) => state.taskId, shallow),
+  getProjectId: () => useStore((state) => state.projectId, shallow),
+  getColumnId: () => useStore((state) => state.columnId, shallow),
+  getTitle: () => useStore((state) => state.title, shallow),
+  getDescription: () => useStore((state) => state.description, shallow),
+  getTaskDate: () => useStore((state) => state.taskDate, shallow),
+  getEndTime: () => useStore((state) => state.endTime, shallow),
+  getPriority: () => useStore((state) => state.priority, shallow),
+  getParticipants: () => useStore((state) => state.participants, shallow),
+  getLabels: () => useStore((state) => state.labels, shallow),
+  getSubTasks: () => useStore((state) => state.subTasks, shallow),
+  getAttachments: () => useStore((state) => state.attachments, shallow),
+  getComments: () => useStore((state) => state.comments, shallow),
 });
 
 export { useTaskPropertiesStore, useTaskSelectors };

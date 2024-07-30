@@ -9,14 +9,17 @@ import {
 } from "@/components/ui/select";
 import { useGetWorkspaceColumnsById } from "@/utils/hooks/workspace/useGetWorkspaceColumnsById";
 import { useParams } from "next/navigation";
-import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
+import {
+  useTaskPropertiesStore,
+  useTaskSelectors,
+} from "@/utils/store/taskPropertiesStore";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function Column() {
   const workspaceId = useTaskPropertiesStore((state) => state.projectId);
   const { setColumnId } = useTaskPropertiesStore();
 
-  const columnId = useTaskPropertiesStore((state) => state.columnId);
+  const columnId = useTaskSelectors(useTaskPropertiesStore).getColumnId();
   const { data, isLoading } = useGetWorkspaceColumnsById(workspaceId as string);
   return (
     <div className="flex flex-row items-center gap-8">

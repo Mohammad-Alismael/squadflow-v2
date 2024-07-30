@@ -45,7 +45,14 @@ function Column({
                 {...provided.droppableProps}
               >
                 {tasks.map((task: TaskResponse, index: number) => {
-                  return <TaskCard key={task._id} data={task} index={index} />;
+                  return (
+                    <TaskCard
+                      key={task._id}
+                      workspaceId={workspaceId}
+                      data={task}
+                      index={index}
+                    />
+                  );
                 })}
                 {provided.placeholder}
               </div>

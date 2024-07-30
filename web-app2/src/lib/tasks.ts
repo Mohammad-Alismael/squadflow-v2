@@ -1,7 +1,7 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
 import { ObjectId } from "mongodb";
-import { IDashboardTask, ITask } from "@/utils/@types/task";
+import { IDashboardTask, ITask, TaskResponse } from "@/utils/@types/task";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 
@@ -79,7 +79,7 @@ async function updateColumnId(taskId: ObjectId, columnId: ObjectId) {
 }
 
 async function getTaskIdPopulated(taskId: ObjectId) {
-  await init(); // Assuming this is your initialization function
+  await init();
   const task = (await Task.findOne({ _id: taskId })
     .populate({
       path: "participants",
@@ -89,7 +89,7 @@ async function getTaskIdPopulated(taskId: ObjectId) {
       path: "comments.created_by",
       select: "_id username email photoURL",
     })
-    .exec()) as ITask;
+    .exec()) as TaskResponse;
   if (!task) {
     throw new CustomError("Task ID not found", 404);
   }

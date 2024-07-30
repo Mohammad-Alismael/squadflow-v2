@@ -1,16 +1,14 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { getTaskById, fetchTasksForColumnId } from "@/lib/api/task";
 import { ITask, TaskResponse } from "@/utils/@types/task";
+import { handleGetTaskById } from "@/utils/actions/workspace-actions";
 
-export const useGetTasksById = (taskId: string | null, enabled: boolean) => {
+export const useGetTasksById = (taskId: string) => {
   return useQuery<TaskResponse, Error>({
     queryKey: [`task-${taskId}`],
-    enabled: enabled && !!taskId,
-    queryFn: () => {
-      if (taskId) {
-        return getTaskById(taskId);
-      }
-      return Promise.reject(new Error("No taskId provided"));
-    },
+    enabled: !!taskId,
+    refetchOnWindowFocus: false,
+    retry: 3,
+    queryFn: () => getTaskById(taskId),
   }) as UseQueryResult<TaskResponse, Error>;
 };

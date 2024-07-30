@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -19,22 +19,20 @@ import { useUpdateTask } from "@/utils/hooks/task/useUpdateTask";
 import { useGetWorkspacePrivilege } from "@/utils/hooks/workspace/useGetWorkspacePrivilege";
 import { getRoleValue, USER_ROLES } from "@/utils/helper";
 import { handleGetTaskById } from "@/utils/actions/workspace-actions";
-import { useMediaQuery } from "@/utils/hooks/use-media-query";
-import TaskDetailsMobileDialog from "@/components/Dialogs/TaskDetailsMobileDialog";
+import { getTaskById } from "@/lib/api/task";
 
-function TaskDetailsDialog({
+function TaskDetailsMobileDialog({
   workspaceId,
   revertBackTo,
 }: {
   workspaceId: string;
   revertBackTo: string;
 }) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const searchParams = useSearchParams();
   const taskId = searchParams.get("taskId") as string;
+  const [isLoading, setIsLoading] = useState(false);
   const { data: role, isLoading: isLoadingPrivilege } =
     useGetWorkspacePrivilege(workspaceId);
-  const { data, isLoading } = useGetTasksById(taskId);
 
   const resetCustomState = useTaskPropertiesStore(
     (state) => state.resetCustomState
@@ -81,49 +79,79 @@ function TaskDetailsDialog({
   }, [resetState, revertBackTo]);
 
   useEffect(() => {
-    if (!isLoading && data) {
-      const {
-        title,
-        dueDate,
-        dueTime,
-        columnId,
-        comments,
-        priority,
-        participants,
-        labels,
-        description,
-        attachments,
-        _id,
-      } = data;
-      console.log("useEffect hook taskCard.dialog", data);
-      resetCustomState({
-        title,
-        projectId: workspaceId,
-        taskDate: dueDate,
-        endTime: dueTime,
-        columnId,
-        comments,
-        priority,
-        participants,
-        labels,
-        description,
-        attachments,
-        taskId: _id,
-      });
+    const foo = async () => {
+      const task = await getTaskById(taskId);
+      return task;
+    };
+    setIsLoading(true);
+    if (workspaceId && taskId) {
+      foo()
+        .then((data) => {
+          const {
+            title,
+            dueDate,
+            dueTime,
+            columnId,
+            comments,
+            priority,
+            participants,
+            labels,
+            description,
+            attachments,
+            _id,
+          } = data;
+          resetCustomState({
+            title,
+            projectId: workspaceId,
+            taskDate: dueDate,
+            endTime: dueTime,
+            columnId,
+            comments,
+            priority,
+            participants,
+            labels,
+            description,
+            attachments,
+            taskId: _id,
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
-  }, [isLoading, resetCustomState, workspaceId, taskId]);
+  }, [workspaceId, taskId]);
   if (isError) {
     throw error; // This will be caught by the error boundary
   }
 
-  if (isDesktop)
-    return (
-      <Dialog open={taskId !== null} onOpenChange={onOpenChange}>
-        <DialogContent className="p-0 w-4/5 h-[80%]">
-          {isLoading && <TaskDetailsDialogSkeleton />}
-          {!isLoading && (
-            <div className="w-full flex flex-row">
-              <div className="w-1/2 p-4 space-y-2">
+  return (
+    <Dialog open={taskId !== null} onOpenChange={onOpenChange}>
+      <DialogContent className="p-0 w-4/5">
+        {isLoading && <TaskDetailsDialogSkeleton />}
+        {!isLoading && (
+          <Tabs defaultValue="overview" className="w-full">
+            <TabsList className="w-full">
+              <TabsTrigger
+                value="overview"
+                className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+              >
+                overview
+              </TabsTrigger>
+              <TabsTrigger
+                value="comments"
+                className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+              >
+                comments
+              </TabsTrigger>
+              <TabsTrigger
+                value="activity"
+                className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+              >
+                activity
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="overview" className="p-4 h-full">
+              <div className="space-y-2 w-full">
                 <Title />
                 <Assignees />
                 <Priority />
@@ -144,42 +172,20 @@ function TaskDetailsDialog({
                     </Button>
                   )}
               </div>
-              <div className="w-1/2 h-full p-4 bg-[#FBFAF8]">
-                <Tabs defaultValue="account" className="w-full">
-                  <TabsList className="w-full">
-                    <TabsTrigger
-                      value="account"
-                      className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
-                    >
-                      comments
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="password"
-                      className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
-                    >
-                      activity
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="account" className="h-full">
-                    <CommentContainer>
-                      <CommentContainer.AddCommentLocal userRole={role} />
-                    </CommentContainer>
-                  </TabsContent>
-                  <TabsContent value="password">coming soon</TabsContent>
-                </Tabs>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-    );
-  else
-    return (
-      <TaskDetailsMobileDialog
-        workspaceId={workspaceId}
-        revertBackTo={revertBackTo}
-      />
-    );
+            </TabsContent>
+            <TabsContent value="comments" className="h-full">
+              <CommentContainer>
+                <CommentContainer.AddCommentLocal userRole={role} />
+              </CommentContainer>
+            </TabsContent>
+            <TabsContent value="activity" className="h-full">
+              coming soon
+            </TabsContent>
+          </Tabs>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
 }
 
-export default TaskDetailsDialog;
+export default TaskDetailsMobileDialog;

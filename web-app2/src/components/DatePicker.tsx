@@ -17,7 +17,7 @@ import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { parseDate } from "@/utils/helper-date";
 
 export function DatePicker() {
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date | "" | null>(null);
   const setTaskDate = useTaskPropertiesStore((state) => state.setTaskDate);
   const dueDate = useTaskPropertiesStore((state) => state.taskDate);
 
@@ -43,7 +43,7 @@ export function DatePicker() {
         <Button
           variant="outline"
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "w-40 md:w-[280px] justify-start text-left font-normal",
             !date && "text-muted-foreground"
           )}
         >

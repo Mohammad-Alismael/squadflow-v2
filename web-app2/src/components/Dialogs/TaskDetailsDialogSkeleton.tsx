@@ -1,24 +1,6 @@
 "use client";
 import React, { ReactNode, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@/components/ui/label";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { useQueryClient } from "react-query";
-import { useGetTasksById } from "@/utils/hooks/task/useGetTasksById";
-import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
-import Assignees from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Assignees";
-import Priority from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Priority";
-import Column from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Column";
-import Labels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Labels";
-import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Deadlines";
-import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Description";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/CommentContainer";
-import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function TaskDetailsDialogSkeleton() {

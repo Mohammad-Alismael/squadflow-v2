@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
 import { ReactQueryProvider } from "@/app/Provider";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="w-screen h-screen bg-[#F2F0EB]">
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ReactQueryProvider>
+          {children}
+          {/*<ReactQueryDevtools initialIsOpen={true} />*/}
+        </ReactQueryProvider>
       </body>
     </html>
   );

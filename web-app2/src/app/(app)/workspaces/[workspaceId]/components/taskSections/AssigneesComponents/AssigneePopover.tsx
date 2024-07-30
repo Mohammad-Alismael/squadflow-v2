@@ -18,17 +18,13 @@ function AssigneePopover({ children }: { children: ReactNode }) {
     workspaceId,
     true
   );
-  console.log("workspaceId", workspaceId);
-  console.log("useGetWorkspaceParticipantsById", data);
-  useEffect(() => {
-    !isLoading && console.log(data);
-  }, [workspaceId, isLoading]);
+
   return (
     <Popover>
       <PopoverTrigger>{children}</PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent className="z-[999]">
         {isLoading && <p>loading ...</p>}
-        <div className="space-y-2">
+        <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
           <h4 className="capitalize font-bold">workspace participants</h4>
           {!isLoading &&
             data &&

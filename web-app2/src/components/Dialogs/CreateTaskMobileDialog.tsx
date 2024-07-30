@@ -27,10 +27,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { revalidateURL } from "@/components/Dialogs/actions";
 import { useQueryClient } from "react-query";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
-import CreateTaskMobileDialog from "@/components/Dialogs/CreateTaskMobileDialog";
 
-function CreateTaskDialog({ columnId }: { columnId: string }) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+function CreateTaskMobileDialog({ columnId }: { columnId: string }) {
   const { toast } = useToast();
   const { workspaceId } = useParams();
   const {
@@ -82,16 +80,35 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
   useEffect(() => {
     workspaceId && setProjectId(workspaceId as string);
   }, [workspaceId]);
-
-  if (isDesktop)
-    return (
-      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-        <DialogTrigger asChild>
-          <Button className="w-full bg-green-700">+ task card</Button>
-        </DialogTrigger>
-        <DialogContent className="p-0 w-4/5 h-[80%]">
-          <div className="w-full flex flex-row">
-            <div className="w-1/2 p-4 space-y-2">
+  return (
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+      <DialogTrigger asChild>
+        <Button className="w-full bg-green-700">+ task card</Button>
+      </DialogTrigger>
+      <DialogContent className="p-0 w-4/5 h-[80%]">
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="w-full">
+            <TabsTrigger
+              value="overview"
+              className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+            >
+              overview
+            </TabsTrigger>
+            <TabsTrigger
+              value="comments"
+              className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+            >
+              comments
+            </TabsTrigger>
+            <TabsTrigger
+              value="activity"
+              className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+            >
+              activity
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview" className="p-4 h-full">
+            <div className="space-y-2 w-full">
               <Title />
               <Assignees />
               <Priority />
@@ -107,35 +124,19 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
                 {!isLoading ? "create task" : "loading ..."}
               </Button>
             </div>
-            <div className="w-1/2 p-4 bg-[#FBFAF8]">
-              <Tabs defaultValue="account" className="w-full h-[95%]">
-                <TabsList className="w-full">
-                  <TabsTrigger
-                    value="account"
-                    className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
-                  >
-                    comments
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="password"
-                    className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
-                  >
-                    activity
-                  </TabsTrigger>
-                </TabsList>
-                <TabsContent value="account" className="h-full">
-                  <CommentContainer>
-                    <CommentContainer.AddCommentLocal />
-                  </CommentContainer>
-                </TabsContent>
-                <TabsContent value="password">coming soon</TabsContent>
-              </Tabs>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  else return <CreateTaskMobileDialog columnId={columnId} />;
+          </TabsContent>
+          <TabsContent value="comments" className="h-full">
+            <CommentContainer>
+              <CommentContainer.AddCommentLocal />
+            </CommentContainer>
+          </TabsContent>
+          <TabsContent value="activity" className="h-full">
+            coming soon
+          </TabsContent>
+        </Tabs>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
-export default CreateTaskDialog;
+export default CreateTaskMobileDialog;

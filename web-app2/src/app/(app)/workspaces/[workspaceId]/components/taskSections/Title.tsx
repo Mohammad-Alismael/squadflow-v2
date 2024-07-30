@@ -5,19 +5,19 @@ import {
   useTaskPropertiesStore,
   useTaskSelectors,
 } from "@/utils/store/taskPropertiesStore";
+import { useShallow } from "zustand/react/shallow";
 
 function Title() {
   const { setTitle } = useTaskPropertiesStore();
-  const taskSelectors = useTaskSelectors(useTaskPropertiesStore);
-
-  const title = taskSelectors.getTitle();
+  const { title } = useTaskPropertiesStore(
+    useShallow((state) => ({
+      title: state.title,
+    }))
+  );
   const [isEditModeOn, setEditModeOn] = useState(false);
 
-  const handleEnterPress = (event: {
-    target: { value: string };
-    key: string;
-  }) => {
-    setTitle(event.target.value);
+  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    // setTitle(event.target.value);
     if (event.key === "Enter") {
       setEditModeOn(false);
     }
@@ -34,6 +34,9 @@ function Title() {
       ) : (
         <Input
           type="text"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setTitle(e.target.value)
+          }
           onKeyPress={handleEnterPress}
           defaultValue={title === "" ? "task title" : title}
         />

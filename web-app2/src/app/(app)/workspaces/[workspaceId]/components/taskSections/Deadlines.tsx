@@ -11,7 +11,7 @@ function Deadlines() {
   const { setEndTime } = useTaskPropertiesStore();
   const dueTime = useTaskPropertiesStore((state) => state.endTime);
   return (
-    <div className="flex flex-row items-center justify-between gap-x-2">
+    <div className="w-full flex flex-row items-center justify-between gap-x-2">
       <div className="flex flex-col gap-1 w-1/2">
         <Label className="capitalize text-md font-bold">due date</Label>
         <DatePicker />

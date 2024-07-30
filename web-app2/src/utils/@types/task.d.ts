@@ -31,7 +31,7 @@ export interface TaskResponse {
   workspace: Schema.Types.ObjectId;
   title: string;
   columnId: string;
-  participants: WorkspaceParticipants[];
+  participants: PopulatedUser[];
   labels: WorkspaceLabel[];
   comments: Comment[];
   dueDate: string;
