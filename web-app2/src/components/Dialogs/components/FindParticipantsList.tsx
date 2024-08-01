@@ -15,7 +15,7 @@ function FindParticipantsList() {
   if (isLoading)
     return Array(3)
       .fill(null)
-      .map((_, index) => <UserComponentSkeleton />);
+      .map((_, index) => <UserComponentSkeleton key={index} />);
 
   if (data?.data)
     return (

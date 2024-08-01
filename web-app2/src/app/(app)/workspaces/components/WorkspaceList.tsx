@@ -1,11 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 import { IWorkspace } from "@/utils/@types/workspace";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
-import { USER_ROLES } from "@/utils/helper";
+
+import { USER_ROLES } from "@/utils/helper-client";
 
 WorkspaceList.propTypes = {};
 
@@ -20,7 +20,7 @@ async function WorkspaceList({ data }: { data: IWorkspace }) {
             <div className="space-y-2">
               <div className="mt-4 flex items-center gap-2">
                 {data.participants.map((participant) => (
-                  <Avatar>
+                  <Avatar key={participant._id}>
                     <AvatarImage src={participant.user.photoURL} />
                     <AvatarFallback>{participant.user.username}</AvatarFallback>
                   </Avatar>

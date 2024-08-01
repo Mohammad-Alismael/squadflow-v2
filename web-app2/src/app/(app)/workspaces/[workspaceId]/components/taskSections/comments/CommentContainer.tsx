@@ -4,7 +4,8 @@ import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskS
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { ICommentCreate, Comment as TComment } from "@/utils/@types/task";
 import Comment from "./Comment";
-import { USER_ROLES } from "@/utils/helper";
+
+import { USER_ROLES } from "@/utils/helper-client";
 type CommentContainerProps = {
   comments: TComment[];
 };

@@ -21,6 +21,7 @@ function AssignedTask({ data }: { data: IDashboardTask }) {
               <div className="flex flex-row sitems-center gap-1">
                 {data.labels.map((item) => (
                   <p
+                    key={item._id.toString()}
                     className={`py-1 px-2 border-2 border-gray-200 rounded-full bg-[#${item.color}]`}
                   >
                     {item.title}
@@ -29,7 +30,7 @@ function AssignedTask({ data }: { data: IDashboardTask }) {
               </div>
               <div className="flex flex-row sitems-center gap-1">
                 {data.participants.map((participant) => (
-                  <Avatar className="w-6 h-6">
+                  <Avatar key={participant._id} className="w-6 h-6">
                     <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>{participant.username}</AvatarFallback>
                   </Avatar>

@@ -1,6 +1,8 @@
+"use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
+import { USER_ROLES } from "@/utils/helper-client";
 
 export async function handleError(response: Response) {
   if (!response.ok) {
@@ -22,12 +24,3 @@ export const getUserAuthFromJWT = async () => {
     communityId: string;
   };
 };
-export enum USER_ROLES {
-  viewer = "viewer",
-  editor = "editor",
-  admin = "admin",
-}
-
-export function getRoleValue(roleKey: USER_ROLES): string {
-  return USER_ROLES[roleKey];
-}

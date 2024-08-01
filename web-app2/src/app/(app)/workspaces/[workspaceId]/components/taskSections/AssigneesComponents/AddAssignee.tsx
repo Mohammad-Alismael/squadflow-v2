@@ -3,14 +3,15 @@ import { WorkspaceParticipants } from "@/utils/@types/workspace";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  useTaskPropertiesStore,
-  useTaskSelectors,
-} from "@/utils/store/taskPropertiesStore";
+import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
+import { shallow } from "zustand/shallow";
 
 function AddAssignee({ data }: { data: WorkspaceParticipants }) {
-  const taskSelectors = useTaskSelectors(useTaskPropertiesStore);
-  const assigness = taskSelectors.getParticipants();
+  const assigness = useTaskPropertiesStore(
+    (state) => state.participants,
+    shallow
+  );
+
   const { addParticipant, removeParticipant } = useTaskPropertiesStore();
   const handleClick = () => {
     addParticipant(data.user);

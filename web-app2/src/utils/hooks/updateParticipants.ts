@@ -7,6 +7,6 @@ export const useUpdateParticipants = (form: any) => {
   );
   useEffect(() => {
     form.setValue("participants", joinedParticipants);
-  }, [JSON.stringify(joinedParticipants)]);
+  }, [joinedParticipants.map((i) => i.user)]);
   return joinedParticipants;
 };

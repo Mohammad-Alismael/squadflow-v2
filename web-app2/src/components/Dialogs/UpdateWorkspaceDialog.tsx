@@ -32,7 +32,6 @@ import { useGetWorkspaceById } from "@/utils/hooks/workspace/useGetWorkspaceById
 import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
 import ParticipantsList from "@/components/Dialogs/components/ParticipantsList";
 import { formSchema } from "@/components/Dialogs/scehmas/workspaceSchema";
-import { useUpdateParticipants } from "@/utils/hooks/updateParticipants";
 import { useQueryClient } from "react-query";
 import ParticipantsComponentSkeleton from "@/components/Dialogs/components/ParticipantsComponentSkeleton";
 

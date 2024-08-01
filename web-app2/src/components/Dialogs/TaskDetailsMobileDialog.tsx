@@ -17,9 +17,9 @@ import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSkeleton";
 import { useUpdateTask } from "@/utils/hooks/task/useUpdateTask";
 import { useGetWorkspacePrivilege } from "@/utils/hooks/workspace/useGetWorkspacePrivilege";
-import { getRoleValue, USER_ROLES } from "@/utils/helper";
 import { handleGetTaskById } from "@/utils/actions/workspace-actions";
 import { getTaskById } from "@/lib/api/task";
+import { getRoleValue, USER_ROLES } from "@/utils/helper-client";
 
 function TaskDetailsMobileDialog({
   workspaceId,

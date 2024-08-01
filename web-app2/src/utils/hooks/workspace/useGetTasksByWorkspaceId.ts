@@ -10,9 +10,6 @@ export const useGetTasksByWorkspaceId = (
     queryKey: [`tasks-${workspaceId}`],
     enabled,
     refetchInterval: 4000,
-    onSuccess: () => {
-      console.log(`tasks-${workspaceId}`, "lol");
-    },
     queryFn: () => fetchTasksForWorkspace(workspaceId),
   }) as UseQueryResult<TaskResponse[], Error>;
 };

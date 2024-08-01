@@ -199,22 +199,4 @@ interface TaskSelectors {
   getComments: () => Comment[];
 }
 
-const useTaskSelectors = (
-  useStore: typeof useTaskPropertiesStore
-): TaskSelectors => ({
-  getTaskId: () => useStore((state) => state.taskId, shallow),
-  getProjectId: () => useStore((state) => state.projectId, shallow),
-  getColumnId: () => useStore((state) => state.columnId, shallow),
-  getTitle: () => useStore((state) => state.title, shallow),
-  getDescription: () => useStore((state) => state.description, shallow),
-  getTaskDate: () => useStore((state) => state.taskDate, shallow),
-  getEndTime: () => useStore((state) => state.endTime, shallow),
-  getPriority: () => useStore((state) => state.priority, shallow),
-  getParticipants: () => useStore((state) => state.participants, shallow),
-  getLabels: () => useStore((state) => state.labels, shallow),
-  getSubTasks: () => useStore((state) => state.subTasks, shallow),
-  getAttachments: () => useStore((state) => state.attachments, shallow),
-  getComments: () => useStore((state) => state.comments, shallow),
-});
-
-export { useTaskPropertiesStore, useTaskSelectors };
+export { useTaskPropertiesStore };

@@ -50,7 +50,7 @@ function MessagesContainer({
         console.error(error);
       }
     );
-  }, [workspaceId]);
+  }, [workspaceId, communityId]);
   const endOfMessagesRef = useRef(null);
 
   const containerRef = useRef(null);

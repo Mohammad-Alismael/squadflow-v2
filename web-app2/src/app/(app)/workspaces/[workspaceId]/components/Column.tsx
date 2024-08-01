@@ -8,8 +8,8 @@ import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { clsx } from "clsx";
 import { useGetWorkspacePrivilege } from "@/utils/hooks/workspace/useGetWorkspacePrivilege";
-import { getRoleValue, USER_ROLES } from "@/utils/helper";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getRoleValue, USER_ROLES } from "@/utils/helper-client";
 function Column({
   data,
   workspaceId,

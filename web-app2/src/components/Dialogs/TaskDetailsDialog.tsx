@@ -17,10 +17,9 @@ import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSkeleton";
 import { useUpdateTask } from "@/utils/hooks/task/useUpdateTask";
 import { useGetWorkspacePrivilege } from "@/utils/hooks/workspace/useGetWorkspacePrivilege";
-import { getRoleValue, USER_ROLES } from "@/utils/helper";
-import { handleGetTaskById } from "@/utils/actions/workspace-actions";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
 import TaskDetailsMobileDialog from "@/components/Dialogs/TaskDetailsMobileDialog";
+import { getRoleValue, USER_ROLES } from "@/utils/helper-client";
 
 function TaskDetailsDialog({
   workspaceId,
@@ -34,11 +33,8 @@ function TaskDetailsDialog({
   const taskId = searchParams.get("taskId") as string;
   const { data: role, isLoading: isLoadingPrivilege } =
     useGetWorkspacePrivilege(workspaceId);
-  const { data, isLoading } = useGetTasksById(taskId);
+  const { isLoading } = useGetTasksById(workspaceId, taskId);
 
-  const resetCustomState = useTaskPropertiesStore(
-    (state) => state.resetCustomState
-  );
   const resetState = useTaskPropertiesStore((state) => state.resetState);
   const {
     mutate: updateMutation,
@@ -80,38 +76,6 @@ function TaskDetailsDialog({
     window.history.replaceState(null, "", revertBackTo);
   }, [resetState, revertBackTo]);
 
-  useEffect(() => {
-    if (!isLoading && data) {
-      const {
-        title,
-        dueDate,
-        dueTime,
-        columnId,
-        comments,
-        priority,
-        participants,
-        labels,
-        description,
-        attachments,
-        _id,
-      } = data;
-      console.log("useEffect hook taskCard.dialog", data);
-      resetCustomState({
-        title,
-        projectId: workspaceId,
-        taskDate: dueDate,
-        endTime: dueTime,
-        columnId,
-        comments,
-        priority,
-        participants,
-        labels,
-        description,
-        attachments,
-        taskId: _id,
-      });
-    }
-  }, [isLoading, resetCustomState, workspaceId, taskId]);
   if (isError) {
     throw error; // This will be caught by the error boundary
   }

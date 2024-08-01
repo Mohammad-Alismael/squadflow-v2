@@ -12,8 +12,12 @@ async function WorkspaceTabs() {
       <Tabs defaultValue="account" className="w-[400px] hidden md:block">
         <TabsList defaultValue={data ? data[0].title : ""}>
           {data.map((item) => (
-            <Link href={`?workspace=${item._id}`} prefetch={false}>
-              <TabsTrigger key={item._id} value={item.title as string}>
+            <Link
+              key={item._id}
+              href={`?workspace=${item._id}`}
+              prefetch={false}
+            >
+              <TabsTrigger value={item.title as string}>
                 {item.title}
               </TabsTrigger>
             </Link>

@@ -11,20 +11,26 @@ import {
   fetchWorkspace,
   getTasksForWorkspace,
 } from "@/utils/actions/workspace-actions";
+import ColumnsWrapperClient from "@/app/(app)/workspaces/[workspaceId]/components/ColumnsWrapperClient";
 
 async function ColumnsWrapperServer({ workspaceId }: { workspaceId: string }) {
   const workspace = fetchWorkspace(workspaceId);
   const workspaceTasks = getTasksForWorkspace(workspaceId);
   const [columns_, tasks] = await Promise.all([workspace, workspaceTasks]);
   // you need to serialize the data if you are passing from server to client component
-  // return <p>{JSON.stringify(tasks)}</p>;
   return (
-    <ColumnsContainer
+    <ColumnsWrapperClient
       workspaceId={workspaceId}
       columns={JSON.parse(JSON.stringify(columns_.columns))}
-      tasks={JSON.parse(JSON.stringify(tasks))}
     />
   );
+  // return (
+  //   <ColumnsContainer
+  //     workspaceId={workspaceId}
+  //     columns={JSON.parse(JSON.stringify(columns_.columns))}
+  //     tasks={JSON.parse(JSON.stringify(tasks))}
+  //   />
+  // );
 }
 
 export default ColumnsWrapperServer;

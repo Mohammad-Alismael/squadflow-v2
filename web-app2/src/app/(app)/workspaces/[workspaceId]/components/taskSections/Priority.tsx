@@ -8,10 +8,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
+import { shallow } from "zustand/shallow";
 
 function Priority() {
-  const { setPriority } = useTaskPropertiesStore();
-  const priority = useTaskPropertiesStore((state) => state.priority);
+  const setPriority = useTaskPropertiesStore((state) => state.setPriority);
+  const priority = useTaskPropertiesStore((state) => state.priority, shallow);
   return (
     <div className="flex flex-row items-center gap-8">
       <h3 className="font-bold">priority</h3>

@@ -1,15 +1,16 @@
 "use client";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  useTaskPropertiesStore,
-  useTaskSelectors,
-} from "@/utils/store/taskPropertiesStore";
+import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
+import { shallow } from "zustand/shallow";
 
 ShowAssignees.propTypes = {};
 
 function ShowAssignees() {
-  const assigness = useTaskPropertiesStore((state) => state.participants);
+  const assigness = useTaskPropertiesStore(
+    (state) => state.participants,
+    shallow
+  );
   return (
     <>
       {assigness.map((item) => {

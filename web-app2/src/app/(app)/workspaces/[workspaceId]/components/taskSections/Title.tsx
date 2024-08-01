@@ -1,14 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import {
-  useTaskPropertiesStore,
-  useTaskSelectors,
-} from "@/utils/store/taskPropertiesStore";
+import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { useShallow } from "zustand/react/shallow";
 
 function Title() {
-  const { setTitle } = useTaskPropertiesStore();
+  const setTitle = useTaskPropertiesStore((state) => state.setTitle);
   const { title } = useTaskPropertiesStore(
     useShallow((state) => ({
       title: state.title,

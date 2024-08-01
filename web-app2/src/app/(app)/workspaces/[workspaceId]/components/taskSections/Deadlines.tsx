@@ -6,10 +6,11 @@ import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
+import { shallow } from "zustand/shallow";
 
 function Deadlines() {
-  const { setEndTime } = useTaskPropertiesStore();
-  const dueTime = useTaskPropertiesStore((state) => state.endTime);
+  const setEndTime = useTaskPropertiesStore((state) => state.setEndTime);
+  const dueTime = useTaskPropertiesStore((state) => state.endTime, shallow);
   return (
     <div className="w-full flex flex-row items-center justify-between gap-x-2">
       <div className="flex flex-col gap-1 w-1/2">

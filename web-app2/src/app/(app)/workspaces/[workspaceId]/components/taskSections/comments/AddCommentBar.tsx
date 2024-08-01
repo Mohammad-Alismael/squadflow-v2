@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { SendIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { v4 as uuidv4 } from "uuid";
@@ -43,7 +43,7 @@ function AddCommentBar() {
   return (
     <div className="flex w-full gap-3 items-stretch my-2">
       <Avatar className="border w-10 h-10">
-        <img src={userData?.photoURL} alt="@shadcn" />
+        <AvatarImage src={userData?.photoURL} alt="@shadcn" />
         <AvatarFallback>{userData?.username}</AvatarFallback>
       </Avatar>
       <div className="w-[90%]">

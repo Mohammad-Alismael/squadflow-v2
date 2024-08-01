@@ -12,7 +12,8 @@ import { clsx } from "clsx";
 import ModifyColumnsDialog from "@/components/Dialogs/ModifyColumnsDialog";
 import TasksSearch from "@/app/(app)/workspaces/[workspaceId]/components/TasksSearch";
 import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
-import { USER_ROLES } from "@/utils/helper";
+
+import { USER_ROLES } from "@/utils/helper-client";
 
 WorkspaceHeader.propTypes = {};
 

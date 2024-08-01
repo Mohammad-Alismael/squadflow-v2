@@ -11,7 +11,7 @@ async function ParticipantsHeader({ workspaceId }: { workspaceId: string }) {
     <div className="flex items-center">
       {data &&
         data?.participants.map((participant: WorkspaceParticipants) => (
-          <Avatar className="w-8 h-8">
+          <Avatar key={participant._id.toString()} className="w-8 h-8">
             <AvatarImage src={participant.user.photoURL} />
             <AvatarFallback>{participant.user.username}</AvatarFallback>
           </Avatar>

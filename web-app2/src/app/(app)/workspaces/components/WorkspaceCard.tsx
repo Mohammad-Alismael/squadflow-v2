@@ -5,8 +5,8 @@ import Link from "next/link";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
 import { IWorkspace } from "@/utils/@types/workspace";
 import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
-import { USER_ROLES } from "@/utils/helper";
 import { clsx } from "clsx";
+import { USER_ROLES } from "@/utils/helper-client";
 
 async function WorkspaceCard({ data }: { data: IWorkspace }) {
   const role = await getWorkspacePrivilege(data._id as string);
@@ -28,7 +28,10 @@ async function WorkspaceCard({ data }: { data: IWorkspace }) {
         <CardContent>
           <div className="mt-4 flex items-center">
             {data.participants.map((participant) => (
-              <Avatar className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10">
+              <Avatar
+                key={participant._id}
+                className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10"
+              >
                 <AvatarImage src={participant.user.photoURL} />
                 <AvatarFallback>{participant.user.username}</AvatarFallback>
               </Avatar>

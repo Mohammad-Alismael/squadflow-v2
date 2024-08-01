@@ -11,7 +11,7 @@ export const useUpdateTask = (workspaceId: string, revertBackTo: string) => {
       toast({
         title: `Successfully updated task`,
       });
-
+      await queryClient.invalidateQueries([`tasks-${workspaceId}`]);
       revalidateURL(workspaceId as string);
       window.history.replaceState(null, "", revertBackTo);
     },
