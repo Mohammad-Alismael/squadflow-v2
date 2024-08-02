@@ -22,7 +22,8 @@ function AssignedTask({ data }: { data: IDashboardTask }) {
                 {data.labels.map((item) => (
                   <p
                     key={item._id.toString()}
-                    className={`py-1 px-2 border-2 border-gray-200 rounded-full bg-[#${item.color}]`}
+                    className="inline px-4 py-1 rounded-full"
+                    style={{ backgroundColor: item.color }}
                   >
                     {item.title}
                   </p>

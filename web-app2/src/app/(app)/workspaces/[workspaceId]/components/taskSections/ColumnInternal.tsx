@@ -12,46 +12,7 @@ import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { shallow } from "zustand/shallow";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Column = () => {
-  const workspaceId = useTaskPropertiesStore(
-    (state) => state.projectId,
-    shallow
-  );
-  const setColumnId = useTaskPropertiesStore((state) => state.setColumnId);
-  const columnId = useTaskPropertiesStore((state) => state.columnId, shallow);
-  const { data, isLoading, refetch } = useGetWorkspaceColumnsById(
-    workspaceId as string
-  );
-
-  const handleValueChange = useCallback(
-    (value: string) => {
-      setColumnId(value);
-    },
-    [setColumnId]
-  );
-
-  return (
-    <div className="flex flex-row items-center gap-8">
-      <h3 className="font-bold">Column</h3>
-      {isLoading && <Skeleton className="h-10 w-40" />}
-      {!isLoading && (
-        <Select onValueChange={handleValueChange} defaultValue={columnId}>
-          <SelectTrigger className="w-[160px] h-[41px] bg-gray-100">
-            <SelectValue placeholder="Select order list" />
-          </SelectTrigger>
-          <SelectContent>
-            {data?.map((column) => (
-              <SelectItem key={column._id} value={column._id}>
-                {column.title}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
-    </div>
-  );
-};
-const Internal = () => {
+const ColumnInternal = () => {
   const columns = useTaskPropertiesStore((state) => state.columns, shallow);
   const setColumnId = useTaskPropertiesStore((state) => state.setColumnId);
   const columnId = useTaskPropertiesStore((state) => state.columnId, shallow);
@@ -81,6 +42,5 @@ const Internal = () => {
     </div>
   );
 };
-Column.Internal = Internal;
 
-export default Column;
+export default ColumnInternal;

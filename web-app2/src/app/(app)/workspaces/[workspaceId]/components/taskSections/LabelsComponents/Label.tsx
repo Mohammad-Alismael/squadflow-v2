@@ -21,7 +21,8 @@ function Label({ data }: { data: WorkspaceLabel }) {
   return (
     <p
       onClick={included ? handleClickRemove : handleClick}
-      className={`px-4 py-2 border-2 border-gray-200 rounded-full bg-[${data.color}]`}
+      className="inline px-4 py-2 rounded-full"
+      style={{ backgroundColor: data.color }}
     >
       {data.title}
     </p>

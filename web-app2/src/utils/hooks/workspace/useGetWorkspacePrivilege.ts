@@ -1,5 +1,4 @@
 import { useQuery, UseQueryResult } from "react-query";
-import { WorkspaceParticipants } from "@/utils/@types/workspace";
 import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
 interface PropTypes {
   id: string;

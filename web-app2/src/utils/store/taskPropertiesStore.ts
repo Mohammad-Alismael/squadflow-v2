@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { PopulatedUser } from "@/utils/@types/user";
-import { WorkspaceLabel } from "@/utils/@types/workspace";
+import { WorkspaceColumn, WorkspaceLabel } from "@/utils/@types/workspace";
 import { Comment } from "@/utils/@types/task";
 import { shallow } from "zustand/shallow";
 
@@ -22,9 +22,11 @@ export interface ITaskState {
   priority: string;
   participants: PopulatedUser[];
   labels: WorkspaceLabel[];
+  workspaceLabels: WorkspaceLabel[];
   subTasks: Task[];
   attachments: string[];
   comments: Comment[];
+  columns: WorkspaceColumn[];
 }
 
 interface Actions {
@@ -40,6 +42,7 @@ interface Actions {
   addParticipant: (payload: PopulatedUser) => void;
   removeParticipant: (payload: PopulatedUser) => void;
   setLabels: (payload: WorkspaceLabel[]) => void;
+  setWorkspaceLabels: (payload: WorkspaceLabel[]) => void;
   addLabel: (payload: WorkspaceLabel) => void;
   removeLabel: (payload: WorkspaceLabel) => void;
   setSubTasks: (payload: Task[]) => void;
@@ -51,6 +54,7 @@ interface Actions {
   resetCustomState: (customState?: Partial<ITaskState>) => void;
   updateSubTask: (updatedSubTask: Task) => void;
   removeSubTask: (selectedTaskId: string) => void;
+  setColumns: (columns: WorkspaceColumn[]) => void;
 }
 
 const initialState: ITaskState = {
@@ -64,9 +68,11 @@ const initialState: ITaskState = {
   priority: "low",
   participants: [],
   labels: [],
+  workspaceLabels: [],
   subTasks: [],
   attachments: [],
   comments: [],
+  columns: [],
 };
 
 const handleAddParticipant = (
@@ -127,6 +133,8 @@ const useTaskPropertiesStore = create<ITaskState & Actions>()(
           participants: handleRemoveParticipant(state.participants, payload),
         })),
       setLabels: (payload) => set((state) => ({ ...state, labels: payload })),
+      setWorkspaceLabels: (payload) =>
+        set((state) => ({ ...state, workspaceLabels: payload })),
       addLabel: (payload) =>
         set((state) => ({
           ...state,
@@ -144,6 +152,7 @@ const useTaskPropertiesStore = create<ITaskState & Actions>()(
           ...state,
           subTasks: [...state.subTasks, newSubTask],
         })),
+      setColumns: (payload) => set((state) => ({ ...state, columns: payload })),
       setAttachments: (payload) =>
         set((state) => ({ ...state, attachments: payload })),
       setComments: (payload) =>
@@ -182,21 +191,5 @@ const useTaskPropertiesStore = create<ITaskState & Actions>()(
     }
   )
 );
-
-interface TaskSelectors {
-  getTaskId: () => string;
-  getProjectId: () => string;
-  getColumnId: () => string;
-  getTitle: () => string;
-  getDescription: () => string;
-  getTaskDate: () => string;
-  getEndTime: () => string;
-  getPriority: () => string;
-  getParticipants: () => PopulatedUser[];
-  getLabels: () => WorkspaceLabel[];
-  getSubTasks: () => Task[];
-  getAttachments: () => string[];
-  getComments: () => Comment[];
-}
 
 export { useTaskPropertiesStore };

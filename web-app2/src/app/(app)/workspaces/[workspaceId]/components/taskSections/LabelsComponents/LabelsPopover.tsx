@@ -25,11 +25,13 @@ function LabelsPopover({ children }: { children: ReactNode }) {
         {isLoading && <p>loading ...</p>}
         <div className="space-y-2">
           <h4 className="capitalize font-bold">workspace labels</h4>
-          {!isLoading &&
-            data &&
-            data.map((item, index) => {
-              return <Label key={item._id} data={item} />;
-            })}
+          <div className="py-2">
+            {!isLoading &&
+              data &&
+              data.map((item, index) => {
+                return <Label key={item._id.toString()} data={item} />;
+              })}
+          </div>
           <AddLabelPopover>
             <AddItem title="add label" />
           </AddLabelPopover>

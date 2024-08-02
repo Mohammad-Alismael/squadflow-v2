@@ -7,14 +7,13 @@ import {
   fetchWorkspaceColumns,
   fetchWorkspaceParticipants,
 } from "@/lib/api/workspace";
-import { handleGetColumns } from "@/utils/actions/workspace-actions";
 interface PropTypes {
   id: string;
-  details: boolean;
-  enabled: boolean;
+  onSuccess: (data: WorkspaceColumn[]) => void;
 }
 export const useGetWorkspaceColumnsById = (
-  id: PropTypes["id"]
+  id: PropTypes["id"],
+  onSuccess?: PropTypes["onSuccess"]
 ): UseQueryResult<WorkspaceColumn[], Error> => {
   console.log("useGetWorkspaceColumnsById - workspace ID:", id);
 
@@ -22,9 +21,7 @@ export const useGetWorkspaceColumnsById = (
     queryKey: [`columns-${id}`],
     enabled: Boolean(id),
     refetchOnWindowFocus: false,
-    onSuccess: (data) => {
-      console.log("useGetWorkspaceColumnsById - onSuccess:", data);
-    },
+    onSuccess,
     queryFn: () => fetchWorkspaceColumns(id),
   });
 };

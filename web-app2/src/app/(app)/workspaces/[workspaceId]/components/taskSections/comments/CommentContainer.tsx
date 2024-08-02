@@ -37,6 +37,7 @@ function CommentContainer({ children }: { children: React.ReactNode }) {
     </CommentContainerContext.Provider>
   );
 }
+
 CommentContainer.AddCommentLocal = AddCommentLocal;
 
 function AddCommentLocal({ userRole }: { userRole?: string | undefined }) {

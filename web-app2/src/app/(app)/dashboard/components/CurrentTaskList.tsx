@@ -5,6 +5,7 @@ import { getAllTasksAction } from "@/utils/actions/dashboard-actions";
 import { IDashboardTask } from "@/utils/@types/task";
 import { Button } from "@/components/ui/button";
 import NoTasksFound from "@/app/(app)/dashboard/components/NoTasksFound";
+import CreateQuickTaskDialog from "@/components/Dialogs/CreateQuickTaskDialog";
 
 async function CurrentTaskList({
   selectedWorkspaceId,
@@ -19,7 +20,9 @@ async function CurrentTaskList({
           <h4 className="capitalize font-bold">all tasks</h4>
           <WorkspaceLabels />
         </div>
-        <Button size="sm">+ Task</Button>
+        <CreateQuickTaskDialog>
+          <Button size="sm">+ Task</Button>
+        </CreateQuickTaskDialog>
       </div>
       <div className="space-y-2 my-3 h-[38rem] overflow-y-auto">
         {selectedWorkspaceId &&

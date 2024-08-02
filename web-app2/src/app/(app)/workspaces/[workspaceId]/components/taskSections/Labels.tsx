@@ -5,14 +5,16 @@ import ShowLabels from "@/app/(app)/workspaces/[workspaceId]/components/taskSect
 
 function Labels() {
   return (
-    <div className="flex items-center gap-10">
-      <h3 className="font-bold">labels</h3>
-      <div className="flex items-center gap-2">
-        <ShowLabels />
-        <LabelsPopover>
-          <AddItem title="add" />
-        </LabelsPopover>
+    <div className="flex items-center gap-2">
+      <div className="flex items-center gap-10">
+        <h3 className="font-bold">labels</h3>
+        <div className="flex items-center gap-2">
+          <ShowLabels />
+        </div>
       </div>
+      <LabelsPopover>
+        <AddItem title="add" />
+      </LabelsPopover>
     </div>
   );
 }
