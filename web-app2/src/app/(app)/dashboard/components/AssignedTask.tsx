@@ -31,8 +31,8 @@ function AssignedTask({ data }: { data: IDashboardTask }) {
               </div>
               <div className="flex flex-row sitems-center gap-1">
                 {data.participants.map((participant) => (
-                  <Avatar key={participant._id} className="w-6 h-6">
-                    <AvatarImage src="https://github.com/shadcn.png" />
+                  <Avatar key={participant._id} className="w-8 h-8">
+                    <AvatarImage src={participant.photoURL} />
                     <AvatarFallback>{participant.username}</AvatarFallback>
                   </Avatar>
                 ))}

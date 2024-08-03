@@ -22,7 +22,10 @@ async function Page({
         <div className="flex flex-col flex-grow">
           <Header />
           <Suspense fallback={<WorkspaceContainerSkeleton />}>
-            <WorkspacesContainer viewType={searchParams["view"]} />
+            <WorkspacesContainer
+              viewType={searchParams["view"]}
+              sortType={searchParams["sort"]}
+            />
           </Suspense>
         </div>
       </div>

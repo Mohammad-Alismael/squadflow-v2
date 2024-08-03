@@ -23,27 +23,34 @@ function UploadProfile({
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     setError(null);
     const file = event.target.files?.[0];
+
     if (file) {
+      // Check file size (4.5 MB = 4.5 * 1024 * 1024 bytes)
+      const maxSize = 4.5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        setError("File size should not exceed 4.5 MB");
+        return;
+      }
+
       try {
         setIsLoading(true);
         const formData = new FormData();
-        formData.append("file", file!);
+        formData.append("file", file);
         const url = await saveProfileImg(formData);
+
         const reader = new FileReader();
         reader.onloadend = () => {
-          // setSelectedImage(reader.result as string);
           setSelectedImage(url as string);
         };
         reader.readAsDataURL(file);
-        toast({ title: "successfully uploaded avatar image" });
-      } catch (error) {
+        toast({ title: "Successfully uploaded avatar image" });
+      } catch (error: any) {
         setError(error.message);
       } finally {
         setIsLoading(false);
       }
     }
   };
-
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   };
@@ -73,6 +80,7 @@ function UploadProfile({
           ref={fileInputRef}
           style={{ display: "none" }}
           onChange={handleFileUpload}
+          accept="image/*"
         />
       </div>
     </div>

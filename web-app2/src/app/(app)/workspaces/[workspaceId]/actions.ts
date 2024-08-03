@@ -7,6 +7,7 @@ import { IWorkspace, WorkspaceColumn } from "@/utils/@types/workspace";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 export const updateColumnIdForTaskId = async (
   taskId: string,
@@ -34,4 +35,8 @@ export const updateColumnIdForTaskId = async (
 export const handleDeleteTask = async (id: string) => {
   await deleteTask(new ObjectId(id));
   revalidateTag("tasks");
+};
+
+export const redirectServer = (workspaceId: string) => {
+  redirect(`/workspaces/${workspaceId}`);
 };

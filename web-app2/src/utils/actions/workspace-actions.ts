@@ -165,8 +165,9 @@ export const handleUpdateTask = async (data: ITaskState) => {
   }
 };
 
-export const handleGetTaskById = async (taskId: string) => {
+export const handleGetTaskById = async (taskId: string | undefined) => {
   try {
+    if (!taskId || taskId === "") return null;
     const task = await getTaskIdPopulated(new ObjectId(taskId));
     return task as TaskResponse;
   } catch (error) {

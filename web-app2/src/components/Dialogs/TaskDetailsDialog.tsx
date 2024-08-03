@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useGetTasksById } from "@/utils/hooks/task/useGetTasksById";
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
@@ -30,6 +30,7 @@ function TaskDetailsDialog({
 }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const searchParams = useSearchParams();
+  const router = useRouter();
   const taskId = searchParams.get("taskId") as string;
   const { data: role, isLoading: isLoadingPrivilege } =
     useGetWorkspacePrivilege(workspaceId);
@@ -71,9 +72,13 @@ function TaskDetailsDialog({
       comments,
     });
   };
-  const onOpenChange = useCallback(() => {
+  const onOpenChange = useCallback(async () => {
+    const params = new URLSearchParams(searchParams);
+
+    // Set the new value for "messageKeyword"
+    params.delete("taskId");
+    router.replace(`${revertBackTo}`);
     resetState();
-    window.history.replaceState(null, "", revertBackTo);
   }, [resetState, revertBackTo]);
 
   if (isError) {

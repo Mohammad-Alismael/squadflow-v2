@@ -11,6 +11,8 @@ interface IWorkspace {
   columns?: WorkspaceColumn[];
   labels?: { color: string; title: string }[];
   progress?: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface WorkspaceParticipants {
