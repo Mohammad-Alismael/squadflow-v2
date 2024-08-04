@@ -44,9 +44,11 @@ function FindParticipantsList() {
                       key={participant._id}
                       user={participant.user}
                       showDelete={isIncluded}
-                      role={userFound ? userFound.role : ""}
+                      role={userFound ? userFound.role : "viewer"}
                     />
-                    {index !== data.data.participants.length - 1 && <hr />}
+                    {index !== (data?.data?.participants?.length ?? 0) - 1 && (
+                      <hr />
+                    )}
                   </>
                 );
               })}

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { ReactNode, useEffect, useState } from "react";
 import {
@@ -15,7 +16,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,11 +29,15 @@ import {
 } from "@/app/(app)/workspaces/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetWorkspaceById } from "@/utils/hooks/workspace/useGetWorkspaceById";
-import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
+import {
+  ParticipantWorkspace,
+  workspaceParticipantStore,
+} from "@/utils/store/workspaceParticipantStore";
 import ParticipantsList from "@/components/Dialogs/components/ParticipantsList";
 import { formSchema } from "@/components/Dialogs/scehmas/workspaceSchema";
 import { useQueryClient } from "react-query";
 import ParticipantsComponentSkeleton from "@/components/Dialogs/components/ParticipantsComponentSkeleton";
+import { WorkspaceParticipants } from "@/utils/@types/workspace";
 
 function UpdateWorkspaceDialog() {
   const searchParams = useSearchParams();
@@ -75,9 +79,13 @@ function UpdateWorkspaceDialog() {
     if (!isLoadingWorkspace && workspace) {
       form.reset({
         title: workspace.title,
-        participants: workspace.participants ?? [],
+        participants:
+          (workspace.participants as unknown as WorkspaceParticipants[]) ?? [],
       });
-      workspace.participants && setParticipants(workspace.participants);
+      workspace.participants &&
+        setParticipants(
+          workspace.participants as unknown as ParticipantWorkspace[]
+        );
     }
   }, [workspaceId, isLoadingWorkspace]);
   return (

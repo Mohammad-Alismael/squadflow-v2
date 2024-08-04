@@ -1,9 +1,11 @@
 import { Schema } from "mongoose";
 import { IUser, PopulatedUser } from "@/utils/@types/user";
 import {
+  IWorkspace,
   WorkspaceLabel,
   WorkspaceParticipants,
 } from "@/utils/@types/workspace";
+import { ObjectId } from "mongodb";
 
 export interface ITask {
   _id?: string;
@@ -22,8 +24,8 @@ export interface ITask {
   priority: string;
   description: string;
   attachments: string[];
-  created_by: Schema.Types.ObjectId | IUser;
-  updated_by: Schema.Types.ObjectId | IUser;
+  created_by: ObjectId;
+  updated_by: ObjectId;
 }
 
 export interface TaskResponse {

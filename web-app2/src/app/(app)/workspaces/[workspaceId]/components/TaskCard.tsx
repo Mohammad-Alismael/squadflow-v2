@@ -40,39 +40,38 @@ const TaskCard = ({
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          {/*<Link href={`?taskId=${_id}`} prefetch={false} passHref={false}>*/}
-          <Card
-            onClick={handleChange}
-            className={clsx(
-              "p-2 space-y-1",
-              snapshot.isDragging && "bg-[#e6e6e6]"
-            )}
-          >
-            <div className="flex justify-between items-center">
-              <p>{title}</p>
-              <TaskCardMenu taskId={_id} />
-            </div>
-            <TaskParticipants assigness={data.participants} />
-            <div className="flex flex-row items-center justify-between text-gray-400 gap-1">
-              <p className=" flex flex-row items-center gap-1">
-                <Calendar size={20} />
-                {!data.dueDate || data.dueDate === ""
-                  ? "no due date"
-                  : `${data.dueDate}`}
-                {/*{data.dueTime && data.dueTime !== "" && `, ${data.dueTime}`}*/}
-              </p>
-              {!!data.comments.length && (
-                <div className="flex flex-row text-gray-400 gap-1 self-end">
-                  <span>{data.comments.length}</span>
-                  <MessageCircle size={20} />
-                </div>
+          <Link href={`?taskId=${_id}`} prefetch={false} passHref={false}>
+            <Card
+              className={clsx(
+                "p-2 space-y-1",
+                snapshot.isDragging && "bg-[#e6e6e6]"
               )}
-            </div>
-            <div className="flex items-end justify-between ">
-              {!!data.labels.length && <TaskLabels labels={data.labels} />}
-            </div>
-          </Card>
-          {/*</Link>*/}
+            >
+              <div className="flex justify-between items-center">
+                <p>{title}</p>
+                <TaskCardMenu taskId={_id} />
+              </div>
+              <TaskParticipants assigness={data.participants} />
+              <div className="flex flex-row items-center justify-between text-gray-400 gap-1">
+                <p className=" flex flex-row items-center gap-1">
+                  <Calendar size={20} />
+                  {!data.dueDate || data.dueDate === ""
+                    ? "no due date"
+                    : `${data.dueDate}`}
+                  {/*{data.dueTime && data.dueTime !== "" && `, ${data.dueTime}`}*/}
+                </p>
+                {!!data.comments.length && (
+                  <div className="flex flex-row text-gray-400 gap-1 self-end">
+                    <span>{data.comments.length}</span>
+                    <MessageCircle size={20} />
+                  </div>
+                )}
+              </div>
+              <div className="flex items-end justify-between ">
+                {!!data.labels.length && <TaskLabels labels={data.labels} />}
+              </div>
+            </Card>
+          </Link>
         </div>
       )}
     </Draggable>

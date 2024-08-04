@@ -14,7 +14,7 @@ async function Page({
   searchParams,
 }: {
   params: { workspaceId: string };
-  searchParams?: { [key: string]: string | string[] };
+  searchParams?: { [key: string]: string };
 }) {
   console.log("[workspaceId]/", params, searchParams);
   return (

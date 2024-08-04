@@ -13,7 +13,7 @@ export const getAuthUser = async () => {
   return null;
 };
 
-export const getUserById = async (uid) => {
+export const getUserById = async (uid: string) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URL_API_ROUTE}/api/users/${uid}`,
     {

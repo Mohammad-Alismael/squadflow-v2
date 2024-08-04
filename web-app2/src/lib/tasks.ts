@@ -122,11 +122,9 @@ async function deleteTasksByWorkspaceId(workspaceId: ObjectId) {
   return deletedCount;
 }
 
-const updateTask = async (taskId: string, updateData: ITask) => {
+const updateTask = async (taskId: string, updateData: any) => {
   await init();
   try {
-    // Find the task by ID and update it
-    // Return the updated task
     return await Task.findByIdAndUpdate(taskId, updateData, {
       new: true,
     });

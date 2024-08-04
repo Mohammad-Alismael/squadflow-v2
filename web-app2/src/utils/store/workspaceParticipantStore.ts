@@ -5,7 +5,7 @@ export interface Participant {
   user: string;
   role: "admin" | "editor" | "viewer";
 }
-interface ParticipantWorkspace extends Participant {
+export interface ParticipantWorkspace extends Participant {
   _id: string;
 }
 interface State {

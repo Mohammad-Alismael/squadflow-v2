@@ -15,15 +15,13 @@ export async function GET(request: Request) {
   try {
     const communityFound = await getCommunityById(communityId as string);
     const isAdmin = isAdminUserId(communityFound.admin._id, userId as string);
-    const participantsWithoutUserId = communityFound[
-      "_doc"
-    ].participants.filter(
+    const participantsWithoutUserId = communityFound.participants.filter(
       (participant) => participant.user._id.toString() !== userId
     );
     console.log(participantsWithoutUserId[0]["user"]);
     return NextResponse.json(
       {
-        ...communityFound["_doc"],
+        ...communityFound,
         participants: participantsWithoutUserId,
         isAdmin,
       },

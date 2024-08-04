@@ -1,6 +1,10 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Community from "@/models/community";
-import { ICommunity } from "@/utils/@types/community";
+import {
+  CommunityResponse,
+  ICommunity,
+  Participant,
+} from "@/utils/@types/community";
 import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 import {
@@ -125,7 +129,7 @@ async function joinCommunityByCode(userId: string, code: string) {
 async function leaveCommunityForParticipants(
   communityId: ObjectId,
   userId: string,
-  participants: ICommunity["participants"]
+  participants: Participant[]
 ) {
   const alreadyJoined = isUserIdInParticipantsList(participants, userId);
   if (!alreadyJoined)
@@ -183,7 +187,9 @@ async function updateCommunityAdmin(
   }
 }
 
-async function getCommunityById(communityId: string) {
+async function getCommunityById(
+  communityId: string
+): Promise<CommunityResponse> {
   await init();
   const result = await Community.findById(new ObjectId(communityId))
     .select("_id name code participants admin")
@@ -197,14 +203,14 @@ async function getCommunityById(communityId: string) {
     })
     .exec();
 
-  if (!result)
+  if (!result) {
     throw new CustomError(
       "communities Id doesn't exists",
       HttpStatusCode.NOT_FOUND
     );
-  return result;
+  }
+  return result as CommunityResponse;
 }
-
 async function updateCommunity(community: ICommunity) {
   await init();
   try {

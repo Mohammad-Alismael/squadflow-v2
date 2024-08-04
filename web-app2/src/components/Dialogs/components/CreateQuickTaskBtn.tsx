@@ -1,13 +1,11 @@
 "use client";
 import React from "react";
-import PropTypes from "prop-types";
 import { Button } from "@/components/ui/button";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { useCreateTask } from "@/utils/hooks/task/useCreateTask";
 import { useToast } from "@/components/ui/use-toast";
-import { useParams } from "next/navigation";
-import { DialogClose } from "@/components/ui/dialog";
 import { shallow } from "zustand/shallow";
+import { getErrorMessage } from "@/utils/helper-client";
 
 CreateQuickTaskBtn.propTypes = {};
 
@@ -75,7 +73,7 @@ function CreateQuickTaskBtn() {
       reset();
     }
 
-    if (isError) toast({ title: error?.message });
+    if (isError) toast({ title: getErrorMessage(error) });
   };
 
   return (

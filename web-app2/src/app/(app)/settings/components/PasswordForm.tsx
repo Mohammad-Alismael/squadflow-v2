@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -9,19 +10,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Label from "@/components/Label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 import { handleChangePassword } from "@/utils/actions/settings-actions";
-import { useFormStatus } from "react-dom";
 import { useToast } from "@/components/ui/use-toast";
-
+import { z } from "zod";
+export const formSchema = z.object({
+  password: z.string(),
+  newPassword: z.string().min(6).max(50),
+});
 function PasswordForm() {
   const form = useForm();
   const { toast } = useToast();
 
-  const onSubmit = async (data: { password: string; newPassword: string }) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await handleChangePassword(data.password, data.newPassword);
       toast({ title: "successfully updated password" });

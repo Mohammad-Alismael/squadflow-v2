@@ -23,7 +23,7 @@ import Workspace from "@/models/workspace";
 import Task from "@/models/task";
 import { restructureCommentsv2 } from "@/app/api/tasks/[taskId]/helper";
 import { ITaskState } from "@/utils/store/taskPropertiesStore";
-import { TaskResponse } from "@/utils/@types/task";
+import { ICommentCreate, ITask, TaskResponse } from "@/utils/@types/task";
 import { safeStringify } from "@/utils/helper-client";
 
 export const fetchWorkspaces = async () => {
@@ -149,11 +149,18 @@ export const deleteColumn = async (workspaceId: string, columnId: string) => {
   }
 };
 
-export const handleUpdateTask = async (data: ITaskState) => {
+export type ModifiedITaskState = Omit<ITaskState, "comments"> & {
+  comments: ICommentCreate[];
+};
+
+export const handleUpdateTask = async (data: ModifiedITaskState) => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
 
   try {
-    data.comments = restructureCommentsv2(data.comments, userId);
+    data.comments = restructureCommentsv2(
+      data.comments as ICommentCreate[],
+      userId
+    );
     await updateTask(data.taskId, {
       ...data,
       updated_by: new ObjectId(userId) as ObjectId,

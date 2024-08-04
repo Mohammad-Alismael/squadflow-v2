@@ -1,6 +1,11 @@
 "use client";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { Calendar, dayjsLocalizer, Views } from "react-big-calendar";
+import {
+  Calendar,
+  dayjsLocalizer,
+  EventPropGetter,
+  Views,
+} from "react-big-calendar";
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -8,9 +13,15 @@ import { fetchTasksForCalendar } from "@/utils/actions/workspace-actions";
 import { parseDate } from "@/utils/helper-date";
 import TaskDetailsDialog from "@/components/Dialogs/TaskDetailsDialog";
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
+import { TaskResponse } from "@/utils/@types/task";
 
 const localizer = dayjsLocalizer(dayjs);
-
+type TEvent = {
+  title: string;
+  taskId: string;
+  start: string | Date;
+  end: string | Date;
+};
 function FullPageCalendar() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -19,8 +30,8 @@ function FullPageCalendar() {
   const workspaceId = searchParams.get("workspace");
   const taskId = searchParams.get("taskId");
   const [loading, setLoading] = useState(false);
-  const [events, setEvents] = useState([]);
-  const eventPropGetter = (event: { color: string; textColor: string }) => {
+  const [events, setEvents] = useState<TEvent[]>([]);
+  const eventPropGetter = (event: any) => {
     const backgroundColor = event.color || "#2e7d32"; // Default color if none is specified
     const color = event.textColor || "#fff"; // Default text color if none is specified
     return { style: { backgroundColor, color } };
@@ -35,11 +46,11 @@ function FullPageCalendar() {
     },
     [searchParams]
   );
-  const handleNavigate = (date, view) => {
+  const handleNavigate = (date: Date) => {
     setCurrentDate(date);
   };
 
-  const handleSelectEvent = (event) => {
+  const handleSelectEvent = (event: TEvent) => {
     router.push(pathname + "?" + createQueryString("taskId", event.taskId));
   };
   useEffect(() => {
@@ -59,7 +70,6 @@ function FullPageCalendar() {
         setLoading(false);
       });
   }, [workspaceId]);
-  // @ts-ignore
   return (
     <div>
       {!loading && events.length === 0 && (

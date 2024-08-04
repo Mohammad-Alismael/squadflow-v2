@@ -27,6 +27,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { revalidateURL } from "@/components/Dialogs/actions";
 import { useQueryClient } from "react-query";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
+import { getErrorMessage } from "@/utils/helper-client";
 
 function CreateTaskMobileDialog({ columnId }: { columnId: string }) {
   const { toast } = useToast();
@@ -75,7 +76,7 @@ function CreateTaskMobileDialog({ columnId }: { columnId: string }) {
       reset();
     }
 
-    if (isError) toast({ title: error?.message });
+    if (isError) toast({ title: getErrorMessage(error) });
   };
   useEffect(() => {
     workspaceId && setProjectId(workspaceId as string);

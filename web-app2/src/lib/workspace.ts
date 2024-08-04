@@ -7,13 +7,13 @@ import Task from "@/models/task";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 import mongoose from "mongoose";
-import { IWorkspace } from "@/utils/@types/workspace";
+import { IWorkspace, IWorkspaceCreate } from "@/utils/@types/workspace";
 
 async function init() {
   await connectMongoDB();
 }
 
-async function createWorkspace(workspace: IWorkspace) {
+async function createWorkspace(workspace: Partial<IWorkspaceCreate>) {
   await init();
   try {
     const result = await Workspace.create({
@@ -31,7 +31,7 @@ async function createWorkspace(workspace: IWorkspace) {
   }
 }
 
-async function updateWorkspace(workspace: IWorkspace) {
+async function updateWorkspace(workspace: Partial<IWorkspace>) {
   await init();
   try {
     const result = await Workspace.updateOne(
@@ -73,7 +73,12 @@ async function updateWorkspaceLabelsList(
 
 async function getWorkspaceById(workspaceId: ObjectId) {
   await init();
-  const workspace = await Workspace.findOne({ _id: workspaceId });
+  const workspace = await Workspace.findOne({ _id: workspaceId })
+    .populate({
+      path: "participants.user",
+      select: "_id username email role photoURL",
+    })
+    .exec();
   if (!workspace) {
     throw new CustomError("workspace not found", HttpStatusCode.NOT_FOUND);
   }

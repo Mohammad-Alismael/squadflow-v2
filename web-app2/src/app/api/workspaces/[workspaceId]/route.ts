@@ -54,7 +54,9 @@ export async function PUT(request: Request, context: any) {
     const x = isUserIdHasRole(workspace.participants, userId, "admin");
     if (!x) throw new Error("you are not allowed to change workspace details");
 
-    const userIdsToCheck: string[] = data.participants.map(({ user }) => user);
+    const userIdsToCheck: string[] = data.participants.map(
+      ({ user }) => user._id
+    );
     const allExist = await checkUserIdsExist(userIdsToCheck);
     if (!allExist)
       return NextResponse.json(

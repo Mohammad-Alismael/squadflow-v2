@@ -9,10 +9,10 @@ import {
 import { validateCommunity, validateSchema } from "@/lib/helper/route.helper";
 import { checkUserIdsExist, findUserByUserId } from "@/lib/users";
 import { postSchema } from "@/app/api/workspaces/schema";
-import { IWorkspace } from "@/utils/@types/workspace";
+import { IWorkspace, IWorkspaceCreate } from "@/utils/@types/workspace";
 
 export async function POST(request: Request) {
-  const data: IWorkspace = await request.json();
+  const data: IWorkspaceCreate = await request.json();
   validateSchema(postSchema, data);
   const { title, participants } = data;
   if (!participants)

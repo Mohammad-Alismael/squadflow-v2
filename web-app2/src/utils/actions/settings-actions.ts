@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use server";
 import { findUserByUserId, generateAccessTokenFlat } from "@/lib/users";
 import {

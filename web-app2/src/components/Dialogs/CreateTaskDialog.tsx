@@ -1,14 +1,6 @@
 "use client";
 import React, { ReactNode, useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
 import { Button } from "@/components/ui/button";
@@ -28,6 +20,7 @@ import { revalidateURL } from "@/components/Dialogs/actions";
 import { useQueryClient } from "react-query";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
 import CreateTaskMobileDialog from "@/components/Dialogs/CreateTaskMobileDialog";
+import { getErrorMessage } from "@/utils/helper-client";
 
 function CreateTaskDialog({ columnId }: { columnId: string }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -77,7 +70,7 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
       reset();
     }
 
-    if (isError) toast({ title: error?.message });
+    if (isError) toast({ title: getErrorMessage(error) });
   };
   useEffect(() => {
     workspaceId && setProjectId(workspaceId as string);

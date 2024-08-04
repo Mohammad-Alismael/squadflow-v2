@@ -1,6 +1,6 @@
 import { ICommunity, Participant } from "@/utils/@types/community";
 import { ObjectId } from "mongodb";
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import { IUser } from "@/utils/@types/user";
 
 export function generateRandomId(length: number): string {
@@ -56,12 +56,22 @@ export function isNoOneInParticipants(
   return participants.length === 0;
 }
 
-export function removeUserId(participants: Participant[], userId: string) {
+export function removeUserId(
+  participants: Participant[],
+  userId: string
+): Participant[] {
   if (!userId) throw new Error("User not found");
-  const index = participants.findIndex((item) => item.user.equals(userId));
+
+  const userIdObj = new Types.ObjectId(userId);
+
+  const index = participants.findIndex(
+    (item) => item.user.toString() === userIdObj.toString()
+  );
+
   if (index !== -1) {
     participants.splice(index, 1);
   }
+
   return participants;
 }
 
@@ -71,5 +81,7 @@ export function isUserIdInParticipantsList(
 ) {
   if (!userId) throw new Error("User not found");
   if (!participants) throw new Error("participants not found");
-  return participants.some((participant) => participant.user.equals(userId));
+  return participants.some(
+    (participant) => participant.user.toString() === userId
+  );
 }

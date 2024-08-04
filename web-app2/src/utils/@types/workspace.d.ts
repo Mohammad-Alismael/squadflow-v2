@@ -14,6 +14,19 @@ interface IWorkspace {
   createdAt: Date;
   updatedAt: Date;
 }
+interface IWorkspaceCreate {
+  _id?: string;
+  created_by?: string;
+  updated_by?: string;
+  community?: string;
+  title?: string;
+  participants: Array<{ user: string; role: "admin" | "editor" | "viewer" }>;
+  columns?: WorkspaceColumn[];
+  labels?: { color: string; title: string }[];
+  progress?: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 interface WorkspaceParticipants {
   user: PopulatedUser;
