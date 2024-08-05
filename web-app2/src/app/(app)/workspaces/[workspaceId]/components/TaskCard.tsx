@@ -40,7 +40,12 @@ const TaskCard = ({
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <Link href={`?taskId=${_id}`} prefetch={false} passHref={false}>
+          <Link
+            href={`?taskId=${_id}`}
+            scroll={false}
+            prefetch={false}
+            passHref={false}
+          >
             <Card
               className={clsx(
                 "p-2 space-y-1",

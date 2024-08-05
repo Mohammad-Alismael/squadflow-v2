@@ -2,8 +2,8 @@
 import React, { useEffect } from "react";
 import { TaskResponse } from "@/utils/@types/task";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
-import { redirect } from "next/navigation";
-import { Dialog } from "@/components/ui/dialog";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { Dialog, DialogOverlay } from "@/components/ui/dialog";
 import { redirectServer } from "@/app/(app)/workspaces/[workspaceId]/actions";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
 
@@ -22,6 +22,12 @@ function TaskDialogWrapper({
   const resetCustomState = useTaskPropertiesStore(
     (state) => state.resetCustomState
   );
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleChange = () => {
+    router.replace(window.location.href.split("?")[0]);
+  };
   useEffect(() => {
     if (data) {
       const {
@@ -57,10 +63,11 @@ function TaskDialogWrapper({
     <Dialog
       open={Boolean(taskId)}
       onOpenChange={() => {
-        redirectServer(workspaceId);
+        handleChange();
+        // redirectServer(workspaceId);
       }}
     >
-      {isDesktop ? children[0] : children[1]}
+      <DialogOverlay>{isDesktop ? children[0] : children[1]}</DialogOverlay>
     </Dialog>
   );
 }

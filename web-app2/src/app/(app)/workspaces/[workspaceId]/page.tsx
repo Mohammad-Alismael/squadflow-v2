@@ -35,23 +35,23 @@ async function Page({
       {/*  workspaceId={params.workspaceId}*/}
       {/*  revertBackTo={`/workspaces/${params.workspaceId}`}*/}
       {/*/>*/}
-      <Suspense
-        fallback={
-          <Dialog>
-            <DialogContent className="hidden md:block p-0 w-4/5 h-[80%]">
-              <TaskDetailsDialogSkeleton />
-            </DialogContent>
-          </Dialog>
-        }
-      >
-        {searchParams && (
+      {searchParams && (
+        <Suspense
+          fallback={
+            <Dialog>
+              <DialogContent className="hidden md:block p-0 w-4/5 h-[80%]">
+                <TaskDetailsDialogSkeleton />
+              </DialogContent>
+            </Dialog>
+          }
+        >
           <TaskDetailsDialogServer
             taskId={searchParams["taskId"]}
             workspaceId={params.workspaceId}
             revertBackTo={`/workspaces/${params.workspaceId}`}
           />
-        )}
-      </Suspense>
+        </Suspense>
+      )}
     </div>
   );
 }

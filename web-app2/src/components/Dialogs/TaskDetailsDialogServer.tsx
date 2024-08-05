@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
 import Assignees from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Assignees";
 import Priority from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Priority";
@@ -29,10 +29,10 @@ function Body({
   return (
     <React.Fragment>
       <Title />
-      <Assignees />
-      <Priority />
-      <Column />
-      <Labels />
+      {/*<Assignees />*/}
+      {/*<Priority />*/}
+      {/*<Column />*/}
+      {/*<Labels />*/}
       <Deadlines />
       <Description />
       <CreateTaskBtn workspaceId={workspaceId} revertBackTo={revertBackTo} />
