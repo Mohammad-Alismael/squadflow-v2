@@ -16,7 +16,7 @@ async function WorkspacesList({
         <h4 className="text-xl font-bold capitalize ">workspaces</h4>
         <SettingsIcon className="w-6 h-6" />
       </div>
-      <div className="flex-1 flex flex-col space-y-2 p-4 bg-gray-300">
+      <div className="flex-1 flex flex-col space-y-2 p-4 bg-gray-300 overflow-y-auto">
         {data.map((workspace) => {
           return (
             <Workspace
