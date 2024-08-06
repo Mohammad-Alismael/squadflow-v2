@@ -94,10 +94,10 @@ function TaskDetailsDialog({
             <div className="w-full flex flex-row">
               <div className="w-1/2 p-4 space-y-2">
                 <Title />
-                <Assignees />
+                {/*<Assignees />*/}
                 <Priority />
-                <Column />
-                <Labels />
+                {/*<Column />*/}
+                {/*<Labels />*/}
                 <Deadlines />
                 <Description />
                 {!isLoadingPrivilege &&

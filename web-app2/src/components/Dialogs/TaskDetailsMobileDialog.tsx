@@ -153,10 +153,10 @@ function TaskDetailsMobileDialog({
             <TabsContent value="overview" className="p-4 h-full">
               <div className="space-y-2 w-full">
                 <Title />
-                <Assignees />
+                {/*<Assignees />*/}
                 <Priority />
-                <Column />
-                <Labels />
+                {/*<Column />*/}
+                {/*<Labels />*/}
                 <Deadlines />
                 <Description />
                 {!isLoadingPrivilege &&

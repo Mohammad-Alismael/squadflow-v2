@@ -10,24 +10,12 @@ import {
 } from "@/components/ui/dialog";
 
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
-import { Button } from "@/components/ui/button";
 import Priority from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Priority";
-import Column from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Column";
 import Labels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Labels";
 import Assignees from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Assignees";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Description";
 import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Deadlines";
-import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
-import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/CommentContainer";
-import { useParams } from "next/navigation";
-import { useCreateTask } from "@/utils/hooks/task/useCreateTask";
-import { useToast } from "@/components/ui/use-toast";
-import { revalidateURL } from "@/components/Dialogs/actions";
-import { useQueryClient } from "react-query";
-import { useMediaQuery } from "@/utils/hooks/use-media-query";
-import CreateTaskMobileDialog from "@/components/Dialogs/CreateTaskMobileDialog";
-import Workspace from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Workspace";
 import CreateQuickTaskBtn from "@/components/Dialogs/components/CreateQuickTaskBtn";
 import ColumnInternal from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/ColumnInternal";
 import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/PlainCommentsContainer";
@@ -49,10 +37,10 @@ function CreateQuickTaskDialog({ children }: { children: React.ReactNode }) {
             <Suspense fallback={<Skeleton className="h-10 w-40" />}>
               <WorkspaceServer />
             </Suspense>
-            <Assignees />
+            {/*<Assignees />*/}
             <Priority />
             <ColumnInternal />
-            <Labels />
+            {/*<Labels />*/}
             <Deadlines />
             <Description />
             <CreateQuickTaskBtn />

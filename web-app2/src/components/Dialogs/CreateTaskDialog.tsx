@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, Suspense, useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
@@ -21,6 +21,7 @@ import { useQueryClient } from "react-query";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
 import CreateTaskMobileDialog from "@/components/Dialogs/CreateTaskMobileDialog";
 import { getErrorMessage } from "@/utils/helper-client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function CreateTaskDialog({ columnId }: { columnId: string }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -86,10 +87,25 @@ function CreateTaskDialog({ columnId }: { columnId: string }) {
           <div className="w-full flex flex-row">
             <div className="w-1/2 p-4 space-y-2">
               <Title />
-              <Assignees />
+              <Suspense
+                key={`assignees-${workspaceId}`}
+                fallback={<p>loading ...</p>}
+              >
+                <Assignees workspaceId={workspaceId as string} />
+              </Suspense>
               <Priority />
-              <Column />
-              <Labels />
+              <Suspense
+                key={`column-${workspaceId}`}
+                fallback={<Skeleton className="h-10 w-40" />}
+              >
+                <Column workspaceId={workspaceId as string} />
+              </Suspense>
+              <Suspense
+                key={`labels-${workspaceId}`}
+                fallback={<Skeleton className="h-10 w-40" />}
+              >
+                <Labels workspaceId={workspaceId as string} />
+              </Suspense>
               <Deadlines />
               <Description />
               <Button
