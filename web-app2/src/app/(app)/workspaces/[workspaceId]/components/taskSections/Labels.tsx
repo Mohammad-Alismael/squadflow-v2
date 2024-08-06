@@ -2,8 +2,10 @@ import React from "react";
 import AddItem from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesComponents/AddItem";
 import LabelsPopover from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/LabelsPopover";
 import ShowLabels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/ShowLabels";
+import { fetchWorkspaceLabels } from "@/utils/actions/workspace-actions";
 
-function Labels() {
+async function Labels({ workspaceId }: { workspaceId: string }) {
+  const data = await fetchWorkspaceLabels(workspaceId);
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center gap-10">
@@ -12,7 +14,7 @@ function Labels() {
           <ShowLabels />
         </div>
       </div>
-      <LabelsPopover>
+      <LabelsPopover data={JSON.parse(JSON.stringify(data))}>
         <AddItem title="add" />
       </LabelsPopover>
     </div>

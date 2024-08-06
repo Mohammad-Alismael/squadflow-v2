@@ -25,6 +25,7 @@ import { restructureCommentsv2 } from "@/app/api/tasks/[taskId]/helper";
 import { ITaskState } from "@/utils/store/taskPropertiesStore";
 import { ICommentCreate, ITask, TaskResponse } from "@/utils/@types/task";
 import { safeStringify } from "@/utils/helper-client";
+import { NextResponse } from "next/server";
 
 export const fetchWorkspaces = async () => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
@@ -177,6 +178,26 @@ export const handleGetTaskById = async (taskId: string | undefined) => {
     if (!taskId || taskId === "") return null;
     const task = await getTaskIdPopulated(new ObjectId(taskId));
     return task as TaskResponse;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const fetchWorkspaceColumns = async (workspaceId: string) => {
+  try {
+    const workspace = await getWorkspaceById(new ObjectId(workspaceId));
+    return workspace.columns;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const fetchWorkspaceLabels = async (workspaceId: string) => {
+  try {
+    const workspace = await getWorkspaceById(new ObjectId(workspaceId));
+    return workspace.labels;
   } catch (error) {
     console.log(error);
     throw error;

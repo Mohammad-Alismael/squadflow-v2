@@ -9,25 +9,24 @@ import {
 import { useGetWorkspaceParticipantsById } from "@/utils/hooks/workspace/useGetWorkspaceParticipantsById";
 import AddAssignee from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesComponents/AddAssignee";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
+import { WorkspaceParticipants } from "@/utils/@types/workspace";
 
 AssigneePopover.propTypes = {};
 
-function AssigneePopover({ children }: { children: ReactNode }) {
-  const workspaceId = useTaskPropertiesStore((state) => state.projectId);
-  const { data, isLoading } = useGetWorkspaceParticipantsById(
-    workspaceId,
-    true
-  );
-
+function AssigneePopover({
+  children,
+  data,
+}: {
+  children: ReactNode;
+  data: WorkspaceParticipants[];
+}) {
   return (
     <Popover>
       <PopoverTrigger>{children}</PopoverTrigger>
       <PopoverContent className="z-[999]">
-        {isLoading && <p>loading ...</p>}
         <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
           <h4 className="capitalize font-bold">workspace participants</h4>
-          {!isLoading &&
-            data &&
+          {data &&
             data.map((item, index) => {
               return (
                 <React.Fragment key={item._id}>

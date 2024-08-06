@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
 import Assignees from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Assignees";
@@ -18,6 +18,7 @@ import { TaskResponse } from "@/utils/@types/task";
 import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/PlainCommentsContainer";
 import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";
 import { USER_ROLES } from "@/utils/helper-client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Body({
   workspaceId,
@@ -29,17 +30,31 @@ function Body({
   return (
     <React.Fragment>
       <Title />
-      {/*<Assignees />*/}
-      {/*<Priority />*/}
-      {/*<Column />*/}
-      {/*<Labels />*/}
+      <Suspense key={`assignees-${workspaceId}`} fallback={<p>loading ...</p>}>
+        <Assignees workspaceId={workspaceId} />
+      </Suspense>
+      <Priority />
+      <Suspense
+        key={`column-${workspaceId}`}
+        fallback={<Skeleton className="h-10 w-40" />}
+      >
+        <Column workspaceId={workspaceId} />
+      </Suspense>
+      <Suspense
+        key={`labels-${workspaceId}`}
+        fallback={<Skeleton className="h-10 w-40" />}
+      >
+        <Labels workspaceId={workspaceId} />
+      </Suspense>
       <Deadlines />
       <Description />
       <CreateTaskBtn workspaceId={workspaceId} revertBackTo={revertBackTo} />
     </React.Fragment>
   );
 }
-
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 async function TaskDetailsDialogServer({
   workspaceId,
   taskId,
@@ -49,6 +64,8 @@ async function TaskDetailsDialogServer({
   taskId: string | undefined;
   revertBackTo: string;
 }) {
+  // await wait(3000);
+  console.log({ workspaceId, taskId });
   const roleP = getWorkspacePrivilege(workspaceId);
   const data_ = handleGetTaskById(taskId);
   const [data, role] = (await Promise.all([data_, roleP])) as [

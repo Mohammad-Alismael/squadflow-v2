@@ -3,10 +3,18 @@ import PropTypes from "prop-types";
 import Navbar from "@/components/Navbar";
 import FullPageCalendar from "@/app/(app)/calendars/components/FullPageCalendar";
 import WorkspaceTabs from "@/app/(app)/calendars/components/WorkspaceTabs";
+import TaskDetailsDialogServer from "@/components/Dialogs/TaskDetailsDialogServer";
+import WorkspaceTabsSkeleton from "@/app/(app)/calendars/components/WorkspaceTabsSkeleton";
 
 Page.propTypes = {};
 
-function Page() {
+function Page({
+  params,
+  searchParams,
+}: {
+  params: { workspaceId: string };
+  searchParams?: { [key: string]: string };
+}) {
   return (
     <div>
       <Navbar>
@@ -16,11 +24,18 @@ function Page() {
         </div>
       </Navbar>
       <div className="w-full h-full bg-white flex flex-col flex-grow p-4 rounded space-y-2">
-        <Suspense fallback={<p>loading ...</p>}>
+        <Suspense fallback={<WorkspaceTabsSkeleton />}>
           <WorkspaceTabs />
         </Suspense>
         <FullPageCalendar />
       </div>
+      {searchParams && searchParams["taskId"] && (
+        <TaskDetailsDialogServer
+          taskId={searchParams["taskId"]}
+          workspaceId={searchParams["workspace"]}
+          revertBackTo={`/calendars?workspace=${searchParams["workspace"]}`}
+        />
+      )}
     </div>
   );
 }

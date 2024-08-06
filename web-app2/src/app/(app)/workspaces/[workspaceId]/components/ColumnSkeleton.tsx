@@ -10,7 +10,6 @@ function ColumnSkeleton() {
       <Skeleton className="h-24 w-full" />
       <Skeleton className="h-24 w-full" />
       <Skeleton className="h-24 w-full" />
-      <Skeleton className="h-24 w-full" />
     </div>
   );
 }

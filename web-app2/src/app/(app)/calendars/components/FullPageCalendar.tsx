@@ -28,7 +28,6 @@ function FullPageCalendar() {
   const router = useRouter();
 
   const workspaceId = searchParams.get("workspace");
-  const taskId = searchParams.get("taskId");
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<TEvent[]>([]);
   const eventPropGetter = (event: any) => {
@@ -101,12 +100,6 @@ function FullPageCalendar() {
           defaultView={Views.MONTH}
           views={[Views.MONTH]}
           style={{ height: "86vh" }}
-        />
-      )}
-      {workspaceId && taskId && (
-        <TaskDetailsDialog
-          workspaceId={workspaceId}
-          revertBackTo={`/calendars?workspace=${workspaceId}`}
         />
       )}
     </div>

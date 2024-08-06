@@ -1,6 +1,5 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { WorkspaceParticipants } from "@/utils/@types/workspace";
-// import { fetchWorkspaceParticipants } from "@/utils/actions/workspace-actions";
 import { fetchWorkspaceParticipants } from "@/lib/api/workspace";
 interface PropTypes {
   id: string;

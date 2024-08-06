@@ -34,7 +34,6 @@ function CreateTaskBtn({
   const reset = useTaskPropertiesStore((state) => state.resetState);
   const { data: role, isLoading: isLoadingPrivilege } =
     useGetWorkspacePrivilege(workspaceId);
-  const resetState = useTaskPropertiesStore((state) => state.resetState);
 
   const onSuccess = async () => {
     toast({
@@ -43,14 +42,10 @@ function CreateTaskBtn({
     await queryClient.invalidateQueries([`tasks-${workspaceId}`]);
 
     revalidateURL(workspaceId as string);
-    // const params = new URLSearchParams(searchParams);
-    //
-    // // Set the new value for "messageKeyword"
-    // params.delete("taskId");
-    // router.replace(`${revertBackTo}`);
-    redirectServer(workspaceId);
+    console.log(window.location.host + revertBackTo);
+    // router.replace(window.location.host + revertBackTo);
+    router.replace(window.location.href.split("?")[0]);
     reset();
-    // window.history.replaceState(null, "", revertBackTo);
   };
 
   const {

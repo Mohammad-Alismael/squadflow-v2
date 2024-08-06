@@ -10,9 +10,10 @@ function ShowLabels() {
   const label = useTaskPropertiesStore((state) => state.labels, shallow);
   return (
     <>
-      {label.map((item) => {
-        return <Label key={item._id.toString()} data={item} />;
-      })}
+      {!!label.length &&
+        label.map((item) => {
+          return <Label key={item._id.toString()} data={item} />;
+        })}
     </>
   );
 }
