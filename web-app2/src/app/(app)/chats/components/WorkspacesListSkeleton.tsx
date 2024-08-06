@@ -10,11 +10,10 @@ function WorkspacesListSkeleton() {
       </div>
       <div className="flex-1 flex flex-col space-y-2 p-4 bg-gray-300 overflow-y-auto">
         {/* Skeletons for Workspace List */}
-        <Skeleton className="w-full h-10" />
-        <Skeleton className="w-full h-10" />
-        <Skeleton className="w-full h-10" />
-        <Skeleton className="w-full h-10" />
-        <Skeleton className="w-full h-10" />
+        <Skeleton className="w-full h-32" />
+        <Skeleton className="w-full h-32" />
+        <Skeleton className="w-full h-32" />
+        <Skeleton className="w-full h-32" />
       </div>
     </>
   );

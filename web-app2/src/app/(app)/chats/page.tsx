@@ -8,6 +8,9 @@ import MessagesContainer from "@/app/(app)/chats/components/MessagesContainer";
 import WorkspacesList from "@/app/(app)/chats/components/WorkspacesList";
 import WorkspaceDetailsBar from "@/app/(app)/chats/components/workspaceDetailsBar";
 import WorkspacesListSkeleton from "@/app/(app)/chats/components/WorkspacesListSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
+import SendBarSkeleton from "@/app/(app)/chats/components/SendBarSkeleton";
+import MessageSkeleton from "./components/MessageSkeleton";
 
 async function Page({
   searchParams,
@@ -17,6 +20,7 @@ async function Page({
   const cookie = cookies().get("jwt");
   if (!cookie) redirect("/auth");
   const payload = await verifyJWTToken(cookie?.value);
+
   return (
     <div className="h-full flex flex-col">
       <Navbar>
