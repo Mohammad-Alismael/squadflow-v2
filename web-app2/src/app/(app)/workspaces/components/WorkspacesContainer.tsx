@@ -51,14 +51,24 @@ async function WorkspacesContainer({
       {viewType && viewType === "list" && (
         <div className="py-4 w-full space-y-2">
           {filterData(sortType as string, data).map((val) => {
-            return <WorkspaceList data={val} key={val._id} />;
+            return (
+              <WorkspaceList
+                data={JSON.parse(JSON.stringify(val))}
+                key={val._id}
+              />
+            );
           })}
         </div>
       )}
       {(!viewType || viewType === "cards") && (
         <div className="py-4 w-full flex flex-wrap lg:grid lg:grid-cols-4 lg:grid-rows-2 gap-4 lg:overflow-y-auto">
           {filterData(sortType as string, data).map((val) => {
-            return <WorkspaceCard data={val} key={val._id} />;
+            return (
+              <WorkspaceCard
+                data={JSON.parse(JSON.stringify(val))}
+                key={val._id}
+              />
+            );
           })}
         </div>
       )}

@@ -21,12 +21,6 @@ function Loading() {
           </div>
         </div>
       </div>
-      <div className="w-full p-4 bg-white shadow-md">
-        <div className="flex flex-col">
-          <Skeleton className="w-1/2 h-8 mb-2" />
-          <Skeleton className="w-1/3 h-6 opacity-50" />
-        </div>
-      </div>
       <div className="space-y-4 md:flex-1 md:space-y-0">
         <div className="w-full h-96 md:w-2/3 md:h-full float-left md:pr-4">
           <CurrentTaskListSkeleton />

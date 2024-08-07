@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import CurrentTaskListSkeleton from "@/app/(app)/dashboard/components/skeletons/CurrentTaskListSkeleton";
 import TodayTaskDeadlinesSkeleton from "@/app/(app)/dashboard/components/skeletons/TodayTaskDeadlinesSkeleton";
 import AssignedTasksSkeleton from "@/app/(app)/dashboard/components/skeletons/AssignedTasksSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function Dashboard({
   searchParams,
@@ -18,6 +19,7 @@ export default async function Dashboard({
   const cookie = cookies().get("jwt");
   if (!cookie) redirect("/auth");
   const payload = await verifyJWTToken(cookie?.value);
+
   return (
     <div className="h-full flex flex-col">
       <Navbar>

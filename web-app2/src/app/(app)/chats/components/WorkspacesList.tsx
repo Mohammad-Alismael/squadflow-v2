@@ -9,7 +9,7 @@ async function WorkspacesList({
   selectedWorkspaceId: string;
 }) {
   const data = await fetchWorkspaces();
-
+  console.log("Workspaces", { data });
   return (
     <>
       <div className="bg-white flex flex-row items-center justify-between p-4 border-r-2 border-gray-200 rounded-tl">

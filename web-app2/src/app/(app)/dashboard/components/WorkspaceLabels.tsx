@@ -9,8 +9,8 @@ async function WorkspaceLabels() {
     <div className="w-full flex flex-row gap-2 overflow-x-auto">
       {data.map((item) => (
         <Label
-          key={item._id}
-          id={item._id as string}
+          key={item._id?.toString()}
+          id={item._id?.toString() as string}
           text={item.title as string}
         />
       ))}

@@ -29,7 +29,6 @@ export const getAllTasksCreatedParticipatedAction = async () => {
     new ObjectId(userId),
     new ObjectId(communityId)
   );
-  console.log("getAllTasksCreatedParticipatedAction", res);
   return res;
 };
 export const getAllTasksDeadLineByTodayAction = async () => {
@@ -39,7 +38,6 @@ export const getAllTasksDeadLineByTodayAction = async () => {
     new ObjectId(userId),
     new ObjectId(communityId)
   );
-  console.log("getAllTasksDeadLineByTodayAction", res);
   return res;
 };
 

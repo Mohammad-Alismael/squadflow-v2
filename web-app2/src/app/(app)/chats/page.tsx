@@ -4,13 +4,17 @@ import SendBar from "@/app/(app)/chats/components/SendBar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
-import MessagesContainer from "@/app/(app)/chats/components/MessagesContainer";
+const MessagesContainer = dynamic(
+  () => import("@/app/(app)/chats/components/MessagesContainer"),
+  {
+    ssr: false,
+  }
+);
+// import MessagesContainer from "@/app/(app)/chats/components/MessagesContainer";
 import WorkspacesList from "@/app/(app)/chats/components/WorkspacesList";
 import WorkspaceDetailsBar from "@/app/(app)/chats/components/workspaceDetailsBar";
 import WorkspacesListSkeleton from "@/app/(app)/chats/components/WorkspacesListSkeleton";
-import { Skeleton } from "@/components/ui/skeleton";
-import SendBarSkeleton from "@/app/(app)/chats/components/SendBarSkeleton";
-import MessageSkeleton from "./components/MessageSkeleton";
+import dynamic from "next/dynamic";
 
 async function Page({
   searchParams,
