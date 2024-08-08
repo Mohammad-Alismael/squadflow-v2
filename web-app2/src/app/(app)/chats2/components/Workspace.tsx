@@ -18,7 +18,7 @@ function Workspace({
 }) {
   return (
     <Link
-      href={`/chats?workspaceId=${workspace?._id}`}
+      href={`/chats2?workspaceId=${workspace?._id}`}
       prefetch={false}
       scroll={false}
     >

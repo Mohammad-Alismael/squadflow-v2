@@ -87,17 +87,17 @@ function MessagesContainer({
         className="flex-1 w-full overflow-y-auto flex flex-col items-start gap-2 p-4 bg-gray-200"
       >
         {!data.length && <p>no messages</p>}
-        <p>{JSON.stringify(data)}</p>
-        {/*{!!data.length &&*/}
-        {/*  data*/}
-        {/*    .filter((item) => item.text.includes(keyword))*/}
-        {/*    .map((item) => (*/}
-        {/*      <Message*/}
-        {/*        key={item.messageId}*/}
-        {/*        data={item}*/}
-        {/*        currentUserId={userId as string}*/}
-        {/*      />*/}
-        {/*    ))}*/}
+        {/*<p>{JSON.stringify(data)}</p>*/}
+        {!!data.length &&
+          data
+            .filter((item) => item.text.includes(keyword))
+            .map((item) => (
+              <Message
+                key={item.messageId}
+                data={item}
+                currentUserId={userId as string}
+              />
+            ))}
       </div>
     );
 }
