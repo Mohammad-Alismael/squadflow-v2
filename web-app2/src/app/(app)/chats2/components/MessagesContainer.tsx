@@ -32,6 +32,7 @@ function MessagesContainer({ token }: { token: string }) {
       process.env.NEXT_PUBLIC_REAL_TIME_URL +
       `?workspaceId=${workspaceId}&token=${token}`;
     const newSocket = io(URL);
+    // @ts-ignore
     socketRef.current = newSocket;
 
     function onConnect() {

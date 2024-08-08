@@ -6,6 +6,7 @@ import { writeMessage } from "@/lib/firebase/firebase-real-time";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Socket } from "node:net";
 import { io } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 
 SendBar.propTypes = {};
 
@@ -19,12 +20,13 @@ function SendBar({ token }: { token: string }) {
       process.env.NEXT_PUBLIC_REAL_TIME_URL +
       `?workspaceId=${workspaceId}&token=${token}`;
     const newSocket = io(URL);
+    // @ts-ignore
     socketRef.current = newSocket;
   }, [workspaceId, token]);
 
   const [text, setText] = useState("");
   const handleSubmit = async () => {
-    socketRef.current.emit("sendMessage", text);
+    socketRef.current?.emit("sendMessage", text);
     setText("");
   };
   return (
