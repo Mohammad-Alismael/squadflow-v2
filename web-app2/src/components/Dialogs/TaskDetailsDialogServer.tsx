@@ -64,8 +64,6 @@ async function TaskDetailsDialogServer({
   taskId: string | undefined;
   revertBackTo: string;
 }) {
-  // await wait(3000);
-  console.log({ workspaceId, taskId });
   const roleP = getWorkspacePrivilege(workspaceId);
   const data_ = handleGetTaskById(taskId);
   const [data, role] = (await Promise.all([data_, roleP])) as [

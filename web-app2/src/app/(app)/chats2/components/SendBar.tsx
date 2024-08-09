@@ -2,11 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { writeMessage } from "@/lib/firebase/firebase-real-time";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Socket } from "node:net";
 import { io } from "socket.io-client";
-import { DefaultEventsMap } from "@socket.io/component-emitter";
 
 SendBar.propTypes = {};
 

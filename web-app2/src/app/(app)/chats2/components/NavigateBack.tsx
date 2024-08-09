@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
-import PropTypes from "prop-types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CircleChevronLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 function NavigateBack() {
   const router = useRouter();
@@ -13,7 +11,7 @@ function NavigateBack() {
     // Create a new URLSearchParams object from the current search params
     const params = new URLSearchParams(searchParams);
     params.delete("workspaceId");
-    router.replace(`/chats`);
+    router.replace(`/chats2`);
   };
   return (
     <CircleChevronLeft

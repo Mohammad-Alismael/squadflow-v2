@@ -9,11 +9,8 @@ import {
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { fetchTasksForCalendar } from "@/utils/actions/workspace-actions";
-import { parseDate } from "@/utils/helper-date";
-import TaskDetailsDialog from "@/components/Dialogs/TaskDetailsDialog";
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
-import { TaskResponse } from "@/utils/@types/task";
+import { parseDate } from "@/utils/helper-date";
 
 const localizer = dayjsLocalizer(dayjs);
 type TEvent = {
@@ -22,13 +19,16 @@ type TEvent = {
   start: string | Date;
   end: string | Date;
 };
-function FullPageCalendar() {
+type E = {
+  _id: string;
+  workspace: string;
+  title: string;
+  dueDate: string;
+};
+function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
-  const workspaceId = searchParams.get("workspace");
-  const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<TEvent[]>([]);
   const eventPropGetter = (event: any) => {
     const backgroundColor = event.color || "#2e7d32"; // Default color if none is specified
@@ -53,45 +53,27 @@ function FullPageCalendar() {
     router.push(pathname + "?" + createQueryString("taskId", event.taskId));
   };
   useEffect(() => {
-    setLoading(true);
-    fetchTasksForCalendar(workspaceId as string)
-      .then((r) => {
-        const rest = r.map((item) => ({
-          title: item.title,
-          taskId: item._id,
-          workspaceId: item.workspace,
-          start: item.dueDate ? parseDate(item.dueDate) : "",
-          end: item.dueDate ? parseDate(item.dueDate) : "",
-        }));
-        setEvents(rest);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [workspaceId]);
+    const d = eventsProps.map((item) => ({
+      title: item.title,
+      taskId: item._id,
+      workspaceId: item.workspace,
+      start: item.dueDate ? parseDate(item.dueDate) : "",
+      end: item.dueDate ? parseDate(item.dueDate) : "",
+    }));
+    setEvents(d);
+  }, [JSON.stringify(eventsProps)]);
+
+  // return <div>{JSON.stringify(events)}</div>;
   return (
     <div>
-      {!loading && events.length === 0 && (
-        <NoWorkspacesFound className="h-full" />
-      )}
-      {loading && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "500px",
-          }}
-        >
-          {/*<CircularProgress />*/}
-          <p>loading ...</p>
-        </div>
-      )}
-      {!loading && events.length !== 0 && (
+      {events.length === 0 && <NoWorkspacesFound className="h-full" />}
+      {events.length !== 0 && (
         <Calendar
           localizer={localizer}
           events={events}
-          startAccessor="start"
+          startAccessor={(event) => {
+            return new Date(event.start);
+          }}
           endAccessor="end"
           date={currentDate}
           onNavigate={handleNavigate}

@@ -9,8 +9,11 @@ async function WorkspaceTabs() {
   const data: IWorkspace[] = await fetchWorkspaces();
   return (
     <React.Fragment>
-      <Tabs defaultValue="account" className="w-[400px] hidden md:block">
-        <TabsList defaultValue={data ? data[0].title : ""}>
+      <Tabs
+        defaultValue={data ? data[0].title : ""}
+        className="w-full hidden md:block"
+      >
+        <TabsList>
           {data.map((item) => (
             <Link
               key={item._id}

@@ -1,6 +1,6 @@
 "use client";
 import { useQuery, UseQueryResult } from "react-query";
-import { getAuthUser } from "@/lib/api/user";
+import { handelGetUserAuth } from "@/utils/actions/user-actions";
 export type result = {
   username: string;
   email: string;
@@ -11,6 +11,6 @@ export const useGetUserAuth = () => {
     queryKey: ["user-auth"],
     enabled: true,
     refetchOnWindowFocus: false,
-    queryFn: () => getAuthUser(),
+    queryFn: () => handelGetUserAuth(),
   }) as UseQueryResult<result, Error>;
 };

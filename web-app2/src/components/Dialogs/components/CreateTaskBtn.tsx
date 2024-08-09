@@ -43,8 +43,8 @@ function CreateTaskBtn({
 
     revalidateURL(workspaceId as string);
     console.log(window.location.host + revertBackTo);
-    // router.replace(window.location.host + revertBackTo);
-    router.replace(window.location.href.split("?")[0]);
+    router.replace(revertBackTo);
+    // router.replace(window.location.href.split("?")[0]);
     reset();
   };
 

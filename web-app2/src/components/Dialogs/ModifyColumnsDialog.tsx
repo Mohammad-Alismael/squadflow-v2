@@ -1,34 +1,32 @@
-"use client";
-import React, { ReactNode, Suspense } from "react";
+import React, { ReactNode } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import DndColumnContainer from "@/components/Dialogs/components/DNDColumnContainer";
 import CreateNewColumnForm from "@/components/Dialogs/components/CreateNewColumnForm";
-import { useGetWorkspaceById } from "@/utils/hooks/workspace/useGetWorkspaceById";
-function ModifyColumnsDialog({
+import { fetchWorkspace } from "@/utils/actions/workspace-actions";
+import { IWorkspace } from "@/utils/@types/workspace";
+async function ModifyColumnsDialog({
   children,
   workspaceId,
 }: {
   children: ReactNode;
   workspaceId: string;
 }) {
-  const { data: workspace, isLoading } = useGetWorkspaceById(workspaceId);
+  const workspaceRaw = (await fetchWorkspace(
+    workspaceId
+  )) as unknown as IWorkspace;
+  console.log({ workspaceRaw });
+  const workspace = JSON.parse(JSON.stringify(workspaceRaw));
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      {isLoading && (
-        <DialogContent className="">
-          <p>loading ...</p>
-        </DialogContent>
-      )}
-      {!isLoading && workspace && (
+      {workspace && (
         <DialogContent className="">
           <DialogHeader>
             <DialogTitle className="capitalize">modify columns</DialogTitle>

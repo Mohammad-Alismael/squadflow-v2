@@ -1,19 +1,13 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import WorkspaceMenu from "@/app/(app)/workspaces/components/WorkspaceMenu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { clsx } from "clsx";
 import ModifyColumnsDialog from "@/components/Dialogs/ModifyColumnsDialog";
 import TasksSearch from "@/app/(app)/workspaces/[workspaceId]/components/TasksSearch";
 import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
 
 import { USER_ROLES } from "@/utils/helper-client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 WorkspaceHeader.propTypes = {};
 
@@ -34,20 +28,14 @@ async function WorkspaceHeader({
     >
       <TasksSearch workspaceId={workspaceId} />
       <div className="flex flex-row items-center justify-between gap-2">
-        <Select>
-          <SelectTrigger className="w-[180px] bg-white">
-            <SelectValue placeholder="group by" />
-          </SelectTrigger>
-          <SelectContent className="bg-white">
-            <SelectItem value="alphabticaly">A-Z</SelectItem>
-            <SelectItem value="accedning">latest to oldest</SelectItem>
-            <SelectItem value="decending">oldest to latest</SelectItem>
-          </SelectContent>
-        </Select>
         {role !== USER_ROLES.viewer && (
-          <ModifyColumnsDialog workspaceId={workspaceId}>
-            <Button className="capitalize bg-green-800">modify columns</Button>
-          </ModifyColumnsDialog>
+          <Suspense fallback={<Skeleton className="w-[180px] h-8" />}>
+            <ModifyColumnsDialog workspaceId={workspaceId}>
+              <Button className="capitalize bg-green-800">
+                modify columns
+              </Button>
+            </ModifyColumnsDialog>
+          </Suspense>
         )}
         {role === USER_ROLES.admin && (
           <WorkspaceMenu workspaceId={workspaceId} />

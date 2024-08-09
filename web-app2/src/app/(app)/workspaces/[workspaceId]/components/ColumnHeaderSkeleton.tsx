@@ -9,9 +9,6 @@ function ColumnHeaderSkeleton() {
         <Skeleton className="w-full h-full" />
       </div>
       <div className="flex flex-row items-center justify-between gap-2">
-        <div className="w-[180px] h-8 bg-white">
-          <Skeleton className="w-full h-full" />
-        </div>
         <div className="w-[180px] h-8">
           <Skeleton className="w-full h-full" />
         </div>

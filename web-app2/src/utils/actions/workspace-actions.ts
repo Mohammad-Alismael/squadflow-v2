@@ -11,6 +11,7 @@ import {
   getWorkspaceById,
   getWorkspaceParticipants,
   getWorkspacesByCommunityAndUser,
+  getWorkspacesByCommunityIdPopulatedWithUserId,
 } from "@/lib/workspace";
 import { getUserAuthFromJWT } from "@/utils/helper";
 import {
@@ -28,9 +29,14 @@ import { safeStringify } from "@/utils/helper-client";
 import { NextResponse } from "next/server";
 
 export const fetchWorkspaces = async () => {
-  const { _id: userId, communityId } = await getUserAuthFromJWT();
+  const payload = await getUserAuthFromJWT();
+  const userId = payload?._id as string;
+  const communityId = payload?.communityId as string;
   if (communityId === "") return [];
-  const workspaces = await getWorkspacesByCommunityAndUser(communityId, userId);
+  const workspaces = await getWorkspacesByCommunityIdPopulatedWithUserId(
+    communityId,
+    userId
+  );
   return workspaces as IWorkspace[];
 };
 

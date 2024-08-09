@@ -13,7 +13,7 @@ function SearchMessageInput() {
 
     // Set the new value for "messageKeyword"
     params.set("messageKeyword", e.target.value);
-    router.replace(`/chats?${params.toString()}`);
+    router.replace(`/chats2?${params.toString()}`);
   };
   return (
     <Input
