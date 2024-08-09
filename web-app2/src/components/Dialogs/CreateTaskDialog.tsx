@@ -1,9 +1,7 @@
-"use client";
-import React, { ReactNode, Suspense, useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import React, { Suspense } from "react";
+import { DialogContent } from "@/components/ui/dialog";
 
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
-import { Button } from "@/components/ui/button";
 import Priority from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Priority";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Column";
 import Labels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Labels";
@@ -11,140 +9,118 @@ import Assignees from "@/app/(app)/workspaces/[workspaceId]/components/taskSecti
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Description";
 import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Deadlines";
-import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
-import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/CommentContainer";
-import { useParams } from "next/navigation";
-import { useCreateTask } from "@/utils/hooks/task/useCreateTask";
-import { useToast } from "@/components/ui/use-toast";
-import { revalidateURL } from "@/components/Dialogs/actions";
-import { useQueryClient } from "react-query";
-import { useMediaQuery } from "@/utils/hooks/use-media-query";
-import CreateTaskMobileDialog from "@/components/Dialogs/CreateTaskMobileDialog";
-import { getErrorMessage } from "@/utils/helper-client";
 import { Skeleton } from "@/components/ui/skeleton";
+import CreateTaskBtn from "@/components/Dialogs/components/CreateTaskBtn";
+import CreateTaskDialogWrapper from "@/components/Dialogs/CreateTaskDialogWrapper";
+import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/CommentContainer";
+import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/PlainCommentsContainer";
+import { USER_ROLES } from "@/utils/helper-client";
+import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";
 
-function CreateTaskDialog({ columnId }: { columnId: string }) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const { toast } = useToast();
-  const { workspaceId } = useParams();
-  const {
-    mutate: createMutation,
-    isLoading,
-    error,
-    isError,
-    isSuccess,
-  } = useCreateTask(workspaceId as string);
-  const [open, setOpen] = useState(false);
-  const queryClient = useQueryClient();
-  const reset = useTaskPropertiesStore((state) => state.resetState);
-  const setProjectId = useTaskPropertiesStore((state) => state.setProjectId);
-  const handleCreateTask = async () => {
-    const {
-      taskId,
-      title,
-      description,
-      taskDate,
-      endTime,
-      priority,
-      participants,
-      labels,
-      subTasks,
-      attachments,
-      comments,
-    } = useTaskPropertiesStore.getState();
-    createMutation({
-      workspace: workspaceId,
-      columnId,
-      title,
-      description,
-      dueDate: taskDate,
-      dueTime: endTime,
-      priority,
-      participants,
-      labels,
-      subTasks,
-      attachments,
-      comments,
-    });
-    if (!isError && isSuccess) {
-      setOpen(false);
-      reset();
-    }
-
-    if (isError) toast({ title: getErrorMessage(error) });
-  };
-  useEffect(() => {
-    workspaceId && setProjectId(workspaceId as string);
-  }, [workspaceId]);
-
-  if (isDesktop)
-    return (
-      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-        <DialogTrigger asChild>
-          <Button className="w-full bg-green-700">+ task card</Button>
-        </DialogTrigger>
-        <DialogContent className="p-0 w-4/5 h-[80%]">
-          <div className="w-full flex flex-row">
-            <div className="w-1/2 p-4 space-y-2">
-              <Title />
-              <Suspense
-                key={`assignees-${workspaceId}`}
-                fallback={<p>loading ...</p>}
-              >
-                <Assignees workspaceId={workspaceId as string} />
-              </Suspense>
-              <Priority />
-              <Suspense
-                key={`column-${workspaceId}`}
-                fallback={<Skeleton className="h-10 w-40" />}
-              >
-                <Column workspaceId={workspaceId as string} />
-              </Suspense>
-              <Suspense
-                key={`labels-${workspaceId}`}
-                fallback={<Skeleton className="h-10 w-40" />}
-              >
-                <Labels workspaceId={workspaceId as string} />
-              </Suspense>
-              <Deadlines />
-              <Description />
-              <Button
-                className="w-full bg-green-700"
-                onClick={handleCreateTask}
-                disabled={isLoading}
-              >
-                {!isLoading ? "create task" : "loading ..."}
-              </Button>
-            </div>
-            <div className="w-1/2 p-4 bg-[#FBFAF8]">
-              <Tabs defaultValue="account" className="w-full h-[95%]">
-                <TabsList className="w-full">
-                  <TabsTrigger
-                    value="account"
-                    className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
-                  >
-                    comments
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="password"
-                    className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
-                  >
-                    activity
-                  </TabsTrigger>
-                </TabsList>
-                <TabsContent value="account" className="h-full">
-                  <CommentContainer>
-                    <CommentContainer.AddCommentLocal />
-                  </CommentContainer>
-                </TabsContent>
-                <TabsContent value="password">coming soon</TabsContent>
-              </Tabs>
-            </div>
+function CreateTaskDialog({
+  columnId,
+  workspaceId,
+}: {
+  columnId: string;
+  workspaceId: string;
+}) {
+  return (
+    <CreateTaskDialogWrapper workspaceId={workspaceId} columnId={columnId}>
+      <DialogContent className="p-0 w-4/5 h-[80%]">
+        <div className="w-full flex flex-row">
+          <div className="w-1/2 p-4 space-y-2">
+            <Title />
+            <Suspense
+              key={`assignees-${workspaceId}`}
+              fallback={<p>loading ...</p>}
+            >
+              <Assignees workspaceId={workspaceId as string} />
+            </Suspense>
+            <Priority />
+            <Suspense
+              key={`column-${workspaceId}`}
+              fallback={<Skeleton className="h-10 w-40" />}
+            >
+              <Column workspaceId={workspaceId as string} />
+            </Suspense>
+            <Suspense
+              key={`labels-${workspaceId}`}
+              fallback={<Skeleton className="h-10 w-40" />}
+            >
+              <Labels workspaceId={workspaceId as string} />
+            </Suspense>
+            <Deadlines />
+            <Description />
+            <CreateTaskBtn workspaceId={workspaceId} columnId={columnId} />
           </div>
-        </DialogContent>
-      </Dialog>
-    );
-  else return <CreateTaskMobileDialog columnId={columnId} />;
+          <div className="w-1/2 p-4 bg-[#FBFAF8]">
+            <Tabs defaultValue="account" className="w-full h-[95%]">
+              <TabsList className="w-full">
+                <TabsTrigger
+                  value="account"
+                  className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
+                >
+                  comments
+                </TabsTrigger>
+                <TabsTrigger
+                  value="password"
+                  className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
+                >
+                  activity
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="account" className="h-full">
+                <div className="relative flex flex-col items-center justify-between">
+                  <PlainCommentsContainer />
+                  <AddCommentBar />
+                </div>
+              </TabsContent>
+              <TabsContent value="password">coming soon</TabsContent>
+            </Tabs>
+          </div>
+        </div>
+      </DialogContent>
+      <DialogContent className="p-0 w-4/5">
+        <p>hi</p>
+        {/*<Tabs defaultValue="overview" className="w-full">*/}
+        {/*  <TabsList className="w-full">*/}
+        {/*    <TabsTrigger*/}
+        {/*        value="overview"*/}
+        {/*        className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"*/}
+        {/*    >*/}
+        {/*      overview*/}
+        {/*    </TabsTrigger>*/}
+        {/*    <TabsTrigger*/}
+        {/*        value="comments"*/}
+        {/*        className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"*/}
+        {/*    >*/}
+        {/*      comments*/}
+        {/*    </TabsTrigger>*/}
+        {/*    <TabsTrigger*/}
+        {/*        value="activity"*/}
+        {/*        className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"*/}
+        {/*    >*/}
+        {/*      activity*/}
+        {/*    </TabsTrigger>*/}
+        {/*  </TabsList>*/}
+        {/*  <TabsContent value="overview" className="p-4 h-full">*/}
+        {/*    <div className="space-y-2 w-full">*/}
+        {/*      <Body workspaceId={workspaceId} revertBackTo={revertBackTo} />*/}
+        {/*    </div>*/}
+        {/*  </TabsContent>*/}
+        {/*  <TabsContent value="comments" className="h-full">*/}
+        {/*    <div className="relative flex flex-col items-center justify-between">*/}
+        {/*      <PlainCommentsContainer />*/}
+        {/*      {role !== USER_ROLES.viewer && <AddCommentBar />}*/}
+        {/*    </div>*/}
+        {/*  </TabsContent>*/}
+        {/*  <TabsContent value="activity" className="h-full">*/}
+        {/*    coming soon*/}
+        {/*  </TabsContent>*/}
+        {/*</Tabs>*/}
+      </DialogContent>
+    </CreateTaskDialogWrapper>
+  );
 }
 
 export default CreateTaskDialog;

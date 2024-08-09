@@ -1,7 +1,12 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import Task from "@/models/task";
 import { ObjectId } from "mongodb";
-import { IDashboardTask, ITask, TaskResponse } from "@/utils/@types/task";
+import {
+  IDashboardTask,
+  ITask,
+  ITaskAction,
+  TaskResponse,
+} from "@/utils/@types/task";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 
@@ -21,7 +26,7 @@ const createTask = async ({
   description,
   attachments,
   created_by,
-}: ITask) => {
+}: ITask | ITaskAction) => {
   await init();
   try {
     // Create the task

@@ -14,13 +14,17 @@ function DndColumnContainer({ columns }: { columns: WorkspaceColumn[] }) {
     console.log({ source, destination, draggableId });
     const newColumns = Array.from(columns);
     const [movedColumn] = newColumns.splice(source.index, 1);
+    console.log({
+      source: source.index,
+      destination: destination.index,
+      draggableId,
+    });
     newColumns.splice(destination.index, 0, movedColumn);
     const a = newColumns.map((column, index) => ({
       ...column,
       order: index + 1,
     }));
-    console.log({ columns, a });
-    setOptimisticColumns(a);
+    // setOptimisticColumns(a);
   };
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>

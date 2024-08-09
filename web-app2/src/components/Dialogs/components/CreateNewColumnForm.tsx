@@ -45,6 +45,7 @@ function CreateNewColumnForm({
         order: columnsLength,
         color: "#000",
       });
+      form.reset();
       await queryClient.invalidateQueries([
         workspaceId,
         `columns-${workspaceId}`,

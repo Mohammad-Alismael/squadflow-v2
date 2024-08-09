@@ -21,7 +21,6 @@ async function ModifyColumnsDialog({
   const workspaceRaw = (await fetchWorkspace(
     workspaceId
   )) as unknown as IWorkspace;
-  console.log({ workspaceRaw });
   const workspace = JSON.parse(JSON.stringify(workspaceRaw));
   return (
     <Dialog>

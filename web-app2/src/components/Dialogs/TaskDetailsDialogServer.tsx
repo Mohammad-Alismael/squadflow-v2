@@ -8,7 +8,7 @@ import Labels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections
 import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Deadlines";
 import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Description";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CreateTaskBtn from "@/components/Dialogs/components/CreateTaskBtn";
+import UpdateTaskBtn from "@/components/Dialogs/components/UpdateTaskBtn";
 import {
   getWorkspacePrivilege,
   handleGetTaskById,
@@ -19,6 +19,7 @@ import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/compone
 import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";
 import { USER_ROLES } from "@/utils/helper-client";
 import { Skeleton } from "@/components/ui/skeleton";
+import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSkeleton";
 
 function Body({
   workspaceId,
@@ -48,7 +49,7 @@ function Body({
       </Suspense>
       <Deadlines />
       <Description />
-      <CreateTaskBtn workspaceId={workspaceId} revertBackTo={revertBackTo} />
+      <UpdateTaskBtn workspaceId={workspaceId} revertBackTo={revertBackTo} />
     </React.Fragment>
   );
 }
@@ -64,6 +65,7 @@ async function TaskDetailsDialogServer({
   taskId: string | undefined;
   revertBackTo: string;
 }) {
+  // await wait(3000);
   const roleP = getWorkspacePrivilege(workspaceId);
   const data_ = handleGetTaskById(taskId);
   const [data, role] = (await Promise.all([data_, roleP])) as [

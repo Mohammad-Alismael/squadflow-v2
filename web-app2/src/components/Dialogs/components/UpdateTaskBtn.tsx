@@ -8,11 +8,7 @@ import { toast, useToast } from "@/components/ui/use-toast";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { DialogClose } from "@/components/ui/dialog";
 import { shallow } from "zustand/shallow";
-import {
-  getErrorMessage,
-  getRoleValue,
-  USER_ROLES,
-} from "@/utils/helper-client";
+import { getRoleValue, USER_ROLES } from "@/utils/helper-client";
 import { useGetWorkspacePrivilege } from "@/utils/hooks/workspace/useGetWorkspacePrivilege";
 import { useGetTasksById } from "@/utils/hooks/task/useGetTasksById";
 import {
@@ -22,41 +18,59 @@ import {
 import { revalidateURL } from "@/components/Dialogs/actions";
 import { useQueryClient } from "react-query";
 import { redirectServer } from "@/app/(app)/workspaces/[workspaceId]/actions";
-import { useDialog } from "@/utils/store/DialogStore";
 
 function UpdateTaskBtn({
-  columnId,
   workspaceId,
+  revertBackTo,
 }: {
-  columnId: string;
   workspaceId: string;
+  revertBackTo: string;
 }) {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const taskId = searchParams.get("taskId") as string;
+
+  const reset = useTaskPropertiesStore((state) => state.resetState);
   const { data: role, isLoading: isLoadingPrivilege } =
     useGetWorkspacePrivilege(workspaceId);
 
+  const onSuccess = async () => {
+    toast({
+      title: `Successfully updated task`,
+    });
+    await queryClient.invalidateQueries([`tasks-${workspaceId}`]);
+
+    revalidateURL(workspaceId as string);
+    console.log(window.location.host + revertBackTo);
+    router.replace(revertBackTo);
+    // router.replace(window.location.href.split("?")[0]);
+    reset();
+  };
+
   const {
-    mutate: createMutation,
-    isLoading,
+    mutate: updateMutation,
+    isLoading: isLoadingUpdate,
     error,
     isError,
     isSuccess,
-  } = useCreateTask(workspaceId as string);
+  } = useUpdateTaskv2(onSuccess);
 
-  const handleCreateTask = async () => {
+  const handleUpdateClick = () => {
     const {
       taskId,
       title,
       description,
       taskDate,
       endTime,
+      columnId,
       priority,
       participants,
       labels,
-      subTasks,
-      attachments,
       comments,
     } = useTaskPropertiesStore.getState();
-    createMutation({
+    updateMutation({
+      taskId,
       workspace: workspaceId,
       columnId,
       title,
@@ -64,10 +78,8 @@ function UpdateTaskBtn({
       dueDate: taskDate,
       dueTime: endTime,
       priority,
-      participants,
+      participants: participants.map((item) => item._id),
       labels,
-      subTasks,
-      attachments,
       comments,
     });
   };
@@ -76,10 +88,10 @@ function UpdateTaskBtn({
     return (
       <Button
         className="w-full bg-green-700"
-        onClick={handleCreateTask}
-        disabled={isLoading}
+        onClick={handleUpdateClick}
+        disabled={isLoadingUpdate}
       >
-        {!isLoading ? "create task" : "loading ..."}
+        {!isLoadingUpdate ? "update task" : "loading ..."}
       </Button>
     );
 }

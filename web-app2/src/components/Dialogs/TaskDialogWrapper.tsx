@@ -4,7 +4,6 @@ import { TaskResponse } from "@/utils/@types/task";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { Dialog, DialogOverlay } from "@/components/ui/dialog";
-import { redirectServer } from "@/app/(app)/workspaces/[workspaceId]/actions";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
 
 function TaskDialogWrapper({

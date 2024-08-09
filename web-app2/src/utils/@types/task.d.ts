@@ -27,6 +27,25 @@ export interface ITask {
   created_by: ObjectId;
   updated_by: ObjectId;
 }
+export interface ITaskAction {
+  _id?: string;
+  workspace: Schema.Types.ObjectId | IWorkspace;
+  title: string;
+  columnId: string;
+  participants: Schema.Types.ObjectId[] | IUser[];
+  labels: string[];
+  comments: {
+    created_by: string;
+    text: string;
+  }[];
+  dueDate: string;
+  dueTime: string;
+  priority: string;
+  description: string;
+  attachments: string[];
+  created_by: ObjectId;
+  updated_by: ObjectId;
+}
 
 export interface TaskResponse {
   _id: string;

@@ -1,5 +1,6 @@
 "use server";
 import {
+  createTask,
   getTaskIdPopulated,
   getTasksByWorkspaceId,
   getTasksByWorkspaceIdAndColumnId,
@@ -22,9 +23,17 @@ import {
 import { PopulatedUser } from "@/utils/@types/user";
 import Workspace from "@/models/workspace";
 import Task from "@/models/task";
-import { restructureCommentsv2 } from "@/app/api/tasks/[taskId]/helper";
+import {
+  restructureComments,
+  restructureCommentsv2,
+} from "@/app/api/tasks/[taskId]/helper";
 import { ITaskState } from "@/utils/store/taskPropertiesStore";
-import { ICommentCreate, ITask, TaskResponse } from "@/utils/@types/task";
+import {
+  ICommentCreate,
+  ITask,
+  ITaskAction,
+  TaskResponse,
+} from "@/utils/@types/task";
 import { safeStringify } from "@/utils/helper-client";
 import { NextResponse } from "next/server";
 
@@ -208,4 +217,17 @@ export const fetchWorkspaceLabels = async (workspaceId: string) => {
     console.log(error);
     throw error;
   }
+};
+
+export const handleCreateTask = async (data: ITaskAction) => {
+  const { _id: userId, communityId } = await getUserAuthFromJWT();
+
+  data.comments = data.comments.map((comment) => ({
+    created_by: userId,
+    text: comment.text,
+  }));
+  const task = await createTask({
+    ...data,
+    created_by: new ObjectId(userId),
+  });
 };

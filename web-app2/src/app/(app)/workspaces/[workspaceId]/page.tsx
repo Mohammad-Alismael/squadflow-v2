@@ -8,6 +8,8 @@ import NavbarSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skel
 import TaskDetailsDialogServer from "@/components/Dialogs/TaskDetailsDialogServer";
 import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSkeleton";
 import ColumnHeaderSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeaderSkeleton";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import CreateTaskDialog from "@/components/Dialogs/CreateTaskDialog";
 
 async function Page({
   params,
@@ -30,11 +32,29 @@ async function Page({
         </Suspense>
       </div>
 
-      {searchParams && (
-        <TaskDetailsDialogServer
-          taskId={searchParams["taskId"]}
+      {searchParams && searchParams["taskId"] && (
+        <Suspense
+          key={searchParams["taskId"]}
+          fallback={
+            <Dialog defaultOpen={true}>
+              <DialogContent className="p-0 w-4/5 h-[80%]">
+                <TaskDetailsDialogSkeleton />
+              </DialogContent>
+            </Dialog>
+          }
+        >
+          <TaskDetailsDialogServer
+            taskId={searchParams["taskId"]}
+            workspaceId={params.workspaceId}
+            revertBackTo={`/workspaces/${params.workspaceId}`}
+          />
+        </Suspense>
+      )}
+      {searchParams && searchParams["columnId"] && (
+        <CreateTaskDialog
+          key={searchParams["columnId"]}
+          columnId={searchParams["columnId"]}
           workspaceId={params.workspaceId}
-          revertBackTo={`/workspaces/${params.workspaceId}`}
         />
       )}
     </div>

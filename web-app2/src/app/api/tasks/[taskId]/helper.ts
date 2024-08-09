@@ -1,4 +1,4 @@
-import { ICommentCreate } from "@/utils/@types/task";
+import { ICommentCreate, ITask } from "@/utils/@types/task";
 import { Comment } from "@/utils/@types/task";
 
 export const restructureComments = (

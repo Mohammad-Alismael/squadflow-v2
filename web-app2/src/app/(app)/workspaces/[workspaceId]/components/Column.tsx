@@ -10,15 +10,30 @@ import { clsx } from "clsx";
 import { useGetWorkspacePrivilege } from "@/utils/hooks/workspace/useGetWorkspacePrivilege";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getRoleValue, USER_ROLES } from "@/utils/helper-client";
+import { Button } from "@/components/ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDialog } from "@/utils/store/DialogStore";
 function Column({
   data,
   workspaceId,
   tasks,
 }: {
   data: WorkspaceColumn;
-  tasks: any;
+  tasks: TaskResponse[];
   workspaceId: string;
 }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const setOpen = useDialog((state) => state.open);
+
+  const handleOpenCreateTaskDialog = () => {
+    const params = new URLSearchParams(searchParams);
+    // Set the new value for "messageKeyword"
+    params.set("columnId", data._id);
+    router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
+    setOpen(true);
+  };
+
   const { data: role, isLoading } = useGetWorkspacePrivilege(workspaceId);
   return (
     <Draggable draggableId={data._id} index={data.order}>
@@ -60,7 +75,12 @@ function Column({
           </Droppable>
           {isLoading && <Skeleton className="h-14 w-full" />}
           {!isLoading && role !== getRoleValue(USER_ROLES.viewer) && (
-            <CreateTaskDialog key={data._id} columnId={data._id} />
+            <Button
+              className="w-full bg-green-700"
+              onClick={handleOpenCreateTaskDialog}
+            >
+              + task card
+            </Button>
           )}
         </div>
       )}
