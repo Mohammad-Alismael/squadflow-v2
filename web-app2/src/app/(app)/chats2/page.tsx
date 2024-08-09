@@ -32,6 +32,11 @@ async function Page({
           <p className="text-sm opacity-50">never try to give up.</p>
         </div>
       </Navbar>
+      <p className="text-red-700">
+        <span className="font-bold">Note</span> this section might take up to{" "}
+        <span className="font-bold">50 seconds</span> to load. (due to cold
+        start)
+      </p>
       <div className="flex flex-row gap-x-0 flex-grow h-[89%]">
         <div className="hidden md:flex flex-col w-1/4 float-left">
           <Suspense fallback={<WorkspacesListSkeleton />}>
