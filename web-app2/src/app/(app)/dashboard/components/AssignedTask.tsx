@@ -9,7 +9,7 @@ function AssignedTask({ data }: { data: IDashboardTask }) {
     return (
       <div className="">
         <Link
-          href={`/workspaces/${data.workspace._id}?taskId=${data._id}`}
+          href={`/workspaces/${data.workspace._id}/${data._id}`}
           prefetch={false}
         >
           <div className="flex flex-row items-center justify-between px-3 py-2 border-[1px] border-gray-200 rounded-xl">

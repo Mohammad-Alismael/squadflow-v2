@@ -19,17 +19,9 @@ import { revalidateURL } from "@/components/Dialogs/actions";
 import { useQueryClient } from "react-query";
 import { redirectServer } from "@/app/(app)/workspaces/[workspaceId]/actions";
 
-function UpdateTaskBtn({
-  workspaceId,
-  revertBackTo,
-}: {
-  workspaceId: string;
-  revertBackTo: string;
-}) {
+function UpdateTaskBtn({ workspaceId }: { workspaceId: string }) {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const taskId = searchParams.get("taskId") as string;
 
   const reset = useTaskPropertiesStore((state) => state.resetState);
   const { data: role, isLoading: isLoadingPrivilege } =
@@ -42,9 +34,7 @@ function UpdateTaskBtn({
     await queryClient.invalidateQueries([`tasks-${workspaceId}`]);
 
     revalidateURL(workspaceId as string);
-    console.log(window.location.host + revertBackTo);
-    router.replace(revertBackTo);
-    // router.replace(window.location.href.split("?")[0]);
+    router.back();
     reset();
   };
 

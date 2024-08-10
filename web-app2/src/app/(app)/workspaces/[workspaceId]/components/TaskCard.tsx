@@ -19,7 +19,7 @@ const TaskCard = ({
   workspaceId: string;
   index: number;
 }) => {
-  const { _id, title } = data;
+  const { _id, title, workspace } = data;
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -41,7 +41,8 @@ const TaskCard = ({
           ref={provided.innerRef}
         >
           <Link
-            href={`?taskId=${_id}`}
+            // href={`?taskId=${_id}`}
+            href={`/workspaces/${workspace.toString()}/${_id}`}
             scroll={false}
             prefetch={false}
             passHref={false}

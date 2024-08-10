@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
+  DialogOverlay,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -26,21 +27,23 @@ async function ModifyColumnsDialog({
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       {workspace && (
-        <DialogContent className="">
-          <DialogHeader>
-            <DialogTitle className="capitalize">modify columns</DialogTitle>
-            <DialogDescription>
-              Make changes to your columns here.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-2 py-4">
-            <DndColumnContainer columns={workspace.columns ?? []} />
-            <CreateNewColumnForm
-              workspaceId={workspaceId}
-              columnsLength={workspace.columns ? workspace.columns.length : 0}
-            />
-          </div>
-        </DialogContent>
+        <DialogOverlay>
+          <DialogContent className="">
+            <DialogHeader>
+              <DialogTitle className="capitalize">modify columns</DialogTitle>
+              <DialogDescription>
+                Make changes to your columns here.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-2 py-4">
+              <DndColumnContainer columns={workspace.columns ?? []} />
+              <CreateNewColumnForm
+                workspaceId={workspaceId}
+                columnsLength={workspace.columns ? workspace.columns.length : 0}
+              />
+            </div>
+          </DialogContent>
+        </DialogOverlay>
       )}
     </Dialog>
   );

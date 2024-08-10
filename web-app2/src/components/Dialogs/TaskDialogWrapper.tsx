@@ -25,7 +25,8 @@ function TaskDialogWrapper({
   const searchParams = useSearchParams();
 
   const handleChange = () => {
-    router.replace(window.location.href.split("?")[0]);
+    // router.replace(window.location.href.split("?")[0]);
+    router.back();
   };
   useEffect(() => {
     if (data) {
