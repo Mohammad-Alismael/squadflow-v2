@@ -13,6 +13,7 @@ import {
   getWorkspaceParticipants,
   getWorkspacesByCommunityAndUser,
   getWorkspacesByCommunityIdPopulatedWithUserId,
+  updateWorkspace,
 } from "@/lib/workspace";
 import { getUserAuthFromJWT } from "@/utils/helper";
 import {
@@ -36,6 +37,8 @@ import {
 } from "@/utils/@types/task";
 import { safeStringify } from "@/utils/helper-client";
 import { NextResponse } from "next/server";
+import { isUserIdHasRole } from "@/lib/helper/workspace.helper";
+import { checkUserIdsExist } from "@/lib/users";
 
 export const fetchWorkspaces = async () => {
   const payload = await getUserAuthFromJWT();
@@ -51,8 +54,44 @@ export const fetchWorkspaces = async () => {
 
 export const fetchWorkspace = async (workspaceId: string) => {
   if (!workspaceId) return null;
-  return await getWorkspaceById(new ObjectId(workspaceId));
+  const res = await getWorkspaceById(new ObjectId(workspaceId));
+  return JSON.parse(JSON.stringify(res)) as IWorkspace;
 };
+
+export const handleUpdateWorkspace = async (
+  data: { title: string; participants: { user: string; role: string }[] },
+  workspaceId: string
+) => {
+  const { _id: userId, communityId } = await getUserAuthFromJWT();
+  console.log(data);
+  console.log({ userId });
+  const workspace: IWorkspace = await getWorkspaceById(
+    new ObjectId(workspaceId)
+  );
+  const x = isUserIdHasRole(workspace.participants, userId, "admin");
+  if (!x) throw new Error("you are not allowed to change workspace details");
+
+  const userIdsToCheck: string[] = data.participants.map(
+    ({ user }: { user: string; role: string }) => user
+  );
+  const allExist = await checkUserIdsExist(userIdsToCheck);
+  if (!allExist)
+    return NextResponse.json(
+      { message: "some user participant id(s) aren't valid" },
+      { status: 400 }
+    );
+  await Workspace.updateOne(
+    { _id: workspace._id },
+    {
+      title: data.title,
+      participants: data.participants,
+      updated_by: userId,
+    },
+    { new: true }
+  );
+  console.log("succefully update workspace id", workspace._id);
+};
+
 export const getTasksForWorkspace = async (
   workspaceId: string,
   columnId?: string

@@ -22,25 +22,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import {
-  handleCreateWorkspace,
-  handleUpdateWorkspace,
-  revalidateWorkspacePath,
-} from "@/app/(app)/workspaces/actions";
+import { revalidateWorkspacePath } from "@/app/(app)/workspaces/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetWorkspaceById } from "@/utils/hooks/workspace/useGetWorkspaceById";
-import {
-  ParticipantWorkspace,
-  workspaceParticipantStore,
-} from "@/utils/store/workspaceParticipantStore";
+import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
 import ParticipantsList from "@/components/Dialogs/components/ParticipantsList";
 import { formSchema } from "@/components/Dialogs/scehmas/workspaceSchema";
 import { useQueryClient } from "react-query";
 import ParticipantsComponentSkeleton from "@/components/Dialogs/components/ParticipantsComponentSkeleton";
-import { WorkspaceParticipants } from "@/utils/@types/workspace";
+import { handleUpdateWorkspace } from "@/utils/actions/workspace-actions";
 
 function UpdateWorkspaceDialog() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const workspaceId = searchParams.get("workspaceId") as string;
   const { data: workspace, isLoading: isLoadingWorkspace } =
@@ -65,7 +59,7 @@ function UpdateWorkspaceDialog() {
           { ...values, participants: joinedParticipants },
           workspaceId
         ));
-      window.history.replaceState(null, "", "/workspaces");
+      router.replace("/workspaces");
       await queryClient.invalidateQueries([workspaceId]);
       await queryClient.refetchQueries([workspaceId]);
       revalidateWorkspacePath();
@@ -77,15 +71,16 @@ function UpdateWorkspaceDialog() {
 
   useEffect(() => {
     if (!isLoadingWorkspace && workspace) {
+      const newParticipantsList = workspace.participants.map((participant) => ({
+        _id: participant._id,
+        user: participant.user._id,
+        role: participant.role,
+      }));
       form.reset({
         title: workspace.title,
-        participants:
-          (workspace.participants as unknown as WorkspaceParticipants[]) ?? [],
+        participants: newParticipantsList,
       });
-      workspace.participants &&
-        setParticipants(
-          workspace.participants as unknown as ParticipantWorkspace[]
-        );
+      workspace.participants && setParticipants(newParticipantsList);
     }
   }, [workspaceId, isLoadingWorkspace]);
   return (

@@ -14,9 +14,7 @@ export const isUserIdIncludedInParticipants = (
   userId: string,
   participants: IWorkspace["participants"]
 ) => {
-  return participants
-    .map(({ user }) => user.toString())
-    .includes(new ObjectId(userId).toString());
+  return participants.map(({ user }) => user._id.toString()).includes(userId);
 };
 
 export const isUserIdHasRole = (
@@ -30,6 +28,6 @@ export const isUserIdHasRole = (
 
   return participants.some(
     (participant) =>
-      participant.user.toString() === userId && participant.role === role
+      participant.user._id.toString() === userId && participant.role === role
   );
 };

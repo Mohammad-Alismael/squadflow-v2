@@ -6,17 +6,18 @@ import ParticipantsHeader from "@/app/(app)/workspaces/[workspaceId]/components/
 import { fetchWorkspace } from "@/utils/actions/workspace-actions";
 
 async function WorkspaceNavbar({ workspaceId }: { workspaceId: string }) {
-  const data: IWorkspace = await fetchWorkspace(workspaceId);
-  return (
-    <Navbar>
-      <div className="">
-        <p className="text-2xl capitalize font-bold">{data?.title}</p>
-        <div className="flex flex-row gap-2">
-          <ParticipantsHeader workspaceId={workspaceId} />
+  const data: IWorkspace | null = await fetchWorkspace(workspaceId);
+  if (data)
+    return (
+      <Navbar>
+        <div className="">
+          <p className="text-2xl capitalize font-bold">{data?.title}</p>
+          <div className="flex flex-row gap-2">
+            <ParticipantsHeader workspaceId={workspaceId} />
+          </div>
         </div>
-      </div>
-    </Navbar>
-  );
+      </Navbar>
+    );
 }
 
 export default WorkspaceNavbar;
