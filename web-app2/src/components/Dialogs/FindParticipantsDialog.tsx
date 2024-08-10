@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/dialog";
 
 import FindParticipantsList from "@/components/Dialogs/components/FindParticipantsList";
+import UserComponentSkeleton from "@/components/Dialogs/components/UserComponentSkeleton";
+import FindParticipantsSkeleton from "@/components/Dialogs/components/FindParticipantsSkeleton";
 
 function FindParticipantsDialog({ children }: { children: React.ReactNode }) {
   return (

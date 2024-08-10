@@ -32,24 +32,6 @@ async function Page({
         </Suspense>
       </div>
 
-      {searchParams && searchParams["taskId"] && (
-        <Suspense
-          key={searchParams["taskId"]}
-          fallback={
-            <Dialog defaultOpen={true}>
-              <DialogContent className="p-0 w-4/5 h-[80%]">
-                <TaskDetailsDialogSkeleton />
-              </DialogContent>
-            </Dialog>
-          }
-        >
-          <TaskDetailsDialogServer
-            taskId={searchParams["taskId"]}
-            workspaceId={params.workspaceId}
-            revertBackTo={`/workspaces/${params.workspaceId}`}
-          />
-        </Suspense>
-      )}
       {searchParams && searchParams["columnId"] && (
         <CreateTaskDialog
           key={searchParams["columnId"]}

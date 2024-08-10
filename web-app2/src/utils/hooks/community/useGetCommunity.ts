@@ -1,16 +1,14 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { fetchCommunity } from "@/app/(app)/settings/requests";
 import { CommunityResponse, ICommunity } from "@/utils/@types/community";
+import { handleFetchCommunity } from "@/utils/actions/community-actions";
 
-interface RESULT {
-  data: CommunityResponse | null;
-  status: number;
-}
+type RESULT = CommunityResponse | null;
 export const useGetCommunity = (enabled = true) => {
   return useQuery<RESULT, Error>({
     queryKey: [`community`],
     enabled,
     refetchOnWindowFocus: false,
-    queryFn: () => fetchCommunity(),
+    queryFn: () => handleFetchCommunity(),
   }) as UseQueryResult<RESULT, Error>;
 };

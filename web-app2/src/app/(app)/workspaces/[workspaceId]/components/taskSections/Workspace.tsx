@@ -25,6 +25,9 @@ const Workspace = ({ data }: { data: IWorkspace[] }) => {
   const setWorkspaceLabels = useTaskPropertiesStore(
     (state) => state.setWorkspaceLabels
   );
+  const setWorkspaceParticipants = useTaskPropertiesStore(
+    (state) => state.setWorkspaceParticipants
+  );
 
   const handleValueChange = useCallback(
     (value: string) => {
@@ -35,10 +38,13 @@ const Workspace = ({ data }: { data: IWorkspace[] }) => {
       const selectedWorkspace = data.filter(
         (workspace) => workspace._id === value
       )[0];
+      console.log({ selectedWorkspace });
       selectedWorkspace &&
         setColumns(selectedWorkspace.columns as WorkspaceColumn[]);
       selectedWorkspace &&
         setWorkspaceLabels(selectedWorkspace.labels as WorkspaceLabel[]);
+      selectedWorkspace &&
+        setWorkspaceParticipants(selectedWorkspace.participants);
     },
     [setProjectId]
   );

@@ -4,10 +4,10 @@ import { handleJoinCommunityForm } from "@/utils/actions/settings-actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { clsx } from "clsx";
-import SubmitButton from "@/app/(app)/settings/components/SubmitButton";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 function JoinCommunityForm() {
   const formSchema = z.object({
     communityCode: z.string().max(20),
@@ -19,7 +19,7 @@ function JoinCommunityForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -62,7 +62,13 @@ function JoinCommunityForm() {
           <span className="text-red-400">Community code is required</span>
         )}
       </div>
-      <SubmitButton />
+      <Button
+        type="submit"
+        className=" w-1/2 bg-green-700 capitalize"
+        disabled={isSubmitting}
+      >
+        {!isSubmitting ? "join community" : "loading..."}
+      </Button>
     </form>
   );
 }

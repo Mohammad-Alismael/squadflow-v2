@@ -6,12 +6,15 @@ import { IDashboardTask } from "@/utils/@types/task";
 import { Button } from "@/components/ui/button";
 import NoTasksFound from "@/app/(app)/dashboard/components/NoTasksFound";
 import CreateQuickTaskDialog from "@/components/Dialogs/CreateQuickTaskDialog";
+import { getUserAuthFromJWT } from "@/utils/helper";
 
 async function CurrentTaskList({
   selectedWorkspaceId,
 }: {
   selectedWorkspaceId: string;
 }) {
+  const { _id: userId, communityId } = await getUserAuthFromJWT();
+
   const tasks = (await getAllTasksAction()) as IDashboardTask[];
   return (
     <div className="flex flex-col h-full px-3 py-2.5 bg-white rounded-xl">
@@ -20,9 +23,13 @@ async function CurrentTaskList({
           <h4 className="capitalize font-bold">all tasks</h4>
           <WorkspaceLabels />
         </div>
-        {/*<CreateQuickTaskDialog>*/}
-        {/*  <Button size="sm">+ Task</Button>*/}
-        {/*</CreateQuickTaskDialog>*/}
+        {communityId !== "" && (
+          <CreateQuickTaskDialog>
+            <Button size="sm" className="bg-green-700">
+              + Task
+            </Button>
+          </CreateQuickTaskDialog>
+        )}
       </div>
       <div className="space-y-2 my-3 h-[38rem] overflow-y-auto">
         {selectedWorkspaceId &&

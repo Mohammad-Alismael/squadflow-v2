@@ -29,7 +29,7 @@ const TaskCard = ({
 
     // Set the new value for "messageKeyword"
     params.set("taskId", _id);
-    router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
+    router.replace(`/task/${params.toString()}`);
   };
   return (
     <Draggable draggableId={_id as string} index={index}>
@@ -42,7 +42,7 @@ const TaskCard = ({
         >
           <Link
             // href={`?taskId=${_id}`}
-            href={`/workspaces/${workspace.toString()}/${_id}`}
+            href={`/task/${workspace.toString()}/${_id}`}
             scroll={false}
             prefetch={false}
             passHref={false}

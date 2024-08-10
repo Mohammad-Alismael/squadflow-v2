@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
-import {
-  getWorkspacePrivilege,
-  handleGetTaskById,
-} from "@/utils/actions/workspace-actions";
+// import {
+//   getWorkspacePrivilege,
+//   handleGetTaskById,
+// } from "@/utils/actions/workspace-actions";
 import { TaskResponse } from "@/utils/@types/task";
 import TaskDialogWrapper from "@/components/Dialogs/TaskDialogWrapper";
 import { DialogContent } from "@/components/ui/dialog";
@@ -19,6 +19,10 @@ import Labels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections
 import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Deadlines";
 import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Description";
 import UpdateTaskBtn from "@/components/Dialogs/components/UpdateTaskBtn";
+import { getTaskIdPopulated } from "@/lib/tasks";
+import { ObjectId } from "mongodb";
+import { getUserAuthFromJWT } from "@/utils/helper";
+import Workspace from "@/models/workspace";
 
 function Body({
   workspaceId,
@@ -52,6 +56,35 @@ function Body({
     </React.Fragment>
   );
 }
+const handleGetTaskById = async (taskId: string | undefined) => {
+  try {
+    if (!taskId || taskId === "") return null;
+    const task = await getTaskIdPopulated(new ObjectId(taskId));
+    return task as TaskResponse;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+const getWorkspacePrivilege = async (workspaceId: string) => {
+  try {
+    const { _id: userId, communityId } = await getUserAuthFromJWT();
+    const result = await Workspace.aggregate([
+      { $match: { _id: new ObjectId(workspaceId) } },
+      { $unwind: "$participants" },
+      { $match: { "participants.user": new ObjectId(userId) } },
+      { $project: { _id: 0, role: "$participants.role" } },
+    ]);
+    if (result.length === 0) {
+      return null; // No matching participant found
+    }
+
+    return result[0].role;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 async function Page({
   params,
@@ -60,6 +93,8 @@ async function Page({
   params: { workspaceId: string; taskId: string };
   searchParams?: { [key: string]: string };
 }) {
+  if (!params.workspaceId) throw new Error("no workspace id");
+  if (!params.taskId) throw new Error("no task id");
   const roleP = getWorkspacePrivilege(params.workspaceId);
   const data_ = handleGetTaskById(params.taskId);
   const [data, role] = (await Promise.all([data_, roleP])) as [

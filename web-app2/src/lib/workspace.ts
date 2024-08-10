@@ -207,6 +207,20 @@ async function deleteWorkspacesByCommunityId(communityId: ObjectId) {
   return deletedCount;
 }
 
+export const deleteUserParticipant = async (
+  communityId: string,
+  userId: string
+) => {
+  const workspace = await Workspace.aggregate([
+    { $match: { community: new ObjectId(communityId) } },
+    { $unwind: "$participants" },
+    { $match: { "participants.user": new ObjectId(userId) } },
+    { $project: { participant: "$participants" } },
+  ]);
+
+  return workspace.length > 0 ? workspace[0].participant : null;
+};
+
 async function getUserRoleInWorkspace(workspaceId: string, userId: string) {
   try {
     const project = await Workspace.findOne(

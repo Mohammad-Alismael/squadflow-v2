@@ -30,8 +30,7 @@ export default function AuthForm() {
   const router = useRouter();
   const [tab, setTab] = useState("login");
 
-  const handleSubmitLogin = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const handleSubmitLogin = async () => {
     setTab("login");
     try {
       setLoading(true);
@@ -102,6 +101,9 @@ export default function AuthForm() {
                 <Input
                   id="passowrd"
                   type="password"
+                  onKeyPress={async (event) => {
+                    if (event.key === "Enter") await handleSubmitLogin();
+                  }}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>

@@ -1,18 +1,8 @@
 import React, { ReactNode, Suspense, useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
 import Priority from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Priority";
-import Labels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Labels";
-import Assignees from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Assignees";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Description";
 import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Deadlines";
@@ -22,6 +12,8 @@ import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/compone
 import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";
 import WorkspaceServer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/WorkspaceServer";
 import { Skeleton } from "@/components/ui/skeleton";
+import AssigneesClient from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesClient";
+import LabelsClient from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsClient";
 
 function CreateQuickTaskDialog({ children }: { children: React.ReactNode }) {
   // const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -37,10 +29,10 @@ function CreateQuickTaskDialog({ children }: { children: React.ReactNode }) {
             <Suspense fallback={<Skeleton className="h-10 w-40" />}>
               <WorkspaceServer />
             </Suspense>
-            {/*<Assignees />*/}
+            <AssigneesClient />
             <Priority />
             <ColumnInternal />
-            {/*<Labels />*/}
+            <LabelsClient />
             <Deadlines />
             <Description />
             <CreateQuickTaskBtn />

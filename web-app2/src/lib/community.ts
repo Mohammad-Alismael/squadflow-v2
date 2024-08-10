@@ -17,7 +17,10 @@ import {
 } from "@/lib/helper/community.helper";
 import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
-import { deleteWorkspacesByCommunityId } from "@/lib/workspace";
+import {
+  deleteUserParticipant,
+  deleteWorkspacesByCommunityId,
+} from "@/lib/workspace";
 import { updateUserCommunityId, updateUserToken } from "@/lib/users";
 
 export async function init() {
@@ -234,6 +237,7 @@ const handleCommunityExit = async (userId: string, code: string) => {
   if (isAdminUserId_ && isNoOneInParticipants(participants)) {
     await deleteCommunityByCode(code as string);
     await deleteWorkspacesByCommunityId(_id);
+    await deleteUserParticipant(_id, userId);
     const user = await updateUserCommunityId(userId as string, ""); // reseting community id to empty string
     await updateUserToken(user);
     return {

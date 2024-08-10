@@ -1,7 +1,11 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { PopulatedUser } from "@/utils/@types/user";
-import { WorkspaceColumn, WorkspaceLabel } from "@/utils/@types/workspace";
+import {
+  WorkspaceColumn,
+  WorkspaceLabel,
+  WorkspaceParticipants,
+} from "@/utils/@types/workspace";
 import { Comment } from "@/utils/@types/task";
 import { shallow } from "zustand/shallow";
 
@@ -21,6 +25,7 @@ export interface ITaskState {
   endTime: string;
   priority: string;
   participants: PopulatedUser[];
+  workspaceParticipants: WorkspaceParticipants[];
   labels: WorkspaceLabel[];
   workspaceLabels: WorkspaceLabel[];
   subTasks: Task[];
@@ -39,6 +44,7 @@ interface Actions {
   setEndTime: (payload: string) => void;
   setPriority: (payload: string) => void;
   setParticipants: (payload: PopulatedUser[]) => void;
+  setWorkspaceParticipants: (payload: WorkspaceParticipants[]) => void;
   addParticipant: (payload: PopulatedUser) => void;
   removeParticipant: (payload: PopulatedUser) => void;
   setLabels: (payload: WorkspaceLabel[]) => void;
@@ -67,6 +73,7 @@ const initialState: ITaskState = {
   endTime: "",
   priority: "low",
   participants: [],
+  workspaceParticipants: [],
   labels: [],
   workspaceLabels: [],
   subTasks: [],
@@ -122,6 +129,8 @@ const useTaskPropertiesStore = create<ITaskState & Actions>()(
         set((state) => ({ ...state, priority: payload })),
       setParticipants: (payload) =>
         set((state) => ({ ...state, participants: payload })),
+      setWorkspaceParticipants: (payload) =>
+        set((state) => ({ ...state, workspaceParticipants: payload })),
       addParticipant: (payload) =>
         set((state) => ({
           ...state,

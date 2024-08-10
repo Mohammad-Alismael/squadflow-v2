@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -52,16 +51,21 @@ function CreateWorkspaceDialog() {
   });
 
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const joinedParticipants = useUpdateParticipants(form);
   const { reset } = workspaceParticipantStore();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    await handleCreateWorkspace(values);
-    setIsLoading(false);
-    setOpen(false);
-    reset();
+    try {
+      form.clearErrors();
+      await handleCreateWorkspace(values);
+      setOpen(false);
+      reset();
+    } catch (error) {
+      form.setError("root", {
+        type: "custom",
+        message: error.message,
+      });
+    }
   }
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -80,6 +84,11 @@ function CreateWorkspaceDialog() {
             Make changes to your profile here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
+        {form.formState.errors.root && (
+          <span className="text-red-600">
+            {form.formState.errors.root.message}
+          </span>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <FormField
@@ -107,8 +116,12 @@ function CreateWorkspaceDialog() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading} className="bg-green-700">
-              {isLoading ? "loading ..." : "submit"}
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="bg-green-700"
+            >
+              {form.formState.isSubmitting ? "loading ..." : "submit"}
             </Button>
           </form>
         </Form>
