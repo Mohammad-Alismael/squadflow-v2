@@ -21,13 +21,7 @@ import { USER_ROLES } from "@/utils/helper-client";
 import { Skeleton } from "@/components/ui/skeleton";
 import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSkeleton";
 
-function Body({
-  workspaceId,
-  revertBackTo,
-}: {
-  workspaceId: string;
-  revertBackTo: string;
-}) {
+function Body({ workspaceId }: { workspaceId: string }) {
   return (
     <React.Fragment>
       <Title />
@@ -49,7 +43,7 @@ function Body({
       </Suspense>
       <Deadlines />
       <Description />
-      <UpdateTaskBtn workspaceId={workspaceId} revertBackTo={revertBackTo} />
+      <UpdateTaskBtn workspaceId={workspaceId} />
     </React.Fragment>
   );
 }
@@ -81,7 +75,7 @@ async function TaskDetailsDialogServer({
       <DialogContent className="p-0 w-4/5 h-[80%]">
         <div className="w-full flex flex-row">
           <div className="w-1/2 p-4 space-y-2">
-            <Body workspaceId={workspaceId} revertBackTo={revertBackTo} />
+            <Body workspaceId={workspaceId} />
           </div>
           <div className="w-1/2 h-full p-4 bg-[#FBFAF8]">
             <Tabs defaultValue="account" className="w-full">
@@ -134,7 +128,7 @@ async function TaskDetailsDialogServer({
           </TabsList>
           <TabsContent value="overview" className="p-4 h-full">
             <div className="space-y-2 w-full">
-              <Body workspaceId={workspaceId} revertBackTo={revertBackTo} />
+              <Body workspaceId={workspaceId} />
             </div>
           </TabsContent>
           <TabsContent value="comments" className="h-full">
