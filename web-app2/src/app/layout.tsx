@@ -4,6 +4,7 @@ import "./globals.css";
 import React from "react";
 import { ReactQueryProvider } from "@/app/Provider";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
           {children}
           {/*<ReactQueryDevtools initialIsOpen={true} />*/}
         </ReactQueryProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
