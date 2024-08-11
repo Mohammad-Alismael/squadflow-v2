@@ -11,16 +11,21 @@ import {
   fetchWorkspace,
   getTasksForWorkspace,
 } from "@/utils/actions/workspace-actions";
+import { WorkspaceColumn } from "@/utils/@types/workspace";
 
-async function ColumnsWrapperServer({ workspaceId }: { workspaceId: string }) {
-  const workspace = fetchWorkspace(workspaceId);
-  const workspaceTasks = getTasksForWorkspace(workspaceId);
-  const [columns_, tasks] = await Promise.all([workspace, workspaceTasks]);
-
+async function ColumnsWrapperServer({
+  workspaceId,
+  columns,
+  tasks,
+}: {
+  workspaceId: string;
+  columns: WorkspaceColumn[];
+  tasks: any;
+}) {
   return (
     <ColumnsContainer
       workspaceId={workspaceId}
-      columns={JSON.parse(JSON.stringify(columns_?.columns))}
+      columns={JSON.parse(JSON.stringify(columns))}
       tasks={JSON.parse(JSON.stringify(tasks))}
     />
   );

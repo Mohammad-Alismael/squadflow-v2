@@ -13,12 +13,13 @@ WorkspaceHeader.propTypes = {};
 
 async function WorkspaceHeader({
   workspaceId,
+  role,
   className,
 }: {
   workspaceId: string;
+  role: string;
   className: string;
 }) {
-  const role = await getWorkspacePrivilege(workspaceId);
   return (
     <div
       className={clsx(

@@ -10,6 +10,12 @@ import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSke
 import ColumnHeaderSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeaderSkeleton";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import CreateTaskDialog from "@/components/Dialogs/CreateTaskDialog";
+import { IWorkspace } from "@/utils/@types/workspace";
+import {
+  fetchWorkspace,
+  getTasksForWorkspace,
+  getWorkspacePrivilege,
+} from "@/utils/actions/workspace-actions";
 
 async function Page({
   params,
@@ -18,18 +24,33 @@ async function Page({
   params: { workspaceId: string };
   searchParams?: { [key: string]: string };
 }) {
+  const data_ = fetchWorkspace(params.workspaceId);
+  const role_ = getWorkspacePrivilege(params.workspaceId);
+  const tasks_ = getTasksForWorkspace(params.workspaceId);
+
+  const [data, role, tasks] = (await Promise.all([data_, role_, tasks_])) as [
+    IWorkspace,
+    string,
+    any
+  ];
+
   return (
     <div className="h-full flex flex-col">
-      <Suspense fallback={<NavbarSkeleton />}>
-        <WorkspaceNavbar workspaceId={params.workspaceId} />
-      </Suspense>
+      <WorkspaceNavbar
+        title={data?.title ?? ""}
+        workspaceId={params.workspaceId}
+      />
       <div className="space-y-2.5">
-        <Suspense fallback={<ColumnHeaderSkeleton />}>
-          <WorkspaceHeader className="" workspaceId={params.workspaceId} />
-        </Suspense>
-        <Suspense fallback={<ColumnsContainerSkeleton />}>
-          <ColumnsWrapperServer workspaceId={params.workspaceId} />
-        </Suspense>
+        <WorkspaceHeader
+          className=""
+          role={role}
+          workspaceId={params.workspaceId}
+        />
+        <ColumnsWrapperServer
+          tasks={tasks}
+          columns={data?.columns ?? []}
+          workspaceId={params.workspaceId}
+        />
       </div>
 
       {searchParams && searchParams["columnId"] && (
