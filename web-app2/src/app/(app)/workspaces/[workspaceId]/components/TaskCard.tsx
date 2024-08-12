@@ -41,7 +41,6 @@ const TaskCard = ({
           ref={provided.innerRef}
         >
           <Link
-            // href={`?taskId=${_id}`}
             href={`/task/${workspace.toString()}/${_id}`}
             scroll={false}
             prefetch={false}
