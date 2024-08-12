@@ -11,8 +11,11 @@ function ColumnHeader({
   length: number;
 }) {
   return (
-    <div className="flex justify-between items-start p-1" {...rest}>
-      <div className="flex justify-center items-center gap-x-2">
+    <div
+      className="flex flex-row justify-between items-center px-1 pb-1"
+      {...rest}
+    >
+      <div className="flex justify-between items-center gap-x-2">
         <div>
           <span className="capitalize font-bold">{data.title}</span>
         </div>

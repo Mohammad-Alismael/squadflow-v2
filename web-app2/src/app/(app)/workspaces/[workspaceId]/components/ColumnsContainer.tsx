@@ -2,12 +2,20 @@
 import React, { startTransition, useOptimistic } from "react";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/Column";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import { updateColumnIdForTaskId } from "@/app/(app)/workspaces/[workspaceId]/actions";
+import {
+  updateColumnIdForTaskId,
+  updateColumnsOrder,
+} from "@/app/(app)/workspaces/[workspaceId]/actions";
 import { TaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
+import {
+  moveTask,
+  swapColumns,
+} from "@/app/(app)/workspaces/[workspaceId]/helper";
+import { Button } from "@/components/ui/button";
 
 function ColumnsContainer({
   workspaceId,
@@ -21,28 +29,37 @@ function ColumnsContainer({
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
+  const [optimisticColumns, setOptimisticColumns] = useOptimistic(columns);
 
   const handleOnDragEnd = async (result: any) => {
     const { source, destination, draggableId, type } = result;
     if (!destination) return;
-    if (source.droppableId === destination.droppableId) return;
+    if (type === "task" && source.droppableId === destination.droppableId)
+      return;
+    if (type === "column" && source.index === destination.index) return;
 
     const taskId = draggableId;
     const fromColumnId = source.droppableId;
-    const toColumnId = destination.droppableId;
+    const columnId = destination.droppableId;
 
     if (type === "task") {
       // Wrap the state update with startTransition
       startTransition(() => {
-        const newOptimisticTasks = optimisticTasks.map((task: TaskResponse) => {
-          if (task._id === taskId) {
-            return { ...task, columnId: toColumnId };
-          } else return task;
-        });
+        const newOptimisticTasks = moveTask(optimisticTasks, taskId, columnId);
         setOptimisticTasks(newOptimisticTasks);
-        toast({ title: "successfully moved task" });
       });
-      await updateColumnIdForTaskId(taskId, toColumnId);
+      await updateColumnIdForTaskId(taskId, columnId);
+      toast({ title: "successfully moved task" });
+    }
+
+    if (type === "column") {
+      let res: WorkspaceColumn[] = [];
+      startTransition(() => {
+        res = swapColumns(columns, draggableId, destination.index);
+        setOptimisticColumns(res);
+      });
+      await updateColumnsOrder(workspaceId, res);
+      toast({ title: "successfully moved column" });
     }
   };
   return (
@@ -54,32 +71,34 @@ function ColumnsContainer({
             {...provided.droppableProps}
             className="w-full h-full flex flex-row gap-4 overflow-x-auto"
           >
-            {columns &&
-              columns.map(
-                (column: {
-                  _id: string;
-                  order: number;
-                  title: string;
-                  color: string;
-                }) => {
-                  return (
-                    <Column
-                      key={column._id}
-                      workspaceId={workspaceId}
-                      data={column}
-                      tasks={optimisticTasks?.filter(
-                        (item: TaskResponse) =>
-                          item.columnId === column._id &&
-                          item.title.includes(
-                            searchParams.get("keyword")
-                              ? (searchParams.get("keyword") as string)
-                              : ""
-                          )
-                      )}
-                    />
-                  );
-                }
-              )}
+            {optimisticColumns &&
+              optimisticColumns
+                .sort((a, b) => a.order - b.order)
+                .map(
+                  (column: {
+                    _id: string;
+                    order: number;
+                    title: string;
+                    color: string;
+                  }) => {
+                    return (
+                      <Column
+                        key={column._id}
+                        workspaceId={workspaceId}
+                        data={column}
+                        tasks={optimisticTasks?.filter(
+                          (item: TaskResponse) =>
+                            item.columnId === column._id &&
+                            item.title.includes(
+                              searchParams.get("keyword")
+                                ? (searchParams.get("keyword") as string)
+                                : ""
+                            )
+                        )}
+                      />
+                    );
+                  }
+                )}
             {provided.placeholder}
             {/*<div className="flex flex-col gap-y-2 rounded-xl h-[36rem] w-1/4 bg-transparent p-3">*/}
             {/*  <Button className="w-full bg-green-700">+ new column</Button>*/}

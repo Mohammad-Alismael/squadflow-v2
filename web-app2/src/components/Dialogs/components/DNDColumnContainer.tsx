@@ -27,22 +27,11 @@ function DndColumnContainer({ columns }: { columns: WorkspaceColumn[] }) {
     // setOptimisticColumns(a);
   };
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
-      <Droppable droppableId="columns" direction="vertical">
-        {(provided, snapshot) => (
-          <div
-            className="grid gap-2 py-4"
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {optimisticColumns.map((column: WorkspaceColumn) => (
-              <DNDColumn key={column._id} data={column} />
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <div className="grid gap-2 py-4">
+      {optimisticColumns.map((column: WorkspaceColumn) => (
+        <DNDColumn key={column._id} data={column} />
+      ))}
+    </div>
   );
 }
 

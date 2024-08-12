@@ -8,6 +8,7 @@ import CustomError from "@/utils/CustomError";
 import { HttpStatusCode } from "@/utils/HttpStatusCode";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import Workspace from "@/models/workspace";
 
 export const updateColumnIdForTaskId = async (
   taskId: string,
@@ -30,6 +31,23 @@ export const updateColumnIdForTaskId = async (
     new ObjectId(columnId)
   );
   revalidateTag("tasks");
+};
+
+export const updateColumnsOrder = async (
+  workspaceId: string,
+  newColumns: WorkspaceColumn[]
+) => {
+  try {
+    const result = await Workspace.updateMany(
+      { _id: workspaceId },
+      {
+        $set: { columns: newColumns },
+      }
+    );
+    console.log("Columns updated successfully:", result);
+  } catch (error) {
+    throw new Error("Error updating columns");
+  }
 };
 
 export const handleDeleteTask = async (id: string) => {

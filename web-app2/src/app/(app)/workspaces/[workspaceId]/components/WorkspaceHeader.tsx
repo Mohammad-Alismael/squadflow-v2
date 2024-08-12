@@ -7,6 +7,7 @@ import TasksSearch from "@/app/(app)/workspaces/[workspaceId]/components/TasksSe
 
 import { USER_ROLES } from "@/utils/helper-client";
 import { Skeleton } from "@/components/ui/skeleton";
+import ModifyColumnsDrawer from "@/components/Dialogs/ModifyColumnsDrawer";
 
 WorkspaceHeader.propTypes = {};
 

@@ -28,7 +28,7 @@ async function ModifyColumnsDialog({
       <DialogTrigger asChild>{children}</DialogTrigger>
       {workspace && (
         <DialogOverlay>
-          <DialogContent className="">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle className="capitalize">modify columns</DialogTitle>
               <DialogDescription>
