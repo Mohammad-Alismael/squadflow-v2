@@ -39,7 +39,7 @@ import { safeStringify } from "@/utils/helper-client";
 import { NextResponse } from "next/server";
 import { isUserIdHasRole } from "@/lib/helper/workspace.helper";
 import { checkUserIdsExist } from "@/lib/users";
-
+import { cache } from "react";
 export const fetchWorkspaces = async () => {
   const payload = await getUserAuthFromJWT();
   const userId = payload?._id as string;
@@ -52,11 +52,12 @@ export const fetchWorkspaces = async () => {
   return workspaces as IWorkspace[];
 };
 
-export const fetchWorkspace = async (workspaceId: string) => {
+export const fetchWorkspace = cache(async (workspaceId: string) => {
+  console.log("calling fetchWorkspace");
   if (!workspaceId) return null;
   const res = await getWorkspaceById(new ObjectId(workspaceId));
   return JSON.parse(JSON.stringify(res)) as IWorkspace;
-};
+});
 
 export const handleUpdateWorkspace = async (
   data: { title: string; participants: { user: string; role: string }[] },
@@ -89,7 +90,7 @@ export const handleUpdateWorkspace = async (
     },
     { new: true }
   );
-  console.log("succefully update workspace id", workspace._id);
+  console.log("successfully update workspace id", workspace._id);
 };
 
 export const getTasksForWorkspace = async (
@@ -144,7 +145,7 @@ export const fetchWorkspaceParticipants = async (
   }
 };
 
-export const getWorkspacePrivilege = async (workspaceId: string) => {
+export const getWorkspacePrivilege = cache(async (workspaceId: string) => {
   try {
     const { _id: userId, communityId } = await getUserAuthFromJWT();
     const result = await Workspace.aggregate([
@@ -162,7 +163,7 @@ export const getWorkspacePrivilege = async (workspaceId: string) => {
     console.log(error);
     throw error;
   }
-};
+});
 
 export const createNewColumn = async (
   workspaceId: string,

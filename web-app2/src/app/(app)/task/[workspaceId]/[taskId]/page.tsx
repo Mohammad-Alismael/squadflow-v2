@@ -23,6 +23,7 @@ import { getTaskIdPopulated } from "@/lib/tasks";
 import { ObjectId } from "mongodb";
 import { getUserAuthFromJWT } from "@/utils/helper";
 import Workspace from "@/models/workspace";
+import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
 
 function Body({
   workspaceId,
@@ -61,25 +62,6 @@ const handleGetTaskById = async (taskId: string | undefined) => {
     if (!taskId || taskId === "") return null;
     const task = await getTaskIdPopulated(new ObjectId(taskId));
     return task as TaskResponse;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-const getWorkspacePrivilege = async (workspaceId: string) => {
-  try {
-    const { _id: userId, communityId } = await getUserAuthFromJWT();
-    const result = await Workspace.aggregate([
-      { $match: { _id: new ObjectId(workspaceId) } },
-      { $unwind: "$participants" },
-      { $match: { "participants.user": new ObjectId(userId) } },
-      { $project: { _id: 0, role: "$participants.role" } },
-    ]);
-    if (result.length === 0) {
-      return null; // No matching participant found
-    }
-
-    return result[0].role;
   } catch (error) {
     console.log(error);
     throw error;

@@ -32,7 +32,6 @@ export async function middleware(request: NextRequest) {
     if (!token) {
       return NextResponse.redirect(new URL("/auth", request.url));
     }
-    console.log("token is valid!");
 
     const payload = await verifyJWTToken(token.value);
     // Clone the request headers and set a new header `x-hello-from-middleware1`
@@ -40,15 +39,12 @@ export async function middleware(request: NextRequest) {
     if (payload?._id && payload?.communityId !== null) {
       requestHeaders.set("uid", payload?._id.toString());
       requestHeaders.set("cid", payload?.communityId as string);
-      console.log("setting cid and uid are done");
     } else {
-      console.log("smth is wrong while cid and uid");
       return NextResponse.json(
         { message: "error happened in user token" },
         { status: 500 }
       );
     }
-    console.log("setting NextResponse to next are done");
     // You can also set request headers in NextResponse.rewrite
     return NextResponse.next({
       request: {

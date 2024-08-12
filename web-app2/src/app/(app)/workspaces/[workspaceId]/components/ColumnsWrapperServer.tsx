@@ -7,10 +7,7 @@ const ColumnsContainer = dynamic(
     ssr: false,
   }
 );
-import {
-  fetchWorkspace,
-  getTasksForWorkspace,
-} from "@/utils/actions/workspace-actions";
+
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 
 async function ColumnsWrapperServer({
