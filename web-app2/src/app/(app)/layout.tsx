@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import React, { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default async function Layout({
       <Sidebar />
       <div className="h-full w-full lg:w-5/6 float-right px-4">{children}</div>
       <Toaster />
+      <SpeedInsights />
     </div>
   );
 }
