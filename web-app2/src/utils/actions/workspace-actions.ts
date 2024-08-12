@@ -40,6 +40,7 @@ import { NextResponse } from "next/server";
 import { isUserIdHasRole } from "@/lib/helper/workspace.helper";
 import { checkUserIdsExist } from "@/lib/users";
 import { cache } from "react";
+import { revalidatePath } from "next/cache";
 export const fetchWorkspaces = async () => {
   const payload = await getUserAuthFromJWT();
   const userId = payload?._id as string;
@@ -91,6 +92,25 @@ export const handleUpdateWorkspace = async (
     { new: true }
   );
   console.log("successfully update workspace id", workspace._id);
+};
+
+export const updateColumnTitleById = async (
+  workspaceId: string,
+  columnId: string,
+  newTitle: string
+) => {
+  try {
+    const result = await Workspace.updateOne(
+      { _id: workspaceId, "columns._id": columnId },
+      {
+        $set: { "columns.$.title": newTitle },
+      }
+    );
+    console.log("Column title updated successfully:", result);
+    revalidatePath(`/workspaces/${workspaceId}`);
+  } catch (error) {
+    console.error("Error updating column title:", error);
+  }
 };
 
 export const getTasksForWorkspace = async (

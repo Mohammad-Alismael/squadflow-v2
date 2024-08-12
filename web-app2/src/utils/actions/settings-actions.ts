@@ -54,19 +54,23 @@ export const handleJoinCommunityForm = async (formData: {
   communityCode: string;
 }) => {
   const payload = await getUserAuthFromJWT();
-  const user = await handleCommunityJoin(
-    payload?._id as string,
-    formData.communityCode as string
-  );
-  cookies().set({
-    name: "jwt",
-    value: generateAccessTokenFlat(user),
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-    path: "/",
-  });
-  revalidatePath("/settings");
+  try {
+    const user = await handleCommunityJoin(
+      payload?._id as string,
+      formData.communityCode as string
+    );
+    cookies().set({
+      name: "jwt",
+      value: generateAccessTokenFlat(user),
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+    });
+    revalidatePath("/settings");
+  } catch (error) {
+    throw new Error("community not found");
+  }
 };
 
 export const handleLeaveCommunity = async (code: string) => {
@@ -168,25 +172,29 @@ export const saveProfileImg = async (formData: FormData) => {
   const file = formData.get("file") as File;
   const userId = payload?._id as string;
   const fileName = `${userId}.${file.type.split("/")[1]}`;
-  const blob = await put(fileName, file, {
-    access: "public",
-  });
-  const url = blob.url;
-  await User.updateOne({ _id: new ObjectId(userId) }, { photoURL: url });
-  const newUserObject = {
-    _id: userId,
-    username: payload?.username,
-    email: payload?.email,
-    communityId: payload?.communityId,
-    photoURL: url,
-  };
-  cookies().set({
-    name: "jwt",
-    value: generateAccessTokenFlat(newUserObject),
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-    path: "/",
-  });
-  return url;
+  try {
+    const blob = await put(fileName, file, {
+      access: "public",
+    });
+    const url = blob.url;
+    await User.updateOne({ _id: new ObjectId(userId) }, { photoURL: url });
+    const newUserObject = {
+      _id: userId,
+      username: payload?.username,
+      email: payload?.email,
+      communityId: payload?.communityId,
+      photoURL: url,
+    };
+    cookies().set({
+      name: "jwt",
+      value: generateAccessTokenFlat(newUserObject),
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+    });
+    return url;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };

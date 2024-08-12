@@ -47,6 +47,7 @@ function Column({
         >
           <ColumnHeader
             length={tasks.length}
+            workspaceId={workspaceId}
             data={data}
             {...provided.dragHandleProps}
           />

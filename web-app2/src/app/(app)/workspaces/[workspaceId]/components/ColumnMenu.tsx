@@ -16,7 +16,13 @@ import { revalidateURL } from "@/components/Dialogs/actions";
 import { getWorkspaceIdFromUrl } from "@/components/Dialogs/components/DNDColumn";
 import { useToast } from "@/components/ui/use-toast";
 
-function ColumnMenu({ columnId }: { columnId: string }) {
+function ColumnMenu({
+  columnId,
+  onEdit,
+}: {
+  columnId: string;
+  onEdit: () => void;
+}) {
   const router = useRouter();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -46,10 +52,10 @@ function ColumnMenu({ columnId }: { columnId: string }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="z-50">
         <DropdownMenuItem
-        // onClick={(e) => {
-        //     e.stopPropagation();
-        //     handleChange();
-        // }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit();
+          }}
         >
           edit
         </DropdownMenuItem>
