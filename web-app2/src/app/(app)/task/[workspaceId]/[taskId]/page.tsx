@@ -127,7 +127,7 @@ async function Page({
       </DialogContent>
       <DialogContent className="p-0 w-4/5">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="w-full">
+          <TabsList className="">
             <TabsTrigger
               value="overview"
               className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
@@ -147,7 +147,7 @@ async function Page({
               activity
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="overview" className="p-4 h-full">
+          <TabsContent value="overview" className="p-2 h-full">
             <div className="space-y-2 w-full">
               <Body
                 workspaceId={params.workspaceId}

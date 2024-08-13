@@ -11,35 +11,39 @@ import { USER_ROLES } from "@/utils/helper-client";
 async function WorkspaceCard({ data }: { data: IWorkspace }) {
   const role = await getWorkspacePrivilege(data._id as string);
   return (
-    <Link href={`/workspaces/${data._id}`} passHref>
-      <Card className="w-full">
-        <CardHeader
-          className={clsx(
-            "px-2 py-0 m-0 flex flex-row items-center justify-between",
-            role !== USER_ROLES.admin && "p-2"
-          )}
-        >
-          <CardTitle className="text-xl truncate w-72">{data.title}</CardTitle>
-          {role === USER_ROLES.admin && (
-            <WorkspaceMenu workspaceId={data._id as string} />
-          )}
-        </CardHeader>
+    <div className="w-full">
+      <Link href={`/workspaces/${data._id}`} passHref>
+        <Card className="w-full">
+          <CardHeader
+            className={clsx(
+              "px-2 py-0 m-0 flex flex-row items-center justify-between",
+              role !== USER_ROLES.admin && "p-2"
+            )}
+          >
+            <CardTitle className="text-xl truncate w-72">
+              {data.title}
+            </CardTitle>
+            {role === USER_ROLES.admin && (
+              <WorkspaceMenu workspaceId={data._id as string} />
+            )}
+          </CardHeader>
 
-        <CardContent>
-          <div className="mt-4 flex items-center">
-            {data.participants.map((participant) => (
-              <Avatar
-                key={participant._id}
-                className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10"
-              >
-                <AvatarImage src={participant.user.photoURL} />
-                <AvatarFallback>{participant.user.username}</AvatarFallback>
-              </Avatar>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
+          <CardContent>
+            <div className="mt-4 flex items-center">
+              {data.participants.map((participant) => (
+                <Avatar
+                  key={participant._id}
+                  className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10"
+                >
+                  <AvatarImage src={participant.user.photoURL} />
+                  <AvatarFallback>{participant.user.username}</AvatarFallback>
+                </Avatar>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+    </div>
   );
 }
 

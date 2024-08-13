@@ -6,7 +6,7 @@ import { fetchWorkspaceParticipants } from "@/utils/actions/workspace-actions";
 async function Assignees({ workspaceId }: { workspaceId: string }) {
   const data = await fetchWorkspaceParticipants(workspaceId, true);
   return (
-    <div className="flex items-center gap-3.5">
+    <div className="flex flex-wrap items-center gap-3.5">
       <h3 className="font-bold">assignees</h3>
       <ShowAssignees />
       <AssigneePopover data={JSON.parse(JSON.stringify(data))}>

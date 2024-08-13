@@ -41,7 +41,7 @@ function AddCommentBar() {
   };
   if (isLoading) return <Skeleton className="h-10 w-full" />;
   return (
-    <div className="flex w-full gap-3 items-stretch my-2">
+    <div className="flex w-full gap-2 items-stretch my-2">
       <Avatar className="border w-10 h-10">
         <AvatarImage src={userData?.photoURL} alt="@shadcn" />
         <AvatarFallback>{userData?.username}</AvatarFallback>
@@ -54,7 +54,7 @@ function AddCommentBar() {
           type="text"
           placeholder="Write a comment..."
           onChange={(e) => setText(e.target.value)}
-          className="h-10 w-full rounded-full border border-gray-300 px-4 focus:border-gray-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+          className="h-10 w-full rounded-xl border border-gray-300 px-4 focus:border-gray-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
         />
       </div>
       <Button

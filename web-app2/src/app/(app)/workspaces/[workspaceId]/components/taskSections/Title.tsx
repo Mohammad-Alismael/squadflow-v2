@@ -23,9 +23,12 @@ function Title() {
     setEditModeOn(true);
   };
   return (
-    <>
+    <div className="w-full">
       {!isEditModeOn ? (
-        <h4 onClick={handleClickT} className="capitalize font-bold text-2xl">
+        <h4
+          onClick={handleClickT}
+          className="capitalize font-bold text-xl md:text-2xl"
+        >
           {title}
         </h4>
       ) : (
@@ -34,11 +37,12 @@ function Title() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setTitle(e.target.value)
           }
+          className="w-full"
           onKeyPress={handleEnterPress}
           defaultValue={title === "" ? "task title" : title}
         />
       )}
-    </>
+    </div>
   );
 }
 

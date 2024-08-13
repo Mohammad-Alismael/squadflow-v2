@@ -57,6 +57,7 @@ async function Page({
         <CreateTaskDialog
           key={searchParams["columnId"]}
           columnId={searchParams["columnId"]}
+          role={role}
           workspaceId={params.workspaceId}
         />
       )}

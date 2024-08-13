@@ -7,10 +7,10 @@ import { fetchWorkspaceLabels } from "@/utils/actions/workspace-actions";
 async function Labels({ workspaceId }: { workspaceId: string }) {
   const data = await fetchWorkspaceLabels(workspaceId);
   return (
-    <div className="flex items-center gap-2">
+    <div className="w-full flex flex-wrap items-center gap-2">
       <div className="flex items-center gap-10">
         <h3 className="font-bold">labels</h3>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <ShowLabels />
         </div>
       </div>

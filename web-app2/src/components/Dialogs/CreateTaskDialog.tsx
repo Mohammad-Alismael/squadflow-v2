@@ -16,12 +16,45 @@ import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/ta
 import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/PlainCommentsContainer";
 import { USER_ROLES } from "@/utils/helper-client";
 import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";
-
+const Body = ({
+  workspaceId,
+  columnId,
+}: {
+  workspaceId: string;
+  columnId: string;
+}) => {
+  return (
+    <React.Fragment>
+      <Title />
+      <Suspense key={`assignees-${workspaceId}`} fallback={<p>loading ...</p>}>
+        <Assignees workspaceId={workspaceId as string} />
+      </Suspense>
+      <Priority />
+      <Suspense
+        key={`column-${workspaceId}`}
+        fallback={<Skeleton className="h-10 w-40" />}
+      >
+        <Column workspaceId={workspaceId as string} />
+      </Suspense>
+      <Suspense
+        key={`labels-${workspaceId}`}
+        fallback={<Skeleton className="h-10 w-40" />}
+      >
+        <Labels workspaceId={workspaceId as string} />
+      </Suspense>
+      <Deadlines />
+      <Description />
+      <CreateTaskBtn workspaceId={workspaceId} columnId={columnId} />
+    </React.Fragment>
+  );
+};
 function CreateTaskDialog({
   columnId,
+  role,
   workspaceId,
 }: {
   columnId: string;
+  role: string;
   workspaceId: string;
 }) {
   return (
@@ -29,29 +62,7 @@ function CreateTaskDialog({
       <DialogContent className="p-0 w-4/5 h-[80%]">
         <div className="w-full flex flex-row">
           <div className="w-1/2 p-4 space-y-2">
-            <Title />
-            <Suspense
-              key={`assignees-${workspaceId}`}
-              fallback={<p>loading ...</p>}
-            >
-              <Assignees workspaceId={workspaceId as string} />
-            </Suspense>
-            <Priority />
-            <Suspense
-              key={`column-${workspaceId}`}
-              fallback={<Skeleton className="h-10 w-40" />}
-            >
-              <Column workspaceId={workspaceId as string} />
-            </Suspense>
-            <Suspense
-              key={`labels-${workspaceId}`}
-              fallback={<Skeleton className="h-10 w-40" />}
-            >
-              <Labels workspaceId={workspaceId as string} />
-            </Suspense>
-            <Deadlines />
-            <Description />
-            <CreateTaskBtn workspaceId={workspaceId} columnId={columnId} />
+            <Body workspaceId={workspaceId} columnId={columnId} />
           </div>
           <div className="w-1/2 p-4 bg-[#FBFAF8]">
             <Tabs defaultValue="account" className="w-full h-[95%]">
@@ -81,43 +92,42 @@ function CreateTaskDialog({
         </div>
       </DialogContent>
       <DialogContent className="p-0 w-4/5">
-        <p>hi</p>
-        {/*<Tabs defaultValue="overview" className="w-full">*/}
-        {/*  <TabsList className="w-full">*/}
-        {/*    <TabsTrigger*/}
-        {/*        value="overview"*/}
-        {/*        className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"*/}
-        {/*    >*/}
-        {/*      overview*/}
-        {/*    </TabsTrigger>*/}
-        {/*    <TabsTrigger*/}
-        {/*        value="comments"*/}
-        {/*        className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"*/}
-        {/*    >*/}
-        {/*      comments*/}
-        {/*    </TabsTrigger>*/}
-        {/*    <TabsTrigger*/}
-        {/*        value="activity"*/}
-        {/*        className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"*/}
-        {/*    >*/}
-        {/*      activity*/}
-        {/*    </TabsTrigger>*/}
-        {/*  </TabsList>*/}
-        {/*  <TabsContent value="overview" className="p-4 h-full">*/}
-        {/*    <div className="space-y-2 w-full">*/}
-        {/*      <Body workspaceId={workspaceId} revertBackTo={revertBackTo} />*/}
-        {/*    </div>*/}
-        {/*  </TabsContent>*/}
-        {/*  <TabsContent value="comments" className="h-full">*/}
-        {/*    <div className="relative flex flex-col items-center justify-between">*/}
-        {/*      <PlainCommentsContainer />*/}
-        {/*      {role !== USER_ROLES.viewer && <AddCommentBar />}*/}
-        {/*    </div>*/}
-        {/*  </TabsContent>*/}
-        {/*  <TabsContent value="activity" className="h-full">*/}
-        {/*    coming soon*/}
-        {/*  </TabsContent>*/}
-        {/*</Tabs>*/}
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="">
+            <TabsTrigger
+              value="overview"
+              className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+            >
+              overview
+            </TabsTrigger>
+            <TabsTrigger
+              value="comments"
+              className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+            >
+              comments
+            </TabsTrigger>
+            <TabsTrigger
+              value="activity"
+              className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"
+            >
+              activity
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview" className="p-2 h-full">
+            <div className="space-y-2 w-full">
+              <Body workspaceId={workspaceId} columnId={columnId} />
+            </div>
+          </TabsContent>
+          <TabsContent value="comments" className="h-full">
+            <div className="relative flex flex-col items-center justify-between">
+              <PlainCommentsContainer />
+              {role !== USER_ROLES.viewer && <AddCommentBar />}
+            </div>
+          </TabsContent>
+          <TabsContent value="activity" className="h-full">
+            coming soon
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </CreateTaskDialogWrapper>
   );

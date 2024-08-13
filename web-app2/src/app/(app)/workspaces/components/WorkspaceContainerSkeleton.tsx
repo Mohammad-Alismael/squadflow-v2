@@ -3,7 +3,7 @@ import WorkspaceSkeleton from "@/app/(app)/workspaces/components/WorkspaceSkelet
 
 function WorkspaceContainerSkeleton() {
   return (
-    <div className="py-4 h-[91%] grid grid-cols-4 grid-rows-2 gap-4 overflow-y-auto">
+    <div className="py-4 h-[91%] grid grid-cols-1 md:grid-cols-4 grid-rows-4 gap-4 overflow-y-auto">
       <WorkspaceSkeleton />
       <WorkspaceSkeleton />
       <WorkspaceSkeleton />

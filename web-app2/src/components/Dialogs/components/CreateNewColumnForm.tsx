@@ -70,7 +70,7 @@ function CreateNewColumnForm({
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className={clsx(
-          "flex flex-row gap-2 gap-x-4 items-end",
+          "flex flex-wrap flex-row gap-2 items-end",
           form.formState.errors.title && "items-center"
         )}
       >
