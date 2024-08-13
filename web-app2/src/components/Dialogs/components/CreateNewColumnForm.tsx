@@ -42,7 +42,7 @@ function CreateNewColumnForm({
     try {
       await createNewColumn(workspaceId, {
         ...values,
-        order: columnsLength,
+        order: columnsLength + 1,
         color: "#000",
       });
       form.reset();
