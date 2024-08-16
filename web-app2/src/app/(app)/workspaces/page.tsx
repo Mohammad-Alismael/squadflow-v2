@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import WorkspacesContainer from "./components/WorkspacesContainer";
 import WorkspaceContainerSkeleton from "@/app/(app)/workspaces/components/WorkspaceContainerSkeleton";
 import UpdateWorkspaceDialog from "@/components/Dialogs/UpdateWorkspaceDialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 async function Page({
   searchParams,

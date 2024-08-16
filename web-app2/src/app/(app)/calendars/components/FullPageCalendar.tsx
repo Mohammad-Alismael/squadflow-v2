@@ -1,16 +1,23 @@
 "use client";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+import "./custom-calendar-style.css";
 import {
   Calendar,
   dayjsLocalizer,
   EventPropGetter,
+  EventProps,
   Views,
 } from "react-big-calendar";
+const DragAndDropCalendar = withDragAndDrop(Calendar);
+
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
 import { parseDate } from "@/utils/helper-date";
+import TaskEvent from "@/app/(app)/calendars/components/TaskEvent";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
 const localizer = dayjsLocalizer(dayjs);
 type TEvent = {
@@ -25,16 +32,17 @@ type E = {
   title: string;
   dueDate: string;
 };
+
 function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   const [events, setEvents] = useState<TEvent[]>([]);
-  const eventPropGetter = (event: any) => {
-    const backgroundColor = event.color || "#2e7d32"; // Default color if none is specified
-    const color = event.textColor || "#fff"; // Default text color if none is specified
-    return { style: { backgroundColor, color } };
-  };
+  // const eventPropGetter = (event: any) => {
+  //   const backgroundColor = event.color || "#2e7d32"; // Default color if none is specified
+  //   const color = event.textColor || "#fff"; // Default text color if none is specified
+  //   return { style: { backgroundColor, color } };
+  // };
   const [currentDate, setCurrentDate] = useState(new Date());
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -52,15 +60,25 @@ function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
   const handleSelectEvent = (event: TEvent) => {
     router.push(pathname + "?" + createQueryString("taskId", event.taskId));
   };
+  const components: any = {
+    event: ({ event }: EventProps<TEvent>) => {
+      return (
+        <div className="bg-green-700 p-2 rounded-xl">
+          <span className="opacity-70">workspace</span>
+          <p>{event.title}</p>
+        </div>
+      );
+    },
+  };
   useEffect(() => {
-    const d = eventsProps.map((item) => ({
+    const newEvents = eventsProps.map((item) => ({
       title: item.title,
       taskId: item._id,
       workspaceId: item.workspace,
       start: item.dueDate ? parseDate(item.dueDate) : "",
       end: item.dueDate ? parseDate(item.dueDate) : "",
     }));
-    setEvents(d);
+    setEvents(newEvents);
   }, [JSON.stringify(eventsProps)]);
 
   // return <div>{JSON.stringify(events)}</div>;
@@ -78,10 +96,15 @@ function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
           date={currentDate}
           onNavigate={handleNavigate}
           onSelectEvent={handleSelectEvent}
-          eventPropGetter={eventPropGetter}
+          // eventPropGetter={eventPropGetter}
           defaultView={Views.MONTH}
           views={[Views.MONTH]}
           style={{ height: "86vh" }}
+          toolbar={false}
+          components={components}
+          // components={{
+          //   event: TaskEvent,
+          // }}
         />
       )}
     </div>

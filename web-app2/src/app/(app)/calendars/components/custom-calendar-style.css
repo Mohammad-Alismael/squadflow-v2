@@ -1,0 +1,25 @@
+.rbc-header {
+    color: #727275;
+    font-size: 14px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px !important;
+    background: #E7E7E9;
+}
+
+/*Event Styles*/
+.rbc-event,
+.rbc-background-event {
+    z-index: 2;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.rbc-event-label {
+    display: none !important;
+}
+
+.rbc-events-container {
+    width: 100% !important;
+}
