@@ -1,7 +1,10 @@
 "use client";
 import React from "react";
 import { useGetUserById } from "@/utils/hooks/user/useGetUserById";
-import { MessageType } from "@/app/(app)/chats/components/MessagesContainer";
+import {
+  MessageType,
+  MessageTypeWithUserData,
+} from "@/app/(app)/chats/components/MessagesContainer";
 import { clsx } from "clsx";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import MessageSkeleton from "@/app/(app)/chats/components/MessageSkeleton";
@@ -10,7 +13,7 @@ function Message({
   data,
   currentUserId,
 }: {
-  data: MessageType;
+  data: MessageTypeWithUserData;
   currentUserId: string;
 }) {
   // const { data: userData, isLoading } = useGetUserById(
@@ -25,12 +28,12 @@ function Message({
         // data.created_by !== currentUserId ? "self-start" : "self-end"
       )}
     >
-      {/*<Avatar>*/}
-      {/*  <AvatarImage src={userData.photoURL} />*/}
-      {/*  <AvatarFallback>{userData.username}</AvatarFallback>*/}
-      {/*</Avatar>*/}
+      <Avatar>
+        <AvatarImage src={data.user.photoURL} />
+        <AvatarFallback>{data.user.username}</AvatarFallback>
+      </Avatar>
       <div className="bg-white p-2 rounded-md">
-        {/*<p className="text-sm text-green-800">{userData?.username}</p>*/}
+        <p className="text-sm text-green-800">{data.user.username}</p>
         <p>{data.text}</p>
         <span className="text-sm opacity-50 self-end">
           {new Date(data.timestamp).toLocaleDateString("en-GB", {

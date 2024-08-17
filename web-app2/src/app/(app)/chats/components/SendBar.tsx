@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { writeMessage } from "@/lib/firebase/firebase-real-time";
 import { useRouter, useSearchParams } from "next/navigation";
+import { validateUserData } from "@/app/(app)/chats/actions";
 
 SendBar.propTypes = {};
 
@@ -18,6 +19,7 @@ function SendBar({
   const workspaceId = searchParams.get("workspaceId") as string;
   const [text, setText] = useState("");
   const handleSubmit = async () => {
+    // userId && (await validateUserData(userId));
     workspaceId &&
       (await writeMessage(
         communityId as string,

@@ -18,6 +18,7 @@ import CustomError from "@/utils/CustomError";
 import bcrypt from "bcryptjs";
 import { put } from "@vercel/blob";
 import { WorkspaceParticipants } from "@/utils/@types/workspace";
+import { kv } from "@vercel/kv";
 
 export const fetchCommunity = async () => {
   const { _id: userId } = await getUserAuthFromJWT();
@@ -163,6 +164,11 @@ export const handleChangeUserProfile = async (
     sameSite: "lax",
     path: "/",
   });
+  await kv.set(`user_${payload?._id}`, {
+    username: newUserObject.username,
+    email: newUserObject.email,
+    photoURL: payload?.photoURL,
+  });
   revalidatePath("/settings");
 };
 
@@ -192,6 +198,11 @@ export const saveProfileImg = async (formData: FormData) => {
       secure: true,
       sameSite: "lax",
       path: "/",
+    });
+    await kv.set(`user_${userId}`, {
+      username: newUserObject.username,
+      email: payload?.email,
+      photoURL: url,
     });
     return url;
   } catch (error) {

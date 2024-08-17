@@ -150,6 +150,7 @@ const findUserById = async (userId: string) => {
     email: userData?.email,
     photoURL: userData?.photoURL,
   };
+  console.log("findUserById", userId);
   return res;
 };
 
