@@ -91,6 +91,7 @@ async function getWorkspaceByIdPopulated(workspaceId: ObjectId) {
       path: "participants.user",
       select: "_id username email role photoURL",
     })
+    .lean()
     .exec();
   if (!workspace) {
     throw new CustomError("workspace not found", HttpStatusCode.NOT_FOUND);

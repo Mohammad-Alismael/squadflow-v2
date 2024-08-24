@@ -21,6 +21,7 @@ function TaskDialogWrapper({
   const resetCustomState = useTaskPropertiesStore(
     (state) => state.resetCustomState
   );
+  const resetState = useTaskPropertiesStore((state) => state.resetState);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -64,6 +65,7 @@ function TaskDialogWrapper({
       open={Boolean(taskId)}
       onOpenChange={() => {
         handleChange();
+        resetState();
         // redirectServer(workspaceId);
       }}
     >

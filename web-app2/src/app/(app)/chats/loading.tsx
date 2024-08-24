@@ -21,7 +21,7 @@ function Loading() {
           <WorkspacesListSkeleton />
         </div>
         <div className="bg-gray-200 h-full w-full md:w-3/4 float-right flex flex-col">
-          <div className="flex-1 w-full overflow-y-auto flex flex-col items-start gap-2 p-4 bg-gray-200">
+          <div className="flex-1 w-full overflow-y-auto flex flex-col items-start gap-2 p-4bg-[#F0EEEE]">
             <MessageSkeleton />
             <MessageSkeleton />
             <MessageSkeleton />

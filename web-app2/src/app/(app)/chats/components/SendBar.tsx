@@ -10,13 +10,16 @@ SendBar.propTypes = {};
 
 function SendBar({
   userId,
+  workspaceIdProps,
   communityId,
 }: {
   userId: string | unknown;
+  workspaceIdProps?: string;
   communityId: string | unknown;
 }) {
   const searchParams = useSearchParams();
-  const workspaceId = searchParams.get("workspaceId") as string;
+  const workspaceId =
+    workspaceIdProps || (searchParams.get("workspaceId") as string);
   const [text, setText] = useState("");
   const handleSubmit = async () => {
     // userId && (await validateUserData(userId));
@@ -30,7 +33,7 @@ function SendBar({
     setText("");
   };
   return (
-    <div className="bg-gray-200 p-4">
+    <div className="bg-[#F0EEEE] p-4">
       <div className="flex flex-row gap-2 bg-white p-2 rounded">
         <Input
           type="text"

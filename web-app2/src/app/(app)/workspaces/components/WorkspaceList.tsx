@@ -13,7 +13,7 @@ async function WorkspaceList({ data }: { data: IWorkspace }) {
   const role = await getWorkspacePrivilege(data._id as string);
   return (
     <div>
-      <Link href={`/workspaces/${data._id}`} passHref>
+      <Link href={`/workspaces/${data._id}?tabs=kanban`} passHref>
         <div className="bg-white px-4 py-2 border-2 rounded-xl flex items-center justify-between">
           <p>{data.title}</p>
           <div className="flex flex-row items-center gap-4">

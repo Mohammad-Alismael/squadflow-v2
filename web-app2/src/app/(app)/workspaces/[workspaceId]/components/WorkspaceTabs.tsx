@@ -15,13 +15,14 @@ function WorkspaceTabs({ workspaceId }: { workspaceId: string }) {
     // Set the new value for "messageKeyword"
     params.set("tabs", tabName);
     router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
+    // window.history.pushState(null, "", `?${params.toString()}`);
   };
 
   const handleClick = (event: { target: { innerText: string } }) => {
     handleChange(event.target.innerText);
   };
   return (
-    <TabsList onClick={handleClick}>
+    <TabsList onClick={handleClick} className="mb-2">
       <TabsTrigger value="kanban">kanban</TabsTrigger>
       <TabsTrigger value="chats">chats</TabsTrigger>
       <TabsTrigger value="calendar">calendar</TabsTrigger>

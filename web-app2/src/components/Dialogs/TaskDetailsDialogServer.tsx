@@ -53,11 +53,9 @@ function wait(ms: number) {
 async function TaskDetailsDialogServer({
   workspaceId,
   taskId,
-  revertBackTo,
 }: {
   workspaceId: string;
   taskId: string | undefined;
-  revertBackTo: string;
 }) {
   // await wait(3000);
   const roleP = getWorkspacePrivilege(workspaceId);

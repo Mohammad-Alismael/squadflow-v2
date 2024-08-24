@@ -9,6 +9,7 @@ const ColumnsContainer = dynamic(
 );
 
 import { WorkspaceColumn } from "@/utils/@types/workspace";
+import { TaskResponse } from "@/utils/@types/task";
 
 async function ColumnsWrapperServer({
   workspaceId,
@@ -17,7 +18,7 @@ async function ColumnsWrapperServer({
 }: {
   workspaceId: string;
   columns: WorkspaceColumn[];
-  tasks: any;
+  tasks: TaskResponse[];
 }) {
   return (
     <ColumnsContainer

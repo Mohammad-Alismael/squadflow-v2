@@ -33,14 +33,17 @@ function extracted(conversations: { [x: string]: any }) {
 
 function MessagesContainer({
   communityId,
+  workspaceIdProps,
   userId,
 }: {
   userId: string | unknown;
+  workspaceIdProps?: string;
   communityId: string | unknown;
 }) {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const workspaceId = searchParams.get("workspaceId") as string;
+  const workspaceId =
+    workspaceIdProps || (searchParams.get("workspaceId") as string);
   const keyword = searchParams.get("messageKeyword") ?? ("" as string);
   const [data, setData] = useState<MessageTypeWithUserData[]>([]);
   useEffect(() => {
@@ -84,7 +87,7 @@ function MessagesContainer({
     return (
       <div
         ref={containerRef}
-        className="flex-1 w-full overflow-y-auto flex flex-col items-start gap-2 p-4 bg-gray-200"
+        className="flex-1 w-full overflow-y-auto flex flex-col items-start gap-2 p-4 bg-[#F0EEEE]"
       >
         <MessageSkeleton />
         <MessageSkeleton />
@@ -118,10 +121,9 @@ function MessagesContainer({
     return (
       <div
         ref={containerRef}
-        className="flex-1 w-full overflow-y-auto flex flex-col items-start gap-2 p-4 bg-gray-200"
+        className="flex-1 w-full overflow-y-auto flex flex-col items-start gap-2 p-4 bg-[#F0EEEE]"
       >
         {!data.length && <p>no messages</p>}
-        {/*<p>{JSON.stringify(data)}</p>*/}
         {!!data.length &&
           data
             .filter((item) => item.text.includes(keyword))

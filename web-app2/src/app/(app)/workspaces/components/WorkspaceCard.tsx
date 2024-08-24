@@ -12,7 +12,7 @@ async function WorkspaceCard({ data }: { data: IWorkspace }) {
   const role = await getWorkspacePrivilege(data._id as string);
   return (
     <div className="w-full">
-      <Link href={`/workspaces/${data._id}`} passHref>
+      <Link href={`/workspaces/${data._id}?tabs=kanban`} passHref>
         <Card className="w-full">
           <CardHeader
             className={clsx(

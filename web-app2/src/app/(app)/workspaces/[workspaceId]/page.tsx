@@ -20,6 +20,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import WorkspaceTabs from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceTabs";
+import ChatContainer from "@/app/(app)/workspaces/[workspaceId]/components/chats/ChatContainer";
+import CalendarWrapper from "@/app/(app)/calendars/components/CalendarWrapper";
+import SearchMessageInput from "@/app/(app)/chats/components/SearchMessageInput";
+import { TaskResponse } from "@/utils/@types/task";
 
 async function Page({
   params,
@@ -32,11 +36,15 @@ async function Page({
   const role_ = getWorkspacePrivilege(params.workspaceId);
   const tasks_ = getTasksForWorkspace(params.workspaceId);
 
+  console.time("PromiseAllTime");
+
   const [data, role, tasks] = (await Promise.all([data_, role_, tasks_])) as [
     IWorkspace,
     string,
-    any
+    TaskResponse[]
   ];
+
+  console.timeEnd("PromiseAllTime");
 
   return (
     <div className="h-full flex flex-col">
@@ -44,7 +52,10 @@ async function Page({
         title={data?.title ?? ""}
         workspaceId={params.workspaceId}
       />
-      <Tabs defaultValue="kanban" className="w-full">
+      <Tabs
+        defaultValue={(searchParams && searchParams["tabs"]) ?? "kanban"}
+        className="w-full h-[90vh]"
+      >
         <div className="flex flex-row justify-between items-center">
           <WorkspaceTabs workspaceId={params.workspaceId} />
           {searchParams && (
@@ -56,12 +67,16 @@ async function Page({
                   workspaceId={params.workspaceId}
                 />
               )}
-              {searchParams["tabs"] === "chats" && <p>chats</p>}
+              {searchParams["tabs"] === "chats" && (
+                <div className="">
+                  <SearchMessageInput />
+                </div>
+              )}
               {searchParams["tabs"] === "calendar" && <p>calendar</p>}
             </div>
           )}
         </div>
-        <TabsContent value="kanban">
+        {searchParams && searchParams["tabs"] === "kanban" && (
           <div className="space-y-2.5">
             <ColumnsWrapperServer
               tasks={tasks}
@@ -69,18 +84,13 @@ async function Page({
               workspaceId={params.workspaceId}
             />
           </div>
-        </TabsContent>
-        <TabsContent
-          value="chats"
-          className="w-full h-full flex flex-col bg-green-600"
-        >
-          <div className="bg-red-400 flex-1">
-            <p>hello how are you ?</p>
-          </div>
-          <div>
-            <Input placeholder="send a text" />
-          </div>
-        </TabsContent>
+        )}
+        {searchParams && searchParams["tabs"] === "chats" && (
+          <ChatContainer workspaceId={params.workspaceId} />
+        )}
+        {searchParams && searchParams["tabs"] === "calendar" && (
+          <CalendarWrapper workspaceId={params.workspaceId} />
+        )}
       </Tabs>
 
       {searchParams && searchParams["columnId"] && (

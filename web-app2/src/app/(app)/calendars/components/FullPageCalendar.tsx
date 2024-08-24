@@ -23,6 +23,7 @@ const localizer = dayjsLocalizer(dayjs);
 type TEvent = {
   title: string;
   taskId: string;
+  workspaceId: string;
   start: string | Date;
   end: string | Date;
 };
@@ -38,11 +39,6 @@ function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const [events, setEvents] = useState<TEvent[]>([]);
-  // const eventPropGetter = (event: any) => {
-  //   const backgroundColor = event.color || "#2e7d32"; // Default color if none is specified
-  //   const color = event.textColor || "#fff"; // Default text color if none is specified
-  //   return { style: { backgroundColor, color } };
-  // };
   const [currentDate, setCurrentDate] = useState(new Date());
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -58,7 +54,8 @@ function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
   };
 
   const handleSelectEvent = (event: TEvent) => {
-    router.push(pathname + "?" + createQueryString("taskId", event.taskId));
+    // router.push(pathname + "?" + createQueryString("taskId", event.taskId));
+    router.push(`/task/${event.workspaceId}/${event.taskId}`);
   };
   const components: any = {
     event: ({ event }: EventProps<TEvent>) => {
@@ -102,9 +99,6 @@ function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
           style={{ height: "86vh" }}
           toolbar={false}
           components={components}
-          // components={{
-          //   event: TaskEvent,
-          // }}
         />
       )}
     </div>

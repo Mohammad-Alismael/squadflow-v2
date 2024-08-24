@@ -94,6 +94,7 @@ async function getTaskIdPopulated(taskId: ObjectId) {
       path: "comments.created_by",
       select: "_id username email photoURL",
     })
+    .lean()
     .exec()) as TaskResponse;
   if (!task) {
     throw new CustomError("Task ID not found", 404);
@@ -103,7 +104,7 @@ async function getTaskIdPopulated(taskId: ObjectId) {
 
 async function getTasksByWorkspaceId(workspaceId: ObjectId) {
   await init();
-  return Task.find({ workspace: workspaceId });
+  return Task.find({ workspace: workspaceId }).lean();
 }
 
 async function getTasksByWorkspaceIdForCalendar(workspaceId: ObjectId) {

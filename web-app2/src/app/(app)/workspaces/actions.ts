@@ -13,6 +13,7 @@ import { getUserAuthFromJWT, handleError } from "@/utils/helper";
 import { IWorkspace } from "@/utils/@types/workspace";
 import { checkUserIdsExist } from "@/lib/users";
 import { NextResponse } from "next/server";
+import { kv } from "@vercel/kv";
 
 export const redirectToggle = (type: string) => {
   redirect(`/workspaces?view=${type}`);
@@ -40,6 +41,12 @@ export const handleCreateWorkspace = async (data: any) => {
     participants: [...participants, { user: userId, role: "admin" }],
     created_by: userId,
   });
+  const cache = [...participants, { user: userId, role: "admin" }].map(
+    async (item) => {
+      await kv.set(`${workspace._id}_user_role_${item.user}`, item.role);
+    }
+  );
+  await Promise.all(cache);
   revalidatePath("/workspaces");
 };
 
