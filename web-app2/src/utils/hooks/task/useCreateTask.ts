@@ -7,7 +7,10 @@ import { handleCreateTask } from "@/utils/actions/workspace-actions";
 import { getErrorMessage } from "@/utils/helper-client";
 import { useDialog } from "@/utils/store/DialogStore";
 
-export const useCreateTask = (workspaceId: string) => {
+export const useCreateTask = (
+  workspaceId: string,
+  redirectToWorkspace: boolean = true
+) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const setOpen = useDialog((state) => state.open);
@@ -20,7 +23,7 @@ export const useCreateTask = (workspaceId: string) => {
       toast({
         title: `successfully created task`,
       });
-      router.replace(`/workspaces/${workspaceId}`);
+      redirectToWorkspace && router.replace(`/workspaces/${workspaceId}`);
       revalidateURL(workspaceId as string);
       await queryClient.invalidateQueries([
         workspaceId,

@@ -19,7 +19,7 @@ function CreateQuickTaskBtn() {
     error,
     isError,
     isSuccess,
-  } = useCreateTask(projectId as string);
+  } = useCreateTask(projectId as string, false);
   const handleCreateTask = async () => {
     const {
       projectId,
@@ -35,25 +35,13 @@ function CreateQuickTaskBtn() {
       attachments,
       comments,
     } = useTaskPropertiesStore.getState();
-    console.log({
-      workspace: projectId,
-      columnId,
-      title,
-      description,
-      dueDate: taskDate,
-      dueTime: endTime,
-      priority,
-      participants,
-      labels,
-      subTasks,
-      attachments,
-      comments,
-    });
     if (projectId === "") {
       toast({ title: "please select a workspace" });
+      return;
     }
     if (columnId === "") {
       toast({ title: "please select a column" });
+      return;
     }
     createMutation({
       workspace: projectId,

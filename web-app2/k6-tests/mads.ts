@@ -16,8 +16,8 @@ export const options = {
 };
 
 export default function () {
-  const data = { username: "anil", password: "123456" };
-  let res = http.post("http://localhost:3000/api/auth/login", data);
+  const data = { username: "test", password: "test456" };
+  let res = http.post("http://188.166.18.15:8080/api/v1/user/login", data);
 
   check(res, { "success login": (r) => r.status === 200 });
 

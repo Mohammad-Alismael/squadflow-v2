@@ -16,9 +16,7 @@ import {
   getTasksForWorkspace,
   getWorkspacePrivilege,
 } from "@/utils/actions/workspace-actions";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Tabs } from "@/components/ui/tabs";
 import WorkspaceTabs from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceTabs";
 import ChatContainer from "@/app/(app)/workspaces/[workspaceId]/components/chats/ChatContainer";
 import CalendarWrapper from "@/app/(app)/calendars/components/CalendarWrapper";
@@ -67,12 +65,12 @@ async function Page({
                   workspaceId={params.workspaceId}
                 />
               )}
-              {searchParams["tabs"] === "chats" && (
-                <div className="">
-                  <SearchMessageInput />
-                </div>
-              )}
-              {searchParams["tabs"] === "calendar" && <p>calendar</p>}
+              {/*{searchParams["tabs"] === "chats" && (*/}
+              {/*  <div className="">*/}
+              {/*    <SearchMessageInput />*/}
+              {/*  </div>*/}
+              {/*)}*/}
+              {/*{searchParams["tabs"] === "calendar" && <p>calendar</p>}*/}
             </div>
           )}
         </div>

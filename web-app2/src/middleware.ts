@@ -18,6 +18,9 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/api/auth/")) {
     return NextResponse.next();
   }
+  if (request.nextUrl.pathname.includes("sentry")) {
+    return NextResponse.next();
+  }
   if (request.nextUrl.pathname.startsWith("/logout")) {
     return NextResponse.next();
   }

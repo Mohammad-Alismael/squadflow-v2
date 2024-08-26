@@ -9,7 +9,7 @@ async function ChatContainer({ workspaceId }: { workspaceId: string }) {
   const payload = await getUserAuthFromJWT();
 
   return (
-    <div className="h-[94.5%] w-full">
+    <div className="h-[93.5%] w-full bg-red-300">
       <div className="flex flex-col w-4/5 h-full float-left overflow-y-auto border-2 border-gray-150">
         <MessagesContainer
           userId={payload?._id}

@@ -7,23 +7,26 @@ import {
 import { kv } from "@vercel/kv";
 import { findUserById } from "@/lib/users";
 import { Active } from "@/app/(app)/workspaces/[workspaceId]/components/chats/ActiveParticipants";
+import { getRedisClient } from "@/lib/redis-setup";
 export const redirectWorkspaceChat = (workspaceId: string) => {
   redirect(`/chats?workspaceId=${workspaceId}`);
 };
 
 export const addUserDataToMessages = async (messages: MessageType[]) => {
   try {
+    const client = await getRedisClient();
     const list = await Promise.all(
       messages.map(async (message: MessageType) => {
         try {
-          const userData = await kv.get(`user_${message.created_by}`);
+          const userData = await client.get(`user_${message.created_by}`);
           if (userData) {
-            console.log("cache hit");
-            return { ...message, user: userData };
+            return { ...message, user: JSON.parse(userData) };
           } else {
-            console.log("cache miss");
             const user = await findUserById(message.created_by);
-            await kv.set(`user_${message.created_by}`, user);
+            await client.set(
+              `user_${message.created_by}`,
+              JSON.stringify(user)
+            );
             return { ...message, user };
           }
         } catch (error) {
@@ -48,17 +51,16 @@ export const getActiveUserData = async (
   data: { timestamp: string; userId: string }[]
 ) => {
   try {
+    const client = await getRedisClient();
     const list = await Promise.all(
       data.map(async (user: { timestamp: string; userId: string }) => {
         try {
-          const userData = await kv.get(`user_${user.userId}`);
+          const userData = await client.get(`user_${user.userId}`);
           if (userData) {
-            console.log("cache hit");
-            return { ...user, user: userData };
+            return { ...user, user: JSON.parse(userData) };
           } else {
-            console.log("cache miss");
             const userM = await findUserById(user.userId);
-            await kv.set(`user_${user.userId}`, userM);
+            await client.set(`user_${user.userId}`, JSON.stringify(userM));
             return { ...user, user: userM };
           }
         } catch (error) {

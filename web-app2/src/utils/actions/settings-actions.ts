@@ -19,6 +19,7 @@ import bcrypt from "bcryptjs";
 import { put } from "@vercel/blob";
 import { WorkspaceParticipants } from "@/utils/@types/workspace";
 import { kv } from "@vercel/kv";
+import { getRedisClient } from "@/lib/redis-setup";
 
 export const fetchCommunity = async () => {
   const { _id: userId } = await getUserAuthFromJWT();
@@ -127,6 +128,7 @@ export const handleChangeUserProfile = async (
   email: string
 ) => {
   await init();
+  const client = await getRedisClient();
   const payload = await getUserAuthFromJWT();
   if (payload?.username === username && payload?.email === email) {
     throw new CustomError("you need to change some text fields", 401);
@@ -164,11 +166,14 @@ export const handleChangeUserProfile = async (
     sameSite: "lax",
     path: "/",
   });
-  await kv.set(`user_${payload?._id}`, {
-    username: newUserObject.username,
-    email: newUserObject.email,
-    photoURL: payload?.photoURL,
-  });
+  await client.set(
+    `user_${payload?._id}`,
+    JSON.stringify({
+      username: newUserObject.username,
+      email: newUserObject.email,
+      photoURL: payload?.photoURL,
+    })
+  );
   revalidatePath("/settings");
 };
 
@@ -179,6 +184,8 @@ export const saveProfileImg = async (formData: FormData) => {
   const userId = payload?._id as string;
   const fileName = `${userId}.${file.type.split("/")[1]}`;
   try {
+    const client = await getRedisClient();
+
     const blob = await put(fileName, file, {
       access: "public",
     });
@@ -199,11 +206,14 @@ export const saveProfileImg = async (formData: FormData) => {
       sameSite: "lax",
       path: "/",
     });
-    await kv.set(`user_${userId}`, {
-      username: newUserObject.username,
-      email: payload?.email,
-      photoURL: url,
-    });
+    await client.set(
+      `user_${userId}`,
+      JSON.stringify({
+        username: newUserObject.username,
+        email: payload?.email,
+        photoURL: url,
+      })
+    );
     return url;
   } catch (error) {
     throw new Error(error.message);

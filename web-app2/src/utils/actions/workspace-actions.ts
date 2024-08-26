@@ -62,6 +62,7 @@ export const fetchWorkspace = cache(async (workspaceId: string) => {
   const client = await getRedisClient();
   console.time("calling fetchWorkspace cache");
   const workspaceCache = await client.get(`workspace_${workspaceId}`);
+  console.log({ workspaceCache: JSON.parse(workspaceCache) });
   console.timeEnd("calling fetchWorkspace cache");
 
   if (workspaceCache)
@@ -79,6 +80,8 @@ export const handleUpdateWorkspace = async (
   workspaceId: string
 ) => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
+  const client = await getRedisClient();
+
   const workspace: IWorkspace = await getWorkspaceById(
     new ObjectId(workspaceId)
   );
@@ -104,7 +107,7 @@ export const handleUpdateWorkspace = async (
     { new: true }
   );
   const cache = data.participants.map(async (item) => {
-    await kv.set(`${workspace._id}_user_role_${item.user}`, item.role);
+    await client.set(`${workspace._id}_user_role_${item.user}`, item.role);
   });
   await Promise.all(cache);
   console.log("successfully update workspace id", workspace._id);
@@ -187,10 +190,11 @@ export const fetchWorkspaceParticipants = async (
 export const getWorkspacePrivilege = cache(async (workspaceId: string) => {
   try {
     const { _id: userId, communityId } = await getUserAuthFromJWT();
-    // console.time("getWorkspacePrivilege from cache");
-    // const cacheRole = await kv.get(`${workspaceId}_user_role_${userId}`);
-    // console.timeEnd("getWorkspacePrivilege from cache");
-    // if (cacheRole) return cacheRole;
+    const client = await getRedisClient();
+    console.time("getWorkspacePrivilege from cache");
+    const cacheRole = await client.get(`${workspaceId}_user_role_${userId}`);
+    console.timeEnd("getWorkspacePrivilege from cache");
+    if (cacheRole) return cacheRole;
     console.time("getWorkspacePrivilege");
     const result = await Workspace.aggregate([
       { $match: { _id: new ObjectId(workspaceId) } },
@@ -203,7 +207,7 @@ export const getWorkspacePrivilege = cache(async (workspaceId: string) => {
     }
     const role = result[0].role;
     console.timeEnd("getWorkspacePrivilege");
-    // await kv.set(`${workspaceId}_user_role_${userId}`, role);
+    await client.set(`${workspaceId}_user_role_${userId}`, role);
     return role;
   } catch (error) {
     console.log(error);

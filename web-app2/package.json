@@ -26,6 +26,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-toggle-group": "^1.0.4",
+    "@sentry/nextjs": "^8.26.0",
     "@types/k6": "^0.53.1",
     "@vercel/blob": "^0.23.4",
     "@vercel/kv": "^2.0.0",

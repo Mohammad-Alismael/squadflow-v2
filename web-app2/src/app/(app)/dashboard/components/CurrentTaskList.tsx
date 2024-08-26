@@ -23,13 +23,7 @@ async function CurrentTaskList({
           <h4 className="capitalize font-bold">all tasks</h4>
           <WorkspaceLabels />
         </div>
-        {communityId !== "" && (
-          <CreateQuickTaskDialog>
-            <Button size="sm" className="bg-green-700">
-              + Task
-            </Button>
-          </CreateQuickTaskDialog>
-        )}
+        {communityId !== "" && <CreateQuickTaskDialog />}
       </div>
       <div className="space-y-2 my-3 h-[38rem] overflow-y-auto">
         {selectedWorkspaceId &&
