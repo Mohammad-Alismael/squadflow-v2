@@ -35,7 +35,7 @@ function CreateTaskDialogWrapper({
     <Dialog
       open={isOpened}
       onOpenChange={() => {
-        router.replace(`/workspaces/${workspaceId}`);
+        router.replace(`/workspaces/${workspaceId}?tabs=kanban`);
       }}
     >
       <DialogOverlay>{isDesktop ? children[0] : children[1]}</DialogOverlay>

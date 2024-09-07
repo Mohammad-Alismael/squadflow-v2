@@ -26,24 +26,7 @@ Page.propTypes = {};
 
 function Page() {
   // i'm planning to add notification system for tasks deadline and assgiment
-  return (
-    <div className="space-y-8 w-full h-full bg-red-300">
-      <Tabs defaultValue="a" className="w-[400px]">
-        <TabsList defaultValue="a">
-          {/* Skeletons for Tabs */}
-          <div className="flex flex-col space-y-2">
-            <Skeleton className="w-full h-8" />
-            <Skeleton className="w-full h-8" />
-            <Skeleton className="w-full h-8" />
-          </div>
-        </TabsList>
-      </Tabs>
-      <div className="">
-        {/* Skeleton for SelectWorkspace */}
-        <Skeleton className="w-full h-full" />
-      </div>
-    </div>
-  );
+
   return (
     <div className="w-full">
       <Navbar>

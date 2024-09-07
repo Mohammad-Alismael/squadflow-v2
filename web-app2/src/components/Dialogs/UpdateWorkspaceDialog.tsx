@@ -81,6 +81,7 @@ function UpdateWorkspaceDialog() {
         participants: newParticipantsList,
       });
       workspace.participants && setParticipants(newParticipantsList);
+      console.log({ newParticipantsList, title: workspace.title });
     }
   }, [workspaceId, isLoadingWorkspace]);
   return (

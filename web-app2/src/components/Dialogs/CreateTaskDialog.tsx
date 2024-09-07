@@ -12,7 +12,6 @@ import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSecti
 import { Skeleton } from "@/components/ui/skeleton";
 import CreateTaskBtn from "@/components/Dialogs/components/CreateTaskBtn";
 import CreateTaskDialogWrapper from "@/components/Dialogs/CreateTaskDialogWrapper";
-import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/CommentContainer";
 import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/PlainCommentsContainer";
 import { USER_ROLES } from "@/utils/helper-client";
 import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";

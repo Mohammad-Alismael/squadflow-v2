@@ -5,11 +5,20 @@ import Participant from "@/app/(app)/workspaces/components/Participant";
 import { workspaceParticipantStore } from "@/utils/store/workspaceParticipantStore";
 import { useGetCommunity } from "@/utils/hooks/community/useGetCommunity";
 import FindParticipantsSkeleton from "@/components/Dialogs/components/FindParticipantsSkeleton";
+import {
+  filterParticipantsByKeyword,
+  getParticipantRole,
+  isParticipantIncluded,
+} from "@/lib/helper/FindParticipantsList.helper";
 
 function FindParticipantsList() {
   const { data, isLoading } = useGetCommunity();
   const [keyword, setKeyword] = useState("");
   const { participants } = workspaceParticipantStore((state) => state);
+  const filteredParticipants = filterParticipantsByKeyword(
+    data?.participants ?? [],
+    keyword
+  );
 
   if (isLoading) return <FindParticipantsSkeleton />;
 
@@ -22,30 +31,34 @@ function FindParticipantsList() {
           onChange={(e) => setKeyword(e.target.value)}
         />
         <div className="mt-2">
-          {data &&
-            data.participants
-              .filter((participant) =>
-                participant.user.username.includes(keyword)
-              )
-              .map((participant, index) => {
-                const isIncluded = participants
-                  .map((item) => item.user)
-                  .includes(participant.user._id);
-                const userFound = participants.find(
-                  (item) => item.user === participant.user._id
-                );
-                return (
-                  <>
-                    <Participant
-                      key={participant._id}
-                      user={participant.user}
-                      showDelete={isIncluded}
-                      role={userFound ? userFound.role : "viewer"}
-                    />
-                    {index !== (data?.participants?.length ?? 0) - 1 && <hr />}
-                  </>
-                );
-              })}
+          {!filteredParticipants.length && <span>no results found</span>}
+          {!!filteredParticipants.length &&
+            filteredParticipants.map((participant, index) => {
+              const isIncluded = isParticipantIncluded(
+                participants,
+                participant.user._id
+              );
+              console.log({
+                isIncluded,
+                participants,
+                userId: participant.user._id,
+              });
+              const role = getParticipantRole(
+                participants,
+                participant.user._id
+              );
+
+              return (
+                <React.Fragment key={participant._id}>
+                  <Participant
+                    user={participant.user}
+                    showDelete={isIncluded}
+                    role={role}
+                  />
+                  {index !== filteredParticipants.length - 1 && <hr />}
+                </React.Fragment>
+              );
+            })}
         </div>
       </div>
     );

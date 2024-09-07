@@ -20,11 +20,10 @@ function AssigneePopover({
   children: ReactNode;
   data: WorkspaceParticipants[];
 }) {
-  console.log("AssigneePopover", data);
   return (
     <Popover>
       <PopoverTrigger>{children}</PopoverTrigger>
-      <PopoverContent className="z-[999]">
+      <PopoverContent className="z-[999] w-max">
         <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
           <h4 className="capitalize font-bold">workspace participants</h4>
           {data &&

@@ -1,24 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { Tabs, TabsList } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 
 Loading.propTypes = {};
 
 function Loading() {
   return (
-    <div className="space-y-8">
-      <Tabs defaultValue="account" className="w-[400px] hidden md:block">
-        <TabsList defaultValue="">
-          {/* Skeletons for Tabs */}
-          <div className="flex flex-col space-y-2">
-            <Skeleton className="w-full h-8" />
-            <Skeleton className="w-full h-8" />
-            <Skeleton className="w-full h-8" />
-          </div>
-        </TabsList>
-      </Tabs>
-      <div className="">
+    <div className="space-y-2 w-full h-full">
+      <div className="flex flex-row space-x-2 w-[400px]">
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+      </div>
+      <div className="w-full h-full">
         {/* Skeleton for SelectWorkspace */}
         <Skeleton className="w-full h-full" />
       </div>

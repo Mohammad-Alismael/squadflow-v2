@@ -34,7 +34,12 @@ async function createCommunity(userId: string, name: string) {
       name,
       admin: userId,
       code: generateRandomId(10),
-      participants: [],
+      participants: [
+        {
+          user: new ObjectId(userId),
+          joined_at: Date.now(),
+        },
+      ],
     });
     console.log(`Community inserted with _id: ${result}`);
     return result;
@@ -111,11 +116,8 @@ async function joinCommunityByCode(userId: string, code: string) {
     throw new CustomError("Invalid user ID", HttpStatusCode.NOT_FOUND);
   }
 
-  // Convert userId to ObjectId
-  const userIdObjectId = new mongoose.Types.ObjectId(userId.trim());
-
   const participantObject = {
-    user: userIdObjectId,
+    user: new ObjectId(userId),
     joined_at: Date.now(),
   };
 
