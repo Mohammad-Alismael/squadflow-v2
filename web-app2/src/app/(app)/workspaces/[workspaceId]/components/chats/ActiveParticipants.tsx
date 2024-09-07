@@ -8,6 +8,7 @@ import {
 } from "@/lib/firebase/firebase-real-time";
 import { getActiveUserData } from "@/app/(app)/chats/actions";
 import Participant from "@/app/(app)/workspaces/[workspaceId]/components/chats/Participant";
+import ParticipantSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/chats/ParticipantSkeleton";
 
 export type Active = {
   timestamp: string;
@@ -60,11 +61,12 @@ function ActiveParticipants({
     };
   }, [communityId, workspaceId, userId]);
   return (
-    <div className="p-1 float-right w-1/5 h-full bg-[#EEEFFC]">
-      <h4 className="capitalize font-bold py-2 px-1 text-2xl">
-        active participants
+    <div className="float-right w-1/4 h-full bg-[#EEEFFC]">
+      <h4 className="capitalize font-bold py-3 px-1 text-xl bg-white">
+        online participants
       </h4>
-      <div className="space-y-2 px-4">
+      <div className="space-y-2 px-5 py-2">
+        {!data.length && new Array(4).map((_, i) => <ParticipantSkeleton />)}
         {!!data.length &&
           data.map(({ user }, index) => {
             return (

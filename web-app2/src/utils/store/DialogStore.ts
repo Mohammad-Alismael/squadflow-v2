@@ -6,6 +6,6 @@ type DialogStoreState = {
 };
 
 export const useDialog = create<DialogStoreState>((set) => ({
-  isOpen: true,
+  isOpen: false,
   open: (status) => set((state) => ({ isOpen: status })),
 }));

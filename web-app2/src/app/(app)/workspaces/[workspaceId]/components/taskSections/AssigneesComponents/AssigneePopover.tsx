@@ -20,7 +20,7 @@ function AssigneePopover({
   children: ReactNode;
   data: WorkspaceParticipants[];
 }) {
-  console.log(data);
+  console.log("AssigneePopover", data);
   return (
     <Popover>
       <PopoverTrigger>{children}</PopoverTrigger>

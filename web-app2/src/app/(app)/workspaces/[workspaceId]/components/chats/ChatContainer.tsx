@@ -4,13 +4,28 @@ import ActiveParticipants from "@/app/(app)/workspaces/[workspaceId]/components/
 import { getUserAuthFromJWT } from "@/utils/helper";
 import MessagesContainer from "@/app/(app)/chats/components/MessagesContainer";
 import SendBar from "@/app/(app)/chats/components/SendBar";
+import { IWorkspace } from "@/utils/@types/workspace";
 
-async function ChatContainer({ workspaceId }: { workspaceId: string }) {
+async function ChatContainer({
+  workspaceId,
+  participants,
+}: {
+  workspaceId: string;
+  participants: IWorkspace["participants"];
+}) {
   const payload = await getUserAuthFromJWT();
 
   return (
     <div className="h-[93.5%] w-full bg-red-300">
-      <div className="flex flex-col w-4/5 h-full float-left overflow-y-auto border-2 border-gray-150">
+      <div className="flex flex-col w-3/4 h-full float-left overflow-y-auto border-[1px] border-gray-150">
+        <div className="flex flex-col justify-start items-start bg-white px-2 py-1">
+          <p className="font-bold capitalize">chats</p>
+          <p className="text-sm opacity-70">
+            {participants
+              .map((participant) => participant.user.username)
+              .join(",")}
+          </p>
+        </div>
         <MessagesContainer
           userId={payload?._id}
           workspaceIdProps={workspaceId}

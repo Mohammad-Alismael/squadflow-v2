@@ -20,6 +20,7 @@ import { getUserAuthFromJWT } from "@/utils/helper";
 import {
   IWorkspace,
   WorkspaceColumn,
+  WorkspaceLabel,
   WorkspaceParticipants,
 } from "@/utils/@types/workspace";
 import { PopulatedUser } from "@/utils/@types/user";
@@ -36,14 +37,13 @@ import {
   ITaskAction,
   TaskResponse,
 } from "@/utils/@types/task";
-import { safeStringify } from "@/utils/helper-client";
 import { NextResponse } from "next/server";
 import { isUserIdHasRole } from "@/lib/helper/workspace.helper";
 import { checkUserIdsExist } from "@/lib/users";
 import { cache } from "react";
 import { revalidatePath } from "next/cache";
-import { kv } from "@vercel/kv";
-import { client, getRedisClient } from "@/lib/redis-setup";
+import { getRedisClient } from "@/lib/redis-setup";
+// import { handleGetWorkspaceParticipantsCache } from "@/utils/helperServer";
 export const fetchWorkspaces = async () => {
   const payload = await getUserAuthFromJWT();
   const userId = payload?._id as string;
@@ -157,6 +157,27 @@ export const fetchTasksForCalendar = async (workspaceId: string) => {
     new ObjectId(workspaceId)
   )) as { title: string; workspace: string; _id: string; dueDate: string }[];
 };
+const handleGetWorkspaceParticipantsCache = async (
+  workspaceId: string,
+  callback: () => Promise<any>
+) => {
+  try {
+    const client = await getRedisClient();
+    console.time("getWorkspaceParticipantsCache");
+    const workspaceCache = await client.get(`workspace_${workspaceId}`);
+    console.timeEnd("getWorkspaceParticipantsCache");
+
+    if (workspaceCache)
+      return JSON.parse(workspaceCache)
+        .participants as IWorkspace["participants"];
+    else {
+      return callback();
+    }
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+};
 
 export const fetchWorkspaceParticipants = async (
   workspaceId: string,
@@ -165,20 +186,37 @@ export const fetchWorkspaceParticipants = async (
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   try {
     if (withDetails) {
-      const result = await getWorkspaceParticipants(new ObjectId(workspaceId));
-      const listWithoutUserId = result.participants.filter(
+      const callback = async () => {
+        const result = await getWorkspaceParticipants(
+          new ObjectId(workspaceId)
+        );
+        return result.participants;
+      };
+      let participantsList: WorkspaceParticipants[] =
+        await handleGetWorkspaceParticipantsCache(workspaceId, callback);
+      // let participantsList: WorkspaceParticipants[] = await callback();
+      const listWithoutUserId = participantsList.filter(
         (item: { _id: string; user: PopulatedUser; role: string }) => {
           return item.user._id !== userId;
         }
       );
       return listWithoutUserId as WorkspaceParticipants[];
     } else {
-      const res = await getWorkspaceById(new ObjectId(workspaceId));
-      const listWithoutUserId = res.participants.filter(
-        (item: { _id: string; user: string; role: string }) => {
-          return item.user !== userId;
+      const callback = async () => {
+        const result = await getWorkspaceById(new ObjectId(workspaceId));
+        return result.participants;
+      };
+
+      let participantsList: WorkspaceParticipants[] =
+        await handleGetWorkspaceParticipantsCache(workspaceId, callback);
+      // let participantsList: WorkspaceParticipants[] = await callback();
+
+      const listWithoutUserId = participantsList.filter(
+        (item: WorkspaceParticipants) => {
+          return item.user._id !== userId;
         }
       );
+
       return listWithoutUserId as WorkspaceParticipants[];
     }
   } catch (error) {
@@ -291,6 +329,10 @@ export const handleGetTaskById = async (taskId: string | undefined) => {
 
 export const fetchWorkspaceColumns = async (workspaceId: string) => {
   try {
+    const client = await getRedisClient();
+    const workspaceCache = await client.get(`workspace_${workspaceId}`);
+    if (workspaceCache)
+      return JSON.parse(workspaceCache).columns as unknown as WorkspaceColumn[];
     const workspace = await getWorkspaceById(new ObjectId(workspaceId));
     return workspace.columns;
   } catch (error) {
@@ -301,6 +343,10 @@ export const fetchWorkspaceColumns = async (workspaceId: string) => {
 
 export const fetchWorkspaceLabels = async (workspaceId: string) => {
   try {
+    const client = await getRedisClient();
+    const workspaceCache = await client.get(`workspace_${workspaceId}`);
+    if (workspaceCache)
+      return JSON.parse(workspaceCache).labels as unknown as WorkspaceLabel[];
     const workspace = await getWorkspaceById(new ObjectId(workspaceId));
     return workspace.labels;
   } catch (error) {

@@ -99,7 +99,7 @@ async function getWorkspaceByIdPopulated(workspaceId: ObjectId) {
   return workspace;
 }
 async function getWorkspaceParticipants(workspaceId: ObjectId) {
-  await init();
+  // await init();
   const workspace = await Workspace.findById(workspaceId)
     .select("participants")
     .populate({

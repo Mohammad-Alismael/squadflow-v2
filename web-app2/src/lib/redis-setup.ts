@@ -1,3 +1,4 @@
+import "server-only";
 import { createClient, RedisClientType } from "redis";
 
 // Define a variable to hold the Redis client instance

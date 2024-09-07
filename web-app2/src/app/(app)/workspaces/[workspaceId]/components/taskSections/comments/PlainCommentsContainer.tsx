@@ -8,7 +8,7 @@ function PlainCommentsContainer() {
   const comments = useTaskPropertiesStore((state) => state.comments);
 
   return (
-    <div className="space-y-2 w-full h-[25rem] lg:h-[30rem] overflow-y-auto">
+    <div className="space-y-2 w-full h-[25rem] lg:h-[26.5rem] xl:h-[30rem] overflow-y-auto">
       {comments.map((comment) => (
         <Comment key={comment._id} data={comment} />
       ))}
