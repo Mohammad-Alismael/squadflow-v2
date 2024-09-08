@@ -4,11 +4,8 @@ import {
   WorkspaceLabel,
   WorkspaceParticipants,
 } from "@/utils/@types/workspace";
-import {
-  fetchWorkspaceColumns,
-  fetchWorkspaceLabels,
-  fetchWorkspaceParticipants,
-} from "@/lib/api/workspace";
+import { getWorkspaceLabels } from "@/utils/actions/workspace-actions";
+
 interface PropTypes {
   id: string;
   onSuccess: (data: WorkspaceLabel[]) => void;
@@ -22,6 +19,6 @@ export const useGetWorkspaceLabelsById = (
     enabled: !!id,
     onSuccess,
     refetchOnWindowFocus: false,
-    queryFn: () => fetchWorkspaceLabels(id),
+    queryFn: () => getWorkspaceLabels(id),
   }) as UseQueryResult<WorkspaceLabel[], Error>;
 };

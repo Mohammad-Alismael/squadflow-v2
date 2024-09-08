@@ -8,8 +8,8 @@ import User from "@/models/user";
 import { getUserAuthFromJWT } from "@/utils/helper";
 let mongoServer: MongoMemoryServer;
 import { getRedisClient } from "@/lib/redis-setup";
-import { fetchWorkspaceParticipants } from "./mocked-functions/fetchWorkspaceParticipants";
 import { getWorkspaceParticipants } from "@/lib/workspace";
+import { fetchWorkspaceParticipants } from "@/utils/actions/workspace-actions";
 vi.mock("@/utils/helper");
 
 describe("test (fetchWorkspaceParticipants) function", () => {

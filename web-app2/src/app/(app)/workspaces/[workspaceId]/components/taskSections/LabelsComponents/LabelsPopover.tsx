@@ -5,21 +5,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useParams } from "next/navigation";
-import Label from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/Label";
 import AddItem from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesComponents/AddItem";
 import AddLabelPopover from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/AddLabelPopover";
-import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
-import { WorkspaceLabel } from "@/utils/@types/workspace";
+import ShowLabelsClient from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/ShowLabelsClient";
 
 LabelsPopover.propTypes = {};
 
 function LabelsPopover({
   children,
-  data,
+  workspaceId,
 }: {
   children: ReactNode;
-  data: WorkspaceLabel[];
+  workspaceId: string;
 }) {
   return (
     <Popover>
@@ -27,13 +24,7 @@ function LabelsPopover({
       <PopoverContent>
         <div className="space-y-2">
           <h4 className="capitalize font-bold">workspace labels</h4>
-          <div className="py-2">
-            {data &&
-              data.map((item, index) => {
-                return <Label key={item._id.toString()} data={item} />;
-              })}
-            {!data.length && <p>no label were created for workspace</p>}
-          </div>
+          <ShowLabelsClient workspaceId={workspaceId} />
           <AddLabelPopover>
             <AddItem title="add label" />
           </AddLabelPopover>

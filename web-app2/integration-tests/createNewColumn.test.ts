@@ -8,7 +8,6 @@ import User from "@/models/user";
 import { getUserAuthFromJWT } from "@/utils/helper";
 let mongoServer: MongoMemoryServer;
 import { getRedisClient } from "@/lib/redis-setup";
-import { fetchWorkspaceParticipants } from "./mocked-functions/fetchWorkspaceParticipants";
 import { getWorkspaceParticipants } from "@/lib/workspace";
 import { createNewColumn } from "@/utils/actions/workspace-actions";
 vi.mock("@/utils/helper");
@@ -76,5 +75,44 @@ describe("test (createNewColumn) function", () => {
     expect(res.columns[3]).toBeDefined();
     expect(res.columns[3].order).to.equal(newColumn.order);
     expect(res.columns[3].title).to.equal(newColumn.title);
+  });
+
+  test("create a new column unsuccessfully with title", async () => {
+    const workspace = workspaceList[0];
+    const newColumn = {
+      title: "urgent",
+      order: 4,
+      color: "#000",
+    };
+
+    async function getAsyncFunction() {
+      try {
+        const res = await createNewColumn(workspace._id.toString(), newColumn);
+      } catch (error) {
+        return Promise.reject(new Error(error));
+      }
+    }
+    await expect(() => getAsyncFunction()).rejects.toThrowError(
+      "column is already created"
+    );
+  });
+  test("create a new column unsuccessfully with order", async () => {
+    const workspace = workspaceList[0];
+    const newColumn = {
+      title: "urgent_too",
+      order: 3,
+      color: "#000",
+    };
+
+    async function getAsyncFunction() {
+      try {
+        const res = await createNewColumn(workspace._id.toString(), newColumn);
+      } catch (error) {
+        return Promise.reject(new Error(error));
+      }
+    }
+    await expect(() => getAsyncFunction()).rejects.toThrowError(
+      "order column is incorrect"
+    );
   });
 });

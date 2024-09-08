@@ -56,7 +56,7 @@ async function updateWorkspaceLabelsList(
   workspaceId: ObjectId,
   labels: { color: string; title: string }
 ) {
-  await init();
+  // await init();
   try {
     const result = await Workspace.findOneAndUpdate(
       { _id: workspaceId },

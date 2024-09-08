@@ -8,11 +8,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
 import { useCreateLabelWorkspace } from "@/utils/hooks/workspace/useCreateLabelWorkspace";
 import { useParams } from "next/navigation";
 function AddLabelPopover({ children }: { children: ReactNode }) {
-  const { toast } = useToast();
   const { workspaceId } = useParams();
 
   const { createMutation, isLoading } = useCreateLabelWorkspace(
@@ -22,9 +20,6 @@ function AddLabelPopover({ children }: { children: ReactNode }) {
   const [text, setText] = useState("");
   const handleClick = async () => {
     createMutation({ color: color, title: text });
-    toast({
-      title: `successfully created workspace label`,
-    });
   };
   return (
     <Popover>

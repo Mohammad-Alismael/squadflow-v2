@@ -29,6 +29,7 @@ export const generateFakeWorkspace = (
       { order: 3, title: "completed", color: "red" },
     ],
     labels: Array.from({ length: labelsCount }).map(() => ({
+      _id: new mongoose.Types.ObjectId(),
       color: "#ff0000",
       title: faker.commerce.productName(),
     })),

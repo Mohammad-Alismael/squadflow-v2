@@ -10,6 +10,9 @@ vi.mock("react", () => ({
   ...vi.importActual("react"),
   cache: vi.fn((fn) => fn),
 }));
+vi.mock("@/lib/mongodb", () => ({
+  connectMongoDB: vi.fn(),
+}));
 vi.mock("redis", () => ({
   createClient: () => {
     const client = redisMock.createClient();

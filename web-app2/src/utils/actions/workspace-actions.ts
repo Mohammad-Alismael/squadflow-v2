@@ -9,12 +9,14 @@ import {
 } from "@/lib/tasks";
 import { ObjectId } from "mongodb";
 import {
+  deleteLabelFromWorkspace,
   getWorkspaceById,
   getWorkspaceByIdPopulated,
   getWorkspaceParticipants,
   getWorkspacesByCommunityAndUser,
   getWorkspacesByCommunityIdPopulatedWithUserId,
   updateWorkspace,
+  updateWorkspaceLabelsList,
 } from "@/lib/workspace";
 import { getUserAuthFromJWT } from "@/utils/helper";
 import {
@@ -43,7 +45,7 @@ import { checkUserIdsExist } from "@/lib/users";
 import { cache } from "react";
 import { revalidatePath } from "next/cache";
 import { getRedisClient } from "@/lib/redis-setup";
-// import { handleGetWorkspaceParticipantsCache } from "@/utils/helperServer";
+
 export const fetchWorkspaces = async () => {
   const payload = await getUserAuthFromJWT();
   const userId = payload?._id as string;
@@ -266,8 +268,15 @@ export const createNewColumn = async (
       { _id: workspaceId, "columns.title": newColumn.title },
       { "columns.$": 1 }
     );
+    const res2 = await Workspace.findOne(
+      { _id: workspaceId, "columns.order": newColumn.order },
+      { "columns.$": 1 }
+    );
     if (res) {
       throw new Error("column is already created");
+    }
+    if (res2) {
+      throw new Error("order column is incorrect");
     }
     await Workspace.updateOne(
       { _id: workspaceId },
@@ -365,4 +374,69 @@ export const handleCreateTask = async (data: ITaskAction) => {
     ...data,
     created_by: new ObjectId(userId),
   });
+};
+
+export const getWorkspaceLabels = async (workspaceId: string) => {
+  try {
+    const res = await Workspace.findById(workspaceId);
+    return JSON.parse(JSON.stringify(res.labels)) as WorkspaceLabel[];
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const createWorkspaceLabel = async (
+  workspaceId: string,
+  data: { title: string; color: string }
+) => {
+  console.log({ workspaceId, data });
+  if (data.title === "") throw new Error("label title should not bbe empty");
+  try {
+    await updateWorkspaceLabelsList(new ObjectId(workspaceId), {
+      color: data.color,
+      title: data.title,
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const updateWorkspaceLabel = async (
+  workspaceId: string,
+  data: { _id: string; title: string; color: string }
+) => {
+  try {
+    const result = await Workspace.findOneAndUpdate(
+      { _id: workspaceId, "labels._id": data._id },
+      {
+        $set: {
+          "labels.$.title": data.title,
+          "labels.$.color": data.title,
+        },
+      },
+      { new: true } // Returns the updated document
+    );
+
+    return result;
+  } catch (error) {
+    console.error("Error updating label:", error);
+    throw error;
+  }
+};
+
+export const deleteWorkspaceLabel = async (
+  workspaceId: string,
+  labelId: string
+) => {
+  try {
+    await deleteLabelFromWorkspace(
+      new ObjectId(workspaceId),
+      new ObjectId(labelId)
+    );
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
