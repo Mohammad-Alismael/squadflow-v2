@@ -38,11 +38,6 @@ function FindParticipantsList() {
                 participants,
                 participant.user._id
               );
-              console.log({
-                isIncluded,
-                participants,
-                userId: participant.user._id,
-              });
               const role = getParticipantRole(
                 participants,
                 participant.user._id

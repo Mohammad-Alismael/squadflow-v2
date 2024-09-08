@@ -390,7 +390,6 @@ export const createWorkspaceLabel = async (
   workspaceId: string,
   data: { title: string; color: string }
 ) => {
-  console.log({ workspaceId, data });
   if (data.title === "") throw new Error("label title should not bbe empty");
   try {
     await updateWorkspaceLabelsList(new ObjectId(workspaceId), {
