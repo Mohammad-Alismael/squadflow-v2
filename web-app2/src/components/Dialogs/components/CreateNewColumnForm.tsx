@@ -40,6 +40,14 @@ function CreateNewColumnForm({
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      console.log({
+        workspaceId,
+        newColumn: {
+          ...values,
+          order: columnsLength + 1,
+          color: "#000",
+        },
+      });
       await createNewColumn(workspaceId, {
         ...values,
         order: columnsLength + 1,

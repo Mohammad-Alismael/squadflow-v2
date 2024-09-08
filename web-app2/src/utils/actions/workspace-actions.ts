@@ -266,7 +266,6 @@ export const createNewColumn = async (
       { _id: workspaceId, "columns.title": newColumn.title },
       { "columns.$": 1 }
     );
-    console.log("createNewColumn", res);
     if (res) {
       throw new Error("column is already created");
     }

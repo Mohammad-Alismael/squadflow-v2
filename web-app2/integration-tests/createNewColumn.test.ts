@@ -4,16 +4,16 @@ import mongoose from "mongoose";
 import { execute } from "../test-data/faker/seeder-index";
 import Community from "@//models/community";
 import Workspace from "@/models/workspace";
-import { findUserById } from "@/lib/users";
 import User from "@/models/user";
 import { getUserAuthFromJWT } from "@/utils/helper";
 let mongoServer: MongoMemoryServer;
 import { getRedisClient } from "@/lib/redis-setup";
 import { fetchWorkspaceParticipants } from "./mocked-functions/fetchWorkspaceParticipants";
 import { getWorkspaceParticipants } from "@/lib/workspace";
+import { createNewColumn } from "@/utils/actions/workspace-actions";
 vi.mock("@/utils/helper");
 
-describe("test (fetchWorkspaceParticipants) function", () => {
+describe("test (createNewColumn) function", () => {
   const { usersList, communitiesList, workspaceList } = execute();
 
   beforeAll(async () => {
@@ -62,28 +62,19 @@ describe("test (fetchWorkspaceParticipants) function", () => {
     await mongoose.disconnect();
     await mongoServer.stop();
   });
-  test("when details is true", async () => {
-    expect(fetchWorkspaceParticipants).toBeInstanceOf(Function);
-    const res = await fetchWorkspaceParticipants(
-      workspaceList[0]._id.toString(),
-      true
-    );
-    expect(res).length(4);
-    const requestedUserId = res.find(
-      (user) => user.user._id === usersList[0]._id.toString()
-    );
-    expect(requestedUserId).toBeUndefined();
-  });
-  test("when details is false", async () => {
-    expect(fetchWorkspaceParticipants).toBeInstanceOf(Function);
-    const res = await fetchWorkspaceParticipants(
-      workspaceList[0]._id.toString(),
-      false
-    );
-    expect(res).length(4);
-    const requestedUserId = res.find(
-      (user) => user.user._id === usersList[0]._id.toString()
-    );
-    expect(requestedUserId).toBeUndefined();
+
+  test("create a new column successfully", async () => {
+    const workspace = workspaceList[0];
+    const newColumn = {
+      title: "newColumnTitle",
+      order: 4,
+      color: "#000",
+    };
+    await createNewColumn(workspace._id.toString(), newColumn);
+    const res = await Workspace.findById(workspace._id);
+    expect(res.columns).length(4);
+    expect(res.columns[3]).toBeDefined();
+    expect(res.columns[3].order).to.equal(newColumn.order);
+    expect(res.columns[3].title).to.equal(newColumn.title);
   });
 });
