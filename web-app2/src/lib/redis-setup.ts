@@ -19,7 +19,6 @@ export async function getRedisClient(): Promise<RedisClientType> {
     // Connect and return the client
     await redisClient.connect();
     return redisClient!;
-    return redisClient!;
   }
 
   // If the client already exists, return it

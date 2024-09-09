@@ -11,6 +11,7 @@ export const useGetWorkspaceById = (id: PropTypes["id"]) => {
     queryKey: [id],
     enabled: !!id,
     refetchOnWindowFocus: false,
+    cacheTime: 0,
     queryFn: () => fetchWorkspace(id) as unknown as IWorkspace,
   }) as UseQueryResult<IWorkspace, Error>;
 };

@@ -59,7 +59,7 @@ export const fetchWorkspaces = async () => {
 };
 
 export const fetchWorkspace = cache(async (workspaceId: string) => {
-  console.log("calling fetchWorkspace");
+  console.log(`calling fetchWorkspace for _id ${workspaceId}`);
   if (!workspaceId) return null;
   const client = await getRedisClient();
   console.time("calling fetchWorkspace cache");
@@ -112,6 +112,7 @@ export const handleUpdateWorkspace = async (
     await client.set(`${workspace._id}_user_role_${item.user}`, item.role);
   });
   await Promise.all(cache);
+  await client.del(`workspace_${workspace._id}`);
   console.log("successfully update workspace id", workspace._id);
 };
 
