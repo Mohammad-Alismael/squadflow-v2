@@ -127,6 +127,8 @@ export const updateColumnTitleById = async (
         $set: { "columns.$.title": newTitle },
       }
     );
+    const client = await getRedisClient();
+    await client.del(`workspace_${workspaceId}`);
     console.log("Column title updated successfully:", result);
     revalidatePath(`/workspaces/${workspaceId}`);
   } catch (error) {
@@ -278,6 +280,9 @@ export const createNewColumn = async (
     if (res2) {
       throw new Error("order column is incorrect");
     }
+    const client = await getRedisClient();
+    await client.del(`workspace_${workspaceId}`);
+
     await Workspace.updateOne(
       { _id: workspaceId },
       { $push: { columns: newColumn } }
@@ -295,6 +300,8 @@ export const deleteColumn = async (workspaceId: string, columnId: string) => {
       { $pull: { columns: { _id: columnId } } }
     );
     await Task.deleteMany({ columnId });
+    const client = await getRedisClient();
+    await client.del(`workspace_${workspaceId}`);
   } catch (error) {
     console.log(error);
     throw error;
