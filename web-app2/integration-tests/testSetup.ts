@@ -48,8 +48,8 @@ export const setupTestEnvironment = async () => {
     autoIndex: true,
   });
 
-  await seedDatabase(usersList, communitiesList, workspaceList);
-  await seedRedis(workspaceList);
+  await seedDatabase();
+  await seedRedis();
 };
 
 export const teardownTestEnvironment = async () => {

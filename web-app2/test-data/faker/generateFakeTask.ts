@@ -1,35 +1,46 @@
-import { faker } from "@faker-js/faker";
-import mongoose from "mongoose";
-const generateFakeTask = () => {
-  const participantsCount = faker.datatype.number({ min: 1, max: 5 });
-  const labelsCount = faker.datatype.number({ min: 1, max: 3 });
-  const commentsCount = faker.datatype.number({ min: 0, max: 5 });
-  const attachmentsCount = faker.datatype.number({ min: 0, max: 3 });
+import { faker, SimpleFaker } from "@faker-js/faker";
+import { ObjectId } from "mongodb";
+
+export const generateFakeTask = (
+  workspaceId: ObjectId,
+  columnIds: ObjectId[],
+  labels: { _id: ObjectId; color: string; title: string }[],
+  participants: ObjectId[]
+) => {
+  const numberParticipants = faker.number.int({
+    min: 1,
+    max: participants.length,
+  });
+  const randomNumberOfColumns = faker.number.int({
+    min: 0,
+    max: columnIds.length - 1,
+  });
+  const labelsCount = faker.number.int({ min: 1, max: labels.length });
+  const commentsCount = faker.number.int({ min: 0, max: 5 });
+  const creatorId = participants[numberParticipants - 1];
+  const customSimpleFaker = new SimpleFaker();
 
   return {
-    workspace: mongoose.Types.ObjectId(), // Assuming it's a reference to a Workspace
+    workspace: workspaceId,
     title: faker.company.catchPhrase(),
-    columnId: faker.random.alphaNumeric(10),
-    participants: Array.from({ length: participantsCount }).map(() =>
-      mongoose.Types.ObjectId()
+    columnId: columnIds[randomNumberOfColumns],
+    participants: Array.from({ length: numberParticipants }).map(
+      (_, index) => participants[index]
     ),
-    labels: Array.from({ length: labelsCount }).map(() => ({
-      color: faker.commerce.color(),
-      title: faker.commerce.productName(),
-    })),
+    labels: Array.from({ length: labelsCount }).map(
+      (_, index) => labels[index]
+    ),
     comments: Array.from({ length: commentsCount }).map(() => ({
-      created_by: mongoose.Types.ObjectId(),
+      created_by: creatorId,
       text: faker.lorem.sentence(),
       created_at: faker.date.recent(),
     })),
     dueDate: faker.date.future().toISOString().split("T")[0],
     dueTime: faker.date.future().toISOString().split("T")[1].split(".")[0],
-    priority: faker.random.arrayElement(["Low", "Medium", "High"]),
+    priority: customSimpleFaker.helpers.arrayElement(["Low", "Medium", "High"]),
     description: faker.lorem.paragraph(),
-    attachments: Array.from({ length: attachmentsCount }).map(() =>
-      faker.internet.url()
-    ),
-    created_by: mongoose.Types.ObjectId(),
-    updated_by: mongoose.Types.ObjectId(),
+    attachments: [],
+    created_by: creatorId,
+    updated_by: creatorId,
   };
 };

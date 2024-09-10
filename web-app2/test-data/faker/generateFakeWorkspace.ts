@@ -24,9 +24,24 @@ export const generateFakeWorkspace = (
       ]),
     })),
     columns: [
-      { order: 1, title: "ongoing", color: "red" },
-      { order: 2, title: "urgent", color: "red" },
-      { order: 3, title: "completed", color: "red" },
+      {
+        _id: new mongoose.Types.ObjectId(),
+        order: 1,
+        title: "ongoing",
+        color: "red",
+      },
+      {
+        _id: new mongoose.Types.ObjectId(),
+        order: 2,
+        title: "urgent",
+        color: "red",
+      },
+      {
+        _id: new mongoose.Types.ObjectId(),
+        order: 3,
+        title: "completed",
+        color: "red",
+      },
     ],
     labels: Array.from({ length: labelsCount }).map(() => ({
       _id: new mongoose.Types.ObjectId(),

@@ -64,7 +64,6 @@ export const fetchWorkspace = cache(async (workspaceId: string) => {
   const client = await getRedisClient();
   console.time("calling fetchWorkspace cache");
   const workspaceCache = await client.get(`workspace_${workspaceId}`);
-  console.log({ workspaceCache: JSON.parse(workspaceCache) });
   console.timeEnd("calling fetchWorkspace cache");
 
   if (workspaceCache)

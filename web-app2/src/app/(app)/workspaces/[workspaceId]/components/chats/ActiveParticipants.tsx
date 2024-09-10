@@ -66,7 +66,8 @@ function ActiveParticipants({
         online participants
       </h4>
       <div className="space-y-2 px-5 py-2">
-        {!data.length && new Array(4).map((_, i) => <ParticipantSkeleton />)}
+        {!data.length &&
+          new Array(4).map((_, i) => <ParticipantSkeleton key={i} />)}
         {!!data.length &&
           data.map(({ user }, index) => {
             return (

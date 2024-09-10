@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import mongoose from "mongoose";
-import { generateRandomId } from "../../src/lib/helper/community.helper";
+import { generateRandomId } from "@/lib/helper/community.helper";
 import { ObjectId } from "mongodb";
 export const generateFakeCommunity = (
   adminId: ObjectId,

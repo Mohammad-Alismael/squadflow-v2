@@ -6,7 +6,7 @@ import ShowAssignees from "@/app/(app)/workspaces/[workspaceId]/components/taskS
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { useShallow } from "zustand/react/shallow";
 import { WorkspaceParticipants } from "@/utils/@types/workspace";
-async function AssigneesClient() {
+function AssigneesClient() {
   const { participants } = useTaskPropertiesStore(
     useShallow((state) => ({
       participants: state.workspaceParticipants,

@@ -96,7 +96,7 @@ async function getWorkspaceByIdPopulated(workspaceId: ObjectId) {
   if (!workspace) {
     throw new CustomError("workspace not found", HttpStatusCode.NOT_FOUND);
   }
-  return workspace;
+  return workspace as IWorkspace;
 }
 async function getWorkspaceParticipants(workspaceId: ObjectId) {
   // await init();

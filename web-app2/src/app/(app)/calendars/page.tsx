@@ -38,7 +38,6 @@ function Page({
         <TaskDetailsDialogServer
           taskId={searchParams["taskId"]}
           workspaceId={searchParams["workspace"]}
-          revertBackTo={`/calendars?workspace=${searchParams["workspace"]}`}
         />
       )}
     </div>
