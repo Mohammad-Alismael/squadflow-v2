@@ -12,6 +12,7 @@ function NavbarSkeleton() {
           ))}
         </div>
       </div>
+      <Skeleton className="h-8 w-8 rounded-full" />
     </div>
   );
 }

@@ -7,7 +7,6 @@ import TasksSearch from "@/app/(app)/workspaces/[workspaceId]/components/TasksSe
 
 import { USER_ROLES } from "@/utils/helper-client";
 import { Skeleton } from "@/components/ui/skeleton";
-import ModifyColumnsDrawer from "@/components/Dialogs/ModifyColumnsDrawer";
 
 WorkspaceHeader.propTypes = {};
 
@@ -23,7 +22,7 @@ async function WorkspaceHeader({
   return (
     <div
       className={clsx(
-        "w-full flex flex-row items-center justify-between",
+        "w-full flex gap-2 items-center justify-between pb-3 md:pb-0",
         className
       )}
     >
@@ -32,7 +31,7 @@ async function WorkspaceHeader({
         {role !== USER_ROLES.viewer && (
           <Suspense fallback={<Skeleton className="w-[180px] h-8" />}>
             <ModifyColumnsDialog workspaceId={workspaceId}>
-              <Button className="capitalize bg-green-800">
+              <Button className="capitalize bg-green-800" size="sm">
                 modify columns
               </Button>
             </ModifyColumnsDialog>

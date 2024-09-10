@@ -32,7 +32,7 @@ const Sidebar = () => {
         href="/dashboard"
       >
         <Image src={logo} alt="logo" priority width={50} height={50} />
-        <span className="sm:text-2xl text-sm font-bold capitalize">
+        <span className="text-sm xl:text-2xl font-bold capitalize">
           squadflow
         </span>
       </Link>

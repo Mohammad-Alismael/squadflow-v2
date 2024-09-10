@@ -61,7 +61,7 @@ function ActiveParticipants({
     };
   }, [communityId, workspaceId, userId]);
   return (
-    <div className="float-right w-1/4 h-full bg-[#EEEFFC]">
+    <div className="hidden md:block float-right w-1/4 h-full bg-[#EEEFFC]">
       <h4 className="capitalize font-bold py-3 px-1 text-xl bg-white">
         online participants
       </h4>

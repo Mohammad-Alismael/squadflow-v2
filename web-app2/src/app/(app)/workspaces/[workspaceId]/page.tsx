@@ -14,6 +14,9 @@ import WorkspaceTabs from "@/app/(app)/workspaces/[workspaceId]/components/Works
 import ChatContainer from "@/app/(app)/workspaces/[workspaceId]/components/chats/ChatContainer";
 import CalendarWrapper from "@/app/(app)/calendars/components/CalendarWrapper";
 import { TaskResponse } from "@/utils/@types/task";
+import NavbarSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skeleton/NavbarSkeleton";
+import ColumnHeaderSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeaderSkeleton";
+import ColumnsContainerSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skeleton/ColumnsContainerSkeleton";
 
 async function Page({
   params,
@@ -35,7 +38,6 @@ async function Page({
   ];
 
   console.timeEnd("PromiseAllTime");
-
   return (
     <div className="h-full flex flex-col">
       <WorkspaceNavbar
@@ -46,7 +48,7 @@ async function Page({
         defaultValue={(searchParams && searchParams["tabs"]) ?? "kanban"}
         className="w-full h-[90vh]"
       >
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <WorkspaceTabs workspaceId={params.workspaceId} />
           {searchParams && (
             <div>

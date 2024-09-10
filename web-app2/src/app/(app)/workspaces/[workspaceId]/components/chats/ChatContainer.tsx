@@ -17,7 +17,7 @@ async function ChatContainer({
 
   return (
     <div className="h-[93.5%] w-full bg-red-300">
-      <div className="flex flex-col w-3/4 h-full float-left overflow-y-auto border-[1px] border-gray-150">
+      <div className="flex flex-col w-full md:w-3/4 h-full float-left overflow-y-auto border-[1px] border-gray-150">
         <div className="flex flex-col justify-start items-start bg-white px-2 py-1">
           <p className="font-bold capitalize">chats</p>
           <p className="text-sm opacity-70">

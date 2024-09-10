@@ -5,8 +5,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 function ColumnHeaderSkeleton() {
   return (
     <div className={"w-full flex flex-row items-center justify-between"}>
-      <div className="w-full h-8">
-        <Skeleton className="w-full h-full" />
+      <div className="flex flex-row space-x-2 w-[300px]">
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-full h-8" />
       </div>
       <div className="flex flex-row items-center justify-between gap-2">
         <div className="w-[180px] h-8">
