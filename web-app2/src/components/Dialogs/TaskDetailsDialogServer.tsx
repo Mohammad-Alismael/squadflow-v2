@@ -19,7 +19,6 @@ import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/compone
 import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";
 import { USER_ROLES } from "@/utils/helper-client";
 import { Skeleton } from "@/components/ui/skeleton";
-import TaskDetailsDialogSkeleton from "@/components/Dialogs/TaskDetailsDialogSkeleton";
 
 function Body({ workspaceId }: { workspaceId: string }) {
   return (

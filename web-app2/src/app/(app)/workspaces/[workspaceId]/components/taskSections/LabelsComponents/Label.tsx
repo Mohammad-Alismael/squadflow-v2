@@ -8,7 +8,13 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useQueryClient } from "react-query";
 
-function Label({ data }: { data: WorkspaceLabel }) {
+function Label({
+  data,
+  showDeleteIcon = false,
+}: {
+  data: WorkspaceLabel;
+  showDeleteIcon: boolean;
+}) {
   const { addLabel, removeLabel } = useTaskPropertiesStore();
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -35,7 +41,7 @@ function Label({ data }: { data: WorkspaceLabel }) {
   return (
     <div
       style={{ backgroundColor: data.color }}
-      className="space-x-2 inline-block rounded-full px-2 py-1s"
+      className="space-x-2 inline-flex rounded-full px-2 py-1 justify-center items-center gap-x-2"
     >
       <p
         onClick={included ? handleClickRemove : handleClick}
@@ -43,13 +49,15 @@ function Label({ data }: { data: WorkspaceLabel }) {
       >
         {data.title}
       </p>
-      <button
-        onClick={handlePressOnIcon}
-        className="bg-gray-200 rounded-full p-2 hover:bg-gray-300 transition-colors"
-        aria-label="Delete"
-      >
-        <TrashIcon className="h-4 w-4 text-gray-700" />
-      </button>
+      {showDeleteIcon && (
+        <button
+          onClick={handlePressOnIcon}
+          className="bg-gray-200 rounded-full p-2 hover:bg-gray-300 transition-colors"
+          aria-label="Delete"
+        >
+          <TrashIcon className="h-4 w-4 text-gray-700" />
+        </button>
+      )}
     </div>
   );
 }

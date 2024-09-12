@@ -15,6 +15,7 @@ export async function delay(ms: number) {
 export const getAllTasksAction = async () => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   if (communityId === "") return [];
+  console.log("getAllTasksAction");
   const res = await getAllTasksCreatedByUserOrParticipated(
     new ObjectId(userId),
     new ObjectId(communityId)
@@ -25,6 +26,7 @@ export const getAllTasksAction = async () => {
 export const getAllTasksCreatedParticipatedAction = async () => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   if (communityId === "") return [];
+  console.log("getAllTasksCreatedParticipatedAction");
   const res = await getAllTasksCreatedParticipated(
     new ObjectId(userId),
     new ObjectId(communityId)
@@ -34,6 +36,7 @@ export const getAllTasksCreatedParticipatedAction = async () => {
 export const getAllTasksDeadLineByTodayAction = async () => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   if (communityId === "") return [];
+  console.log("getAllTasksDeadLineByTodayAction");
   const res = await getAllTasksDeadLineByToday(
     new ObjectId(userId),
     new ObjectId(communityId)

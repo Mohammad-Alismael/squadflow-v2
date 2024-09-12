@@ -14,8 +14,10 @@ function DisplayParticipants({
         .slice(0, 7)
         .map((participant: CommunityResponse["participants"][0]) => (
           <Avatar className="h-12 w-12" key={participant._id}>
-            <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
-            <AvatarFallback>{participant.user.username}</AvatarFallback>
+            <AvatarImage src={participant.user.photoURL} />
+            <AvatarFallback>
+              {participant.user.username.slice(0, 2)}
+            </AvatarFallback>
           </Avatar>
         ))}
     </React.Fragment>

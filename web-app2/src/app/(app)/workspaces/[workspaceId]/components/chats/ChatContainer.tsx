@@ -20,7 +20,7 @@ async function ChatContainer({
       <div className="flex flex-col w-full md:w-3/4 h-full float-left overflow-y-auto border-[1px] border-gray-150">
         <div className="flex flex-col justify-start items-start bg-white px-2 py-1">
           <p className="font-bold capitalize">chats</p>
-          <p className="text-sm opacity-70">
+          <p className="text-sm opacity-70 max-w-96 truncate">
             {participants
               .map((participant) => participant.user.username)
               .join(",")}

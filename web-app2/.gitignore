@@ -38,4 +38,5 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-
+/test-data/seeds/users10_passwords.txt
+/test-data/seeds/users100_passwords.txt

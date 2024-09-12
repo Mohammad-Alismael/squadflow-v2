@@ -10,12 +10,19 @@ async function ParticipantsHeader({ workspaceId }: { workspaceId: string }) {
   return (
     <div className="flex items-center">
       {data &&
-        data?.participants.map((participant: WorkspaceParticipants) => (
-          <Avatar key={participant._id.toString()} className="w-8 h-8">
-            <AvatarImage src={participant.user.photoURL} />
-            <AvatarFallback>{participant.user.username}</AvatarFallback>
-          </Avatar>
-        ))}
+        data?.participants
+          .slice(0, 5)
+          .map((item: WorkspaceParticipants, index) => (
+            <Avatar key={`${item._id}-${index}`} className="w-8 h-8">
+              <AvatarImage src={item.user.photoURL} />
+              <AvatarFallback>{item.user.username}</AvatarFallback>
+            </Avatar>
+          ))}
+      {data && data?.participants.length > 5 && (
+        <div className="w-7 h-7 flex items-center justify-center bg-gray-300 text-gray-700 rounded-full p-0.5">
+          +{data.participants.length - 5}
+        </div>
+      )}
     </div>
   );
 }

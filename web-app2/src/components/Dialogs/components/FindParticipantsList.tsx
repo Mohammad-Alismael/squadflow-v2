@@ -24,7 +24,7 @@ function FindParticipantsList() {
 
   if (data)
     return (
-      <div className="w-full">
+      <div className="w-full max-h-96 overflow-y-auto">
         <Input
           type="text"
           placeholder="search by username..."

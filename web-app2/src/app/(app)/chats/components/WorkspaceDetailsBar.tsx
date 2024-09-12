@@ -18,7 +18,7 @@ async function WorkspaceDetailsBar({ workspaceId }: { workspaceId: string }) {
         <NavigateBack />
         <div>
           <p className="font-bold">{workspace.title}</p>
-          <p className="text-sm opacity-70">
+          <p className="text-sm opacity-70 max-w-[28rem] truncate">
             {workspace.participants
               .map((participant) => participant.user.username)
               .join(",")}

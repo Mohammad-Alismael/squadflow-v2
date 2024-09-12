@@ -44,6 +44,7 @@ function TaskDialogWrapper({
         attachments,
         _id,
       } = data;
+      console.log({ data });
       resetCustomState({
         title,
         projectId: data.workspace.toString(),

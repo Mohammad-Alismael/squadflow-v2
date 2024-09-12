@@ -104,7 +104,12 @@ async function getTaskIdPopulated(taskId: ObjectId) {
 
 async function getTasksByWorkspaceId(workspaceId: ObjectId) {
   await init();
-  return Task.find({ workspace: workspaceId }).lean();
+  return Task.find({ workspace: workspaceId })
+    .populate({
+      path: "participants",
+      select: "_id username email photoURL",
+    })
+    .lean();
 }
 
 async function getTasksByWorkspaceIdForCalendar(workspaceId: ObjectId) {
@@ -180,6 +185,7 @@ const getAllTasksCreatedByUserOrParticipated = async (
         path: "participants",
         select: "_id username email photoURL",
       })
+      .lean()
       .exec()) as IDashboardTask[];
 
     // Filter out tasks that do not have a populated workspace

@@ -30,7 +30,7 @@ function CommunityFound({ data }: { data: CommunityResponse }) {
       )}
       <div className="space-y-1">
         <Label htmlFor="community-participants">Community Participants</Label>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {data.participants.length === 0 && <p>no participants</p>}
           {!!data.participants.length && (
             <DisplayParticipants

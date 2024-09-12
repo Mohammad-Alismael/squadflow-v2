@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 import { Types } from "mongoose";
 import { generateFakeTask } from "./generateFakeTask";
 
-type TFakerUser = {
+export type TFakerUser = {
   _id: Types.ObjectId;
   username: string;
   email: string;
@@ -15,7 +15,7 @@ type TFakerUser = {
   communityId: string;
   community: null;
 };
-type TFakeCommunity = {
+export type TFakeCommunity = {
   _id: Types.ObjectId;
   name: string;
   code: string;
@@ -164,12 +164,17 @@ export const generateTasks = (
   });
   return list;
 };
-export const smartGenerateData = () => {
-  const users1 = generateUsers(5, 20);
+export const smartGenerateData = (
+  numberOfLeaders = 5,
+  numberOfUsers = 20,
+  numberOfWorkspaces = 6,
+  numberOfTasks = 20
+) => {
+  const users1 = generateUsers(numberOfLeaders, numberOfUsers);
   const communities = generateCommunities(users1);
   const users = updateUserCommunity(users1, communities);
-  const workspaces = generateWorkspaces(communities, 6);
-  const tasks = generateTasks(workspaces, 20);
+  const workspaces = generateWorkspaces(communities, numberOfWorkspaces);
+  const tasks = generateTasks(workspaces, numberOfTasks);
 
   return {
     users,

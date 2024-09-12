@@ -12,7 +12,7 @@ const MessagesContainer = dynamic(
 );
 // import MessagesContainer from "@/app/(app)/chats/components/MessagesContainer";
 import WorkspacesList from "@/app/(app)/chats/components/WorkspacesList";
-import WorkspaceDetailsBar from "@/app/(app)/chats/components/workspaceDetailsBar";
+import WorkspaceDetailsBar from "@/app/(app)/chats/components/WorkspaceDetailsBar";
 import WorkspacesListSkeleton from "@/app/(app)/chats/components/WorkspacesListSkeleton";
 import dynamic from "next/dynamic";
 

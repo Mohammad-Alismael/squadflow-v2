@@ -23,8 +23,11 @@ function AssigneePopover({
   return (
     <Popover>
       <PopoverTrigger>{children}</PopoverTrigger>
-      <PopoverContent className="z-[999] w-max">
-        <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
+      <PopoverContent className="z-[999] min-w-max">
+        <div
+          className="space-y-2 max-h-96 overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
           <h4 className="capitalize font-bold">workspace participants</h4>
           {data &&
             data.map((item, index) => {

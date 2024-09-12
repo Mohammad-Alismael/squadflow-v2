@@ -2,7 +2,6 @@ import React from "react";
 import AddItem from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesComponents/AddItem";
 import LabelsPopover from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/LabelsPopover";
 import ShowLabels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/ShowLabels";
-import { getWorkspaceLabels } from "@/utils/actions/workspace-actions";
 
 async function Labels({ workspaceId }: { workspaceId: string }) {
   return (

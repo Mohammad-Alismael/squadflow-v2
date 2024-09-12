@@ -29,16 +29,18 @@ async function WorkspaceCard({ data }: { data: IWorkspace }) {
           </CardHeader>
 
           <CardContent>
-            <div className="mt-4 flex items-center">
-              {data.participants.map((participant) => (
-                <Avatar
-                  key={participant._id}
-                  className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10"
-                >
+            <div className="flex flex-row items-center gap-1">
+              {data.participants.slice(0, 5).map((participant) => (
+                <Avatar key={participant._id} className="w-7 h-7">
                   <AvatarImage src={participant.user.photoURL} />
                   <AvatarFallback>{participant.user.username}</AvatarFallback>
                 </Avatar>
               ))}
+              {data.participants.length > 5 && (
+                <div className="w-7 h-7 flex items-center justify-center bg-gray-300 text-gray-700 rounded-full p-0.5">
+                  +{data.participants.length - 5}
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

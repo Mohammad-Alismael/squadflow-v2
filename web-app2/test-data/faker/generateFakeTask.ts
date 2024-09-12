@@ -35,8 +35,17 @@ export const generateFakeTask = (
       text: faker.lorem.sentence(),
       created_at: faker.date.recent(),
     })),
-    dueDate: faker.date.future().toISOString().split("T")[0],
-    dueTime: faker.date.future().toISOString().split("T")[1].split(".")[0],
+    dueDate: faker.date.recent().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
+    dueTime: faker.date
+      .future()
+      .toISOString()
+      .split("T")[1]
+      .split(".")[0]
+      .slice(0, 5),
     priority: customSimpleFaker.helpers.arrayElement(["Low", "Medium", "High"]),
     description: faker.lorem.paragraph(),
     attachments: [],

@@ -35,15 +35,20 @@ function Workspace({
           {workspace.title}
         </p>
         <div className="flex flex-row flex-wrap">
-          {workspace.participants.map((participant) => (
+          {workspace.participants.slice(0, 4).map((participant, index) => (
             <Avatar
               key={participant.user.username}
               className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10"
             >
-              <AvatarImage src="/avatars/01.png" />
+              <AvatarImage src={participant.user.photoURL} />
               <AvatarFallback>{participant.user.username}</AvatarFallback>
             </Avatar>
           ))}
+          {workspace.participants.length > 4 && (
+            <div className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 flex items-center justify-center bg-gray-300 text-gray-700 rounded-full p-0.5">
+              +{workspace.participants.length - 4}
+            </div>
+          )}
         </div>
       </div>
     </Link>

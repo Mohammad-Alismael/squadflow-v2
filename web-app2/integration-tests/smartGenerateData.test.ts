@@ -1,5 +1,7 @@
 import { flatUsers, smartGenerateData } from "../test-data/faker/seeder-index";
 import { afterAll, beforeAll, describe, expect, test, vi, it } from "vitest";
+import mongoose from "mongoose";
+import { connectDB, execute } from "../test-data/seeds";
 
 describe("SmartGenerateData", () => {
   test("Should be able to generate data", () => {
@@ -21,5 +23,9 @@ describe("SmartGenerateData", () => {
     const userIds = res.workspaces[0].participants.map((_) => _.user);
     const userIds2 = res.communities[0].participants.map((_) => _.user);
     expect(userIds).to.deep.equal(userIds2);
+  });
+  test("run", () => {
+    const res = smartGenerateData();
+    console.log(res.tasks[0]);
   });
 });

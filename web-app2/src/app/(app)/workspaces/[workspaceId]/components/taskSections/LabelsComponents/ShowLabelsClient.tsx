@@ -8,10 +8,16 @@ function ShowLabelsClient({ workspaceId }: { workspaceId: string }) {
   if (isLoading) return <p>loading ...</p>;
   if (data)
     return (
-      <div className="py-2">
+      <div className="py-2 space-y-2">
         {data &&
           data.map((item, index) => {
-            return <Label key={item._id.toString()} data={item} />;
+            return (
+              <Label
+                key={item._id.toString()}
+                data={item}
+                showDeleteIcon={true}
+              />
+            );
           })}
         {!data.length && <p>no label were created for workspace</p>}
       </div>

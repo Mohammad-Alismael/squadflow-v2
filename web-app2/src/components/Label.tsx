@@ -29,18 +29,18 @@ function Label({ id, text }: { id: string; text: string }) {
     <div
       onClick={handleClick}
       className={clsx(
-        "h-8 flex justify-center items-center px-3 border-2 border-green-800 rounded-full cursor-pointer",
+        "h-8 max-w-max inline-flex justify-center items-center px-3 border-2 border-green-800 rounded-full cursor-pointer",
         selectedWorkspaceId === id && "bg-green-700"
       )}
     >
-      <span
+      <p
         className={clsx(
-          "text-green-800 text-sm",
+          "text-green-800 text-sm leading-none", // Adjust leading-none to make text centered vertically
           selectedWorkspaceId === id && "text-white"
         )}
       >
         {text}
-      </span>
+      </p>
     </div>
   );
 }

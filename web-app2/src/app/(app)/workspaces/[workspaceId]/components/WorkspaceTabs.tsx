@@ -18,8 +18,8 @@ function WorkspaceTabs({ workspaceId }: { workspaceId: string }) {
     // window.history.pushState(null, "", `?${params.toString()}`);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    handleChange(event.currentTarget.innerText);
+  const handleClick = (event: any) => {
+    handleChange(event.target.innerText);
   };
   return (
     <TabsList onClick={handleClick} className="mb-2">

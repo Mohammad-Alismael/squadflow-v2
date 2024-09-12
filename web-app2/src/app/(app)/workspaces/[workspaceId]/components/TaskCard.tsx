@@ -53,7 +53,7 @@ const TaskCard = ({
               )}
             >
               <div className="flex justify-between items-center">
-                <p>{title}</p>
+                <p className="w-56 truncate">{title}</p>
                 <TaskCardMenu taskId={_id} />
               </div>
               <TaskParticipants assigness={data.participants} />
@@ -72,7 +72,7 @@ const TaskCard = ({
                   </div>
                 )}
               </div>
-              <div className="flex items-end justify-between ">
+              <div className="flex items-end justify-between">
                 {!!data.labels.length && <TaskLabels labels={data.labels} />}
               </div>
             </Card>
