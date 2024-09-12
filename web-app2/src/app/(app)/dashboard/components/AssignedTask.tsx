@@ -6,13 +6,14 @@ import Label from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/
 import TaskLabels from "@/app/(app)/workspaces/[workspaceId]/components/TaskLabels";
 
 function AssignedTask({ data }: { data: IDashboardTask }) {
+  console.log(data);
   if (data)
     return (
       <div className="">
         <Link href={`/task/${data.workspace._id}/${data._id}`} prefetch={false}>
           <div className="flex flex-row items-center justify-between px-3 py-2 border-[1px] border-gray-200 rounded-xl">
             <div className="flex flex-col gap-y-2 w-full">
-              <span className="inline opacity-50 text-sm bg-gray-200 px-1 py-0.5 rounded-xl w-56 truncate">
+              <span className="inline-block opacity-50 text-sm bg-gray-200 px-1 py-0.5 rounded-xl truncate max-w-[200px]">
                 {data.workspace.title}
               </span>
               <p className="w-64 truncate">{data.title}</p>

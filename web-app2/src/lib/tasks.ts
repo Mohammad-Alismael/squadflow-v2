@@ -166,7 +166,9 @@ const deleteTask = async (taskId: ObjectId) => {
 
 const getAllTasksCreatedByUserOrParticipated = async (
   userId: ObjectId,
-  communityId: ObjectId
+  communityId: ObjectId,
+  page: number = 1,
+  limit: number = 10
 ): Promise<IDashboardTask[]> => {
   await init();
   try {
@@ -186,11 +188,34 @@ const getAllTasksCreatedByUserOrParticipated = async (
         select: "_id username email photoURL",
       })
       .lean()
+      .skip((page - 1) * limit) // Skip to the appropriate page
+      .limit(limit)
       .exec()) as IDashboardTask[];
 
     // Filter out tasks that do not have a populated workspace
     const filteredTasks = tasks.filter((task) => task.workspace !== null);
     return filteredTasks;
+  } catch (error) {
+    console.error("Error fetching tasks:", error.message);
+    throw new Error(error.message);
+  }
+};
+
+const getAllTasksCreatedByUserOrParticipatedCount = async (
+  userId: ObjectId,
+  communityId: ObjectId
+) => {
+  await init();
+  try {
+    const totalTasks = await Task.countDocuments(
+      {
+        $or: [{ created_by: userId }, { participants: userId }],
+        // "workspace.community": communityId,
+        // "workspace.participants.user": userId,
+      },
+      { hint: "_id_" }
+    );
+    return totalTasks;
   } catch (error) {
     console.error("Error fetching tasks:", error.message);
     throw new Error(error.message);
@@ -316,4 +341,5 @@ export {
   getAllTasksCreatedParticipated,
   updateColumnId,
   getAllTasksDeadLineByToday,
+  getAllTasksCreatedByUserOrParticipatedCount,
 };

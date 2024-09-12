@@ -6,10 +6,9 @@ import AssignedTasks from "@/app/(app)/dashboard/components/AssignedTasks";
 import { cookies } from "next/headers";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
 import { redirect } from "next/navigation";
-import CurrentTaskListSkeleton from "@/app/(app)/dashboard/components/skeletons/CurrentTaskListSkeleton";
 import TodayTaskDeadlinesSkeleton from "@/app/(app)/dashboard/components/skeletons/TodayTaskDeadlinesSkeleton";
 import AssignedTasksSkeleton from "@/app/(app)/dashboard/components/skeletons/AssignedTasksSkeleton";
-import { Skeleton } from "@/components/ui/skeleton";
+import CurrentTaskListInfiniteScroll from "@/app/(app)/dashboard/components/CurrentTaskListInfiniteScroll";
 
 export default async function Dashboard({
   searchParams,
@@ -30,11 +29,14 @@ export default async function Dashboard({
       </Navbar>
       <div className="space-y-4 md:flex-1 md:space-y-0">
         <div className="w-full h-96 md:w-2/3 md:h-full float-left md:pr-4">
-          <Suspense fallback={<CurrentTaskListSkeleton />}>
-            <CurrentTaskList
-              selectedWorkspaceId={searchParams["workspaceId"]}
-            />
-          </Suspense>
+          {/*<Suspense fallback={<CurrentTaskListSkeleton />}>*/}
+          {/*<CurrentTaskList*/}
+          {/*  selectedWorkspaceId={searchParams["workspaceId"]}*/}
+          {/*/>*/}
+          <CurrentTaskListInfiniteScroll
+            selectedWorkspaceId={searchParams["workspaceId"]}
+          />
+          {/*</Suspense>*/}
         </div>
         <div className="w-full md:w-1/3 md:h-full float-right flex flex-col gap-4">
           <Suspense fallback={<TodayTaskDeadlinesSkeleton />}>
