@@ -38,16 +38,21 @@ async function Page({
   ];
 
   console.timeEnd("PromiseAllTime");
+  let currentTab = (searchParams && searchParams["tabs"]) ?? "kanban";
+  if (
+    currentTab !== "kanban" &&
+    currentTab !== "chats" &&
+    currentTab !== "calendar"
+  ) {
+    currentTab = "kanban";
+  }
   return (
     <div className="h-full flex flex-col">
       <WorkspaceNavbar
         title={data?.title ?? ""}
         workspaceId={params.workspaceId}
       />
-      <Tabs
-        defaultValue={(searchParams && searchParams["tabs"]) ?? "kanban"}
-        className="w-full h-[90vh]"
-      >
+      <Tabs defaultValue={currentTab} className="w-full h-[90vh]">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <WorkspaceTabs workspaceId={params.workspaceId} />
           {searchParams && (
@@ -84,7 +89,10 @@ async function Page({
           />
         )}
         {searchParams && searchParams["tabs"] === "calendar" && (
-          <CalendarWrapper workspaceId={params.workspaceId} />
+          <CalendarWrapper
+            workspaceId={params.workspaceId}
+            withRightComponent={false}
+          />
         )}
       </Tabs>
 

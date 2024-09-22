@@ -46,17 +46,18 @@ import { cache } from "react";
 import { revalidatePath } from "next/cache";
 import { getRedisClient } from "@/lib/redis-setup";
 
-export const fetchWorkspaces = async () => {
+export const fetchWorkspaces = cache(async () => {
   const payload = await getUserAuthFromJWT();
   const userId = payload?._id as string;
   const communityId = payload?.communityId as string;
   if (communityId === "") return [];
+  console.log("fetching_workspaces");
   const workspaces = await getWorkspacesByCommunityIdPopulatedWithUserId(
     communityId,
     userId
   );
   return workspaces as IWorkspace[];
-};
+});
 
 export const fetchWorkspace = cache(async (workspaceId: string) => {
   console.log(`calling fetchWorkspace for _id ${workspaceId}`);

@@ -167,14 +167,22 @@ const deleteTask = async (taskId: ObjectId) => {
 const getAllTasksCreatedByUserOrParticipated = async (
   userId: ObjectId,
   communityId: ObjectId,
+  workspaceId: ObjectId | null,
   page: number = 1,
   limit: number = 10
-): Promise<IDashboardTask[]> => {
+): Promise<{ data: IDashboardTask[]; count: number }> => {
   await init();
   try {
-    const tasks = (await Task.find({
+    const query: any = {
       $or: [{ created_by: userId }, { participants: userId }],
-    })
+    };
+
+    // If workspaceId is provided, add it to the query
+    if (workspaceId) {
+      query.workspace = workspaceId;
+    }
+    const totalTasks = await Task.countDocuments(query);
+    const tasks = (await Task.find(query)
       .populate({
         path: "workspace",
         match: {
@@ -194,7 +202,7 @@ const getAllTasksCreatedByUserOrParticipated = async (
 
     // Filter out tasks that do not have a populated workspace
     const filteredTasks = tasks.filter((task) => task.workspace !== null);
-    return filteredTasks;
+    return { data: filteredTasks, count: totalTasks };
   } catch (error) {
     console.error("Error fetching tasks:", error.message);
     throw new Error(error.message);

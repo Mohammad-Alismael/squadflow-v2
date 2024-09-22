@@ -1,7 +1,5 @@
 import React, { Suspense } from "react";
-import PropTypes from "prop-types";
 import Navbar from "@/components/Navbar";
-import FullPageCalendar from "@/app/(app)/calendars/components/FullPageCalendar";
 import WorkspaceTabs from "@/app/(app)/calendars/components/WorkspaceTabs";
 import TaskDetailsDialogServer from "@/components/Dialogs/TaskDetailsDialogServer";
 import WorkspaceTabsSkeleton from "@/app/(app)/calendars/components/WorkspaceTabsSkeleton";
@@ -30,7 +28,10 @@ function Page({
         </Suspense>
         {searchParams && searchParams["workspace"] && (
           <Suspense fallback={<WorkspaceTabsSkeleton />}>
-            <CalendarWrapper workspaceId={searchParams["workspace"]} />
+            <CalendarWrapper
+              workspaceId={searchParams["workspace"]}
+              withRightComponent={true}
+            />
           </Suspense>
         )}
       </div>

@@ -1,12 +1,8 @@
 import React from "react";
-import AssignedTask from "@/app/(app)/dashboard/components/AssignedTask";
 import WorkspaceLabels from "@/app/(app)/dashboard/components/WorkspaceLabels";
-import { getAllTasksAction } from "@/utils/actions/dashboard-actions";
-import { IDashboardTask } from "@/utils/@types/task";
-import { Button } from "@/components/ui/button";
-import NoTasksFound from "@/app/(app)/dashboard/components/NoTasksFound";
 import CreateQuickTaskDialog from "@/components/Dialogs/CreateQuickTaskDialog";
 import { getUserAuthFromJWT } from "@/utils/helper";
+import CurrentTaskListInfiniteScroll from "@/app/(app)/dashboard/components/CurrentTaskListInfiniteScroll";
 
 async function CurrentTaskList({
   selectedWorkspaceId,
@@ -14,8 +10,6 @@ async function CurrentTaskList({
   selectedWorkspaceId: string;
 }) {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
-
-  const tasks = (await getAllTasksAction()) as IDashboardTask[];
   return (
     <div className="flex flex-col h-full px-3 py-2.5 bg-white rounded-xl">
       <div className="flex flex-row items-center justify-between">
@@ -26,25 +20,9 @@ async function CurrentTaskList({
         {communityId !== "" && <CreateQuickTaskDialog />}
       </div>
       <div className="space-y-2 my-3 h-[38rem] overflow-y-auto">
-        {selectedWorkspaceId &&
-          tasks
-            .filter(
-              (task) => task.workspace._id.toString() === selectedWorkspaceId
-            )
-            .map((task) => (
-              <AssignedTask
-                key={task._id}
-                data={JSON.parse(JSON.stringify(task))}
-              />
-            ))}
-        {!selectedWorkspaceId &&
-          tasks.map((task) => (
-            <AssignedTask
-              key={task._id}
-              data={JSON.parse(JSON.stringify(task))}
-            />
-          ))}
-        {tasks.length === 0 && <NoTasksFound />}
+        <CurrentTaskListInfiniteScroll
+          selectedWorkspaceId={selectedWorkspaceId}
+        />
       </div>
     </div>
   );

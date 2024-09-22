@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 function WorkspaceTabs({ workspaceId }: { workspaceId: string }) {
   const router = useRouter();
@@ -14,18 +15,24 @@ function WorkspaceTabs({ workspaceId }: { workspaceId: string }) {
 
     // Set the new value for "messageKeyword"
     params.set("tabs", tabName);
-    router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
-    // window.history.pushState(null, "", `?${params.toString()}`);
+    // router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
+    window.history.pushState(null, "", `?${params.toString()}`);
   };
 
   const handleClick = (event: any) => {
     handleChange(event.target.innerText);
   };
   return (
-    <TabsList onClick={handleClick} className="mb-2">
-      <TabsTrigger value="kanban">kanban</TabsTrigger>
-      <TabsTrigger value="chats">chats</TabsTrigger>
-      <TabsTrigger value="calendar">calendar</TabsTrigger>
+    <TabsList className="mb-2">
+      <TabsTrigger value="kanban" asChild>
+        <span onClick={() => handleChange("kanban")}>kanban</span>
+      </TabsTrigger>
+      <TabsTrigger value="chats" asChild>
+        <span onClick={() => handleChange("chats")}>chats</span>
+      </TabsTrigger>
+      <TabsTrigger value="calendar" asChild>
+        <span onClick={() => handleChange("calendar")}>calendar</span>
+      </TabsTrigger>
     </TabsList>
   );
 }

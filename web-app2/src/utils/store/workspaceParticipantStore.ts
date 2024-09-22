@@ -8,8 +8,14 @@ export interface Participant {
 export interface ParticipantWorkspace extends Participant {
   _id: string;
 }
+export type populatedParticipantWorkspace = {
+  _id: string;
+  role: "admin" | "editor" | "viewer";
+  user: PopulatedUser;
+};
 interface State {
   participants: Participant[];
+  populatedParticipants: populatedParticipantWorkspace[];
 }
 
 interface Actions {
@@ -22,6 +28,7 @@ interface Actions {
 
 const initialState: State = {
   participants: [],
+  populatedParticipants: [],
 };
 
 const handleAddParticipant = (

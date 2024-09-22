@@ -22,20 +22,26 @@ function Label({ id, text }: { id: string; text: string }) {
     if (id === selectedWorkspaceId) {
       router.replace("/dashboard");
     } else {
-      router.push(pathname + "?" + createQueryString("workspaceId", id));
+      window.history.replaceState(
+        null,
+        "",
+        pathname + "?" + createQueryString("workspaceId", id)
+      );
+
+      // router.push(pathname + "?" + createQueryString("workspaceId", id));
     }
   };
   return (
     <div
       onClick={handleClick}
       className={clsx(
-        "h-8 max-w-max inline-flex justify-center items-center px-3 border-2 border-green-800 rounded-full cursor-pointer",
+        "h-8 inline-block px-3 border-2 border-green-800 rounded-full cursor-pointer",
         selectedWorkspaceId === id && "bg-green-700"
       )}
     >
       <p
         className={clsx(
-          "text-green-800 text-sm leading-none", // Adjust leading-none to make text centered vertically
+          "text-green-800 text-sm leading-none",
           selectedWorkspaceId === id && "text-white"
         )}
       >

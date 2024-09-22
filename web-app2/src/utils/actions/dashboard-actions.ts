@@ -12,21 +12,23 @@ import { getUserAuthFromJWT } from "@/utils/helper";
 export async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-export const getAllTasksAction = async (page = 1, limit = 10) => {
+export const getAllTasksAction = async (
+  selectedWorkspaceId?: string,
+  page = 1,
+  limit = 10
+) => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   if (communityId === "") return [];
+  console.log({ selectedWorkspaceId });
   const res = await getAllTasksCreatedByUserOrParticipated(
     new ObjectId(userId),
     new ObjectId(communityId),
+    selectedWorkspaceId ? new ObjectId(selectedWorkspaceId) : null,
     page,
     limit
   );
-  const count = await getAllTasksCreatedByUserOrParticipatedCount(
-    new ObjectId(userId),
-    new ObjectId(communityId)
-  );
-  console.log({ count });
-  return { data: res, count };
+  console.log({ res });
+  return res;
 };
 
 export const getAllTasksCreatedParticipatedAction = async () => {

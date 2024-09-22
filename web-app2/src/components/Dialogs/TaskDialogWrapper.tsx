@@ -66,7 +66,7 @@ function TaskDialogWrapper({
       open={Boolean(taskId)}
       onOpenChange={() => {
         handleChange();
-        resetState();
+        // resetState();
         // redirectServer(workspaceId);
       }}
     >

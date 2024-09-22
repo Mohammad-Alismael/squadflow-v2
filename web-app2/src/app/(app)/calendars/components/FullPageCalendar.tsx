@@ -21,6 +21,7 @@ import { parseDate } from "@/utils/helper-date";
 import TaskEvent from "@/app/(app)/calendars/components/TaskEvent";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import { Button } from "@/components/ui/button";
+import clsx from "clsx";
 
 const localizer = dayjsLocalizer(dayjs);
 type TEvent = {
@@ -37,7 +38,13 @@ type E = {
   dueDate: string;
 };
 
-function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
+function FullPageCalendar({
+  eventsProps,
+  rightComponent,
+}: {
+  eventsProps: E[];
+  rightComponent?: React.ReactNode;
+}) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [date, setDate] = useState<Date>(dayjs().toDate());
@@ -95,36 +102,43 @@ function FullPageCalendar({ eventsProps }: { eventsProps: E[] }) {
     setEvents(newEvents);
   }, [JSON.stringify(eventsProps)]);
 
-  // return <div>{JSON.stringify(events)}</div>;
   return (
     <div>
       {events.length === 0 && <NoWorkspacesFound className="h-full" />}
       {events.length !== 0 && (
         <>
-          <div className="flex flex-row gap-4 justify-end pb-2">
-            <Button onClick={onTodayClick}>Today</Button>
-            <div className="flex flex-row justify-center items-center border-[1px] rounded-md">
-              <Button
-                onClick={onPrevClick}
-                variant="ghost"
-                size="icon"
-                className="p-2 rounded-full hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              >
-                <ChevronLeftIcon className="w-5 h-5" />
-                <span className="sr-only">Previous Month</span>
-              </Button>
-              <div className="py-2 w-auto justify-center items-center">
-                <p className="font-medium">{dateText}</p>
+          <div
+            className={clsx(
+              "flex flex-row gap-4 pb-2",
+              rightComponent ? "justify-between" : "justify-end"
+            )}
+          >
+            {rightComponent}
+            <div className="flex flex-row gap-4 justify-end pb-2">
+              <Button onClick={onTodayClick}>Today</Button>
+              <div className="flex flex-row justify-center items-center border-[1px] rounded-md">
+                <Button
+                  onClick={onPrevClick}
+                  variant="ghost"
+                  size="icon"
+                  className="p-2 rounded-full hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                >
+                  <ChevronLeftIcon className="w-5 h-5" />
+                  <span className="sr-only">Previous Month</span>
+                </Button>
+                <div className="py-2 w-auto justify-center items-center">
+                  <p className="font-medium">{dateText}</p>
+                </div>
+                <Button
+                  onClick={onNextClick}
+                  variant="ghost"
+                  size="icon"
+                  className="p-2 rounded-full hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                >
+                  <ChevronRightIcon className="w-5 h-5" />
+                  <span className="sr-only">Next Month</span>
+                </Button>
               </div>
-              <Button
-                onClick={onNextClick}
-                variant="ghost"
-                size="icon"
-                className="p-2 rounded-full hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              >
-                <ChevronRightIcon className="w-5 h-5" />
-                <span className="sr-only">Next Month</span>
-              </Button>
             </div>
           </div>
           <Calendar

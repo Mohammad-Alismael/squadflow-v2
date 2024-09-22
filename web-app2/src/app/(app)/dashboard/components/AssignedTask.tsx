@@ -2,11 +2,9 @@ import React from "react";
 import { IDashboardTask } from "@/utils/@types/task";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Label from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/Label";
 import TaskLabels from "@/app/(app)/workspaces/[workspaceId]/components/TaskLabels";
 
 function AssignedTask({ data }: { data: IDashboardTask }) {
-  console.log(data);
   if (data)
     return (
       <div className="">

@@ -7,18 +7,17 @@ function TasksSearch({ workspaceId }: { workspaceId: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (value: string) => {
     // Create a new URLSearchParams object from the current search params
     const params = new URLSearchParams(searchParams);
-
-    // Set the new value for "messageKeyword"
-    params.set("keyword", e.target.value);
+    if (value.trim() === "") params.delete("keyword");
+    else params.set("keyword", value);
     router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
   };
   return (
     <div className="flex flex-row items-center gap-4">
       <Input
-        onChange={handleChange}
+        onChange={(e) => handleChange(e.target.value)}
         type="text"
         placeholder="search for task title ..."
         // className="w-1/4"

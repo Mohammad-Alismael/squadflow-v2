@@ -22,9 +22,11 @@ function CreateTaskDialogWrapper({
   const setProjectId = useTaskPropertiesStore((state) => state.setProjectId);
   const setColumnId = useTaskPropertiesStore((state) => state.setColumnId);
   const router = useRouter();
+  const resetState = useTaskPropertiesStore((state) => state.resetState);
   const searchParams = useSearchParams();
   const isOpened = useDialog((state) => state.isOpen, shallow);
   useEffect(() => {
+    resetState();
     workspaceId && setProjectId(workspaceId as string);
     searchParams &&
       searchParams.get("columnId") &&
