@@ -1,5 +1,5 @@
 import { WorkspaceColumn } from "@/utils/@types/workspace";
-import { TaskResponse } from "@/utils/@types/task";
+import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
 
 export const swapColumns = (
   columns: WorkspaceColumn[],
@@ -26,11 +26,11 @@ export const swapColumns = (
 };
 
 export const moveTask = (
-  tasks: TaskResponse[],
+  tasks: MetaTaskResponse[],
   taskId: string,
   columnId: string
 ) => {
-  return tasks.map((task: TaskResponse) => {
+  return tasks.map((task: MetaTaskResponse) => {
     if (task._id === taskId) {
       return { ...task, columnId: columnId };
     } else return task;

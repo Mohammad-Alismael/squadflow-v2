@@ -189,9 +189,12 @@ export const execute = () => {
   const communities = generateCommunities(users1);
   const users = updateUserCommunity(users1, communities);
   const workspaces = generateWorkspaces(communities, 3);
+  const tasks = generateTasks(workspaces, 15);
+
   return {
     usersList: flatUsers(users),
     communitiesList: communities,
     workspaceList: workspaces,
+    tasksList: tasks,
   };
 };

@@ -136,6 +136,7 @@ async function getWorkspacesByCommunityIdPopulatedWithUserId(
     community: communityId,
     "participants.user": userId, // Ensure the user is a participant
   })
+    .select("_id title participants")
     .populate({
       path: "participants.user",
       select: "_id username email role photoURL",

@@ -6,7 +6,7 @@ import {
   updateColumnIdForTaskId,
   updateColumnsOrder,
 } from "@/app/(app)/workspaces/[workspaceId]/actions";
-import { TaskResponse } from "@/utils/@types/task";
+import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
@@ -24,7 +24,7 @@ function ColumnsContainer({
 }: {
   workspaceId: string;
   columns: WorkspaceColumn[];
-  tasks: TaskResponse[];
+  tasks: MetaTaskResponse[];
 }) {
   const { toast } = useToast();
   const searchParams = useSearchParams();
@@ -87,7 +87,7 @@ function ColumnsContainer({
                         workspaceId={workspaceId}
                         data={column}
                         tasks={optimisticTasks?.filter(
-                          (item: TaskResponse) =>
+                          (item: MetaTaskResponse) =>
                             item.columnId === column._id &&
                             item.title.includes(
                               searchParams.get("keyword")

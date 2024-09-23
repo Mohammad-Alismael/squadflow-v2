@@ -2,7 +2,7 @@ import { MoreVertical, Calendar, MessageCircle } from "react-feather";
 import React from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
-import { TaskResponse } from "@/utils/@types/task";
+import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
 import TaskLabels from "@/app/(app)/workspaces/[workspaceId]/components/TaskLabels";
 import TaskParticipants from "@/app/(app)/workspaces/[workspaceId]/components/TaskParticipants";
 import { Draggable } from "@hello-pangea/dnd";
@@ -15,7 +15,7 @@ const TaskCard = ({
   workspaceId,
   index,
 }: {
-  data: TaskResponse;
+  data: MetaTaskResponse;
   workspaceId: string;
   index: number;
 }) => {
@@ -63,11 +63,10 @@ const TaskCard = ({
                   {!data.dueDate || data.dueDate === ""
                     ? "no due date"
                     : `${data.dueDate}`}
-                  {/*{data.dueTime && data.dueTime !== "" && `, ${data.dueTime}`}*/}
                 </p>
-                {!!data.comments.length && (
+                {!!data.commentsCount && (
                   <div className="flex flex-row text-gray-400 gap-1 self-end">
-                    <span>{data.comments.length}</span>
+                    <span>{data.commentsCount}</span>
                     <MessageCircle size={20} />
                   </div>
                 )}

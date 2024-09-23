@@ -64,6 +64,17 @@ export interface TaskResponse {
   updated_by: Schema.Types.ObjectId;
 }
 
+export interface MetaTaskResponse {
+  _id: string;
+  workspace: string;
+  title: string;
+  columnId: string;
+  participants: { _id: string; username: string; photoURL: string }[];
+  labels: { _id: string; color: string }[];
+  commentsCount: number;
+  dueDate: string;
+}
+
 export interface Comment {
   _id?: string;
   created_by: PopulatedUser;

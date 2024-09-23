@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import TaskCard from "../components/TaskCard";
-import { TaskResponse } from "@/utils/@types/task";
+import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
 import CreateTaskDialog from "@/components/Dialogs/CreateTaskDialog";
 import ColumnHeader from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeader";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
@@ -19,7 +19,7 @@ function Column({
   tasks,
 }: {
   data: WorkspaceColumn;
-  tasks: TaskResponse[];
+  tasks: MetaTaskResponse[];
   workspaceId: string;
 }) {
   const router = useRouter();
@@ -61,7 +61,7 @@ function Column({
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {tasks.map((task: TaskResponse, index: number) => {
+                {tasks.map((task: MetaTaskResponse, index: number) => {
                   return (
                     <TaskCard
                       key={task._id}

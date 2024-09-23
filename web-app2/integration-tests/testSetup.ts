@@ -1,22 +1,24 @@
-import { afterAll, beforeAll, describe, expect, test, vi, it } from "vitest";
+import { vi } from "vitest";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import { execute } from "../test-data/faker/seeder-index";
 import Community from "@//models/community";
 import Workspace from "@/models/workspace";
 import User from "@/models/user";
+import Task from "@/models/task";
 import { getUserAuthFromJWT } from "@/utils/helper";
 let mongoServer: MongoMemoryServer;
 import { getRedisClient } from "@/lib/redis-setup";
 import { getWorkspaceParticipants } from "@/lib/workspace";
-import { createNewColumn } from "@/utils/actions/workspace-actions";
 vi.mock("@/utils/helper");
-export const { usersList, communitiesList, workspaceList } = execute();
+export const { usersList, communitiesList, workspaceList, tasksList } =
+  execute();
 
 export const seedDatabase = async () => {
   await User.insertMany(usersList);
   await Community.insertMany(communitiesList);
   await Workspace.insertMany(workspaceList);
+  await Task.insertMany(tasksList);
 };
 
 export const seedRedis = async () => {

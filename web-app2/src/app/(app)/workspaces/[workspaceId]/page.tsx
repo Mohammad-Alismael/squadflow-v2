@@ -13,7 +13,7 @@ import { Tabs } from "@/components/ui/tabs";
 import WorkspaceTabs from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceTabs";
 import ChatContainer from "@/app/(app)/workspaces/[workspaceId]/components/chats/ChatContainer";
 import CalendarWrapper from "@/app/(app)/calendars/components/CalendarWrapper";
-import { TaskResponse } from "@/utils/@types/task";
+import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
 import NavbarSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skeleton/NavbarSkeleton";
 import ColumnHeaderSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeaderSkeleton";
 import ColumnsContainerSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skeleton/ColumnsContainerSkeleton";
@@ -34,7 +34,7 @@ async function Page({
   const [data, role, tasks] = (await Promise.all([data_, role_, tasks_])) as [
     IWorkspace,
     string,
-    TaskResponse[]
+    MetaTaskResponse[]
   ];
 
   console.timeEnd("PromiseAllTime");
@@ -89,10 +89,7 @@ async function Page({
           />
         )}
         {searchParams && searchParams["tabs"] === "calendar" && (
-          <CalendarWrapper
-            workspaceId={params.workspaceId}
-            withRightComponent={false}
-          />
+          <CalendarWrapper workspaceId={params.workspaceId} />
         )}
       </Tabs>
 

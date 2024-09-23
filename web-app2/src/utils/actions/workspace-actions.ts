@@ -1,6 +1,7 @@
 "use server";
 import {
   createTask,
+  getMetaTasksByWorkspaceId,
   getTaskIdPopulated,
   getTasksByWorkspaceId,
   getTasksByWorkspaceIdAndColumnId,
@@ -148,7 +149,7 @@ export const getTasksForWorkspace = async (
           new ObjectId(workspaceId),
           new ObjectId(columnId)
         )
-      : await getTasksByWorkspaceId(new ObjectId(workspaceId));
+      : await getMetaTasksByWorkspaceId(new ObjectId(workspaceId));
     console.timeEnd("getTasksForWorkspace");
     return res;
   } catch (e) {

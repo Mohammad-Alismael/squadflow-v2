@@ -112,6 +112,18 @@ async function getTasksByWorkspaceId(workspaceId: ObjectId) {
     .lean();
 }
 
+async function getMetaTasksByWorkspaceId(workspaceId: ObjectId) {
+  await init();
+  return Task.find({ workspace: workspaceId })
+    .select(
+      "_id workspace title columnId dueDate participants labels._id labels.color commentsCount"
+    )
+    .populate({
+      path: "participants",
+      select: "_id username photoURL",
+    });
+}
+
 async function getTasksByWorkspaceIdForCalendar(workspaceId: ObjectId) {
   await init();
   return Task.find({ workspace: workspaceId }).select(
@@ -350,4 +362,5 @@ export {
   updateColumnId,
   getAllTasksDeadLineByToday,
   getAllTasksCreatedByUserOrParticipatedCount,
+  getMetaTasksByWorkspaceId,
 };

@@ -46,7 +46,7 @@ async function WorkspacesContainer({
 }) {
   const data: IWorkspace[] = await fetchWorkspaces();
   return (
-    <div className="">
+    <div className="h-[85vh] overflow-y-auto">
       {data.length === 0 && <NoWorkspacesFound />}
       {viewType && viewType === "list" && (
         <div className="py-4 w-full space-y-2">

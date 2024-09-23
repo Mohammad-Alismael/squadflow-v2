@@ -1,9 +1,13 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PopulatedUser } from "@/utils/@types/user";
+import { MetaTaskResponse } from "@/utils/@types/task";
 
-function TaskParticipants({ assigness }: { assigness: PopulatedUser[] }) {
-  console.log({ assigness });
+function TaskParticipants({
+  assigness,
+}: {
+  assigness: MetaTaskResponse["participants"];
+}) {
   return (
     <div className="flex flex-row items-center gap-1">
       {assigness.slice(0, 5).map((item, index) => (

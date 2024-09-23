@@ -1,10 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { WorkspaceLabel } from "@/utils/@types/workspace";
+import { MetaTaskResponse } from "@/utils/@types/task";
 
-TaskLabels.propTypes = {};
-
-function TaskLabels({ labels }: { labels: WorkspaceLabel[] }) {
+function TaskLabels({ labels }: { labels: MetaTaskResponse["labels"] }) {
   const colors = labels.map(({ color }) => color);
   return (
     <div className="flex flex-row gap-2">

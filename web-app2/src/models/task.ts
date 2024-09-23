@@ -21,6 +21,7 @@ const taskSchema = new Schema(
         created_at: { type: Date, default: Date.now() },
       },
     ],
+    commentsCount: { type: Number, default: 0 },
     dueDate: {
       type: String,
       required: false,
@@ -40,8 +41,30 @@ const taskSchema = new Schema(
     created_by: { type: Schema.Types.ObjectId, ref: "User" },
     updated_by: { type: Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    // toObject: { virtuals: true },
+    // toJSON: { virtuals: true },
+  }
 );
+taskSchema.pre("save", function (next) {
+  if (this.isModified("comments")) {
+    this.commentsCount = this.comments.length;
+  }
+  next();
+});
+
+taskSchema.post("insertMany", async function (docs) {
+  for (const doc of docs) {
+    // Ensure commentsCount is set correctly for each document
+    doc.commentsCount = doc.comments.length || 0;
+    await doc.save();
+  }
+});
+
+// taskSchema.virtual("commentsCount").get(function () {
+//   return this.comments.length;
+// });
 
 const Task = models.Task || mongoose.model("Task", taskSchema);
 export default Task;
