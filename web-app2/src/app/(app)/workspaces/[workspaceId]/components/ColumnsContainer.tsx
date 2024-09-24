@@ -46,6 +46,7 @@ function ColumnsContainer({
       // Wrap the state update with startTransition
       startTransition(() => {
         const newOptimisticTasks = moveTask(optimisticTasks, taskId, columnId);
+        console.log({ newOptimisticTasks });
         setOptimisticTasks(newOptimisticTasks);
       });
       await updateColumnIdForTaskId(taskId, columnId);

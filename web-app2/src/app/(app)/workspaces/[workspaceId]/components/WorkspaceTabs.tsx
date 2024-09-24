@@ -15,8 +15,8 @@ function WorkspaceTabs({ workspaceId }: { workspaceId: string }) {
 
     // Set the new value for "messageKeyword"
     params.set("tabs", tabName);
-    // router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
-    window.history.pushState(null, "", `?${params.toString()}`);
+    router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
+    // window.history.pushState(null, "", `?${params.toString()}`);
   };
 
   const handleClick = (event: any) => {

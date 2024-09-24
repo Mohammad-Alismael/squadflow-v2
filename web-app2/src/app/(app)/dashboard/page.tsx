@@ -42,7 +42,7 @@ export default async function Dashboard({
             />
           </Suspense>
           <Suspense fallback={<AssignedTasksSkeleton />}>
-            <AssignedTasks selectedWorkspaceId={searchParams["workspaceId"]} />
+            <AssignedTasks />
           </Suspense>
         </div>
       </div>

@@ -13,9 +13,6 @@ import {
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
 import { Button } from "@/components/ui/button";
 import Priority from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Priority";
-import Column from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Column";
-import Labels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Labels";
-import Assignees from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Assignees";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Description";
 import Deadlines from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Deadlines";
@@ -24,9 +21,7 @@ import CommentContainer from "@/app/(app)/workspaces/[workspaceId]/components/ta
 import { useParams } from "next/navigation";
 import { useCreateTask } from "@/utils/hooks/task/useCreateTask";
 import { useToast } from "@/components/ui/use-toast";
-import { revalidateURL } from "@/components/Dialogs/actions";
 import { useQueryClient } from "react-query";
-import { useMediaQuery } from "@/utils/hooks/use-media-query";
 import { getErrorMessage } from "@/utils/helper-client";
 
 function CreateTaskMobileDialog({ columnId }: { columnId: string }) {

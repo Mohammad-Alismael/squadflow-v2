@@ -30,6 +30,7 @@ export const updateColumnIdForTaskId = async (
     new ObjectId(taskId),
     new ObjectId(columnId)
   );
+  console.log("update it successfully");
   // revalidateTag("tasks");
 };
 

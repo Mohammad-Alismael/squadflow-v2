@@ -20,12 +20,19 @@ import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskS
 import { USER_ROLES } from "@/utils/helper-client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-function Body({ workspaceId }: { workspaceId: string }) {
+function Body({
+  workspaceId,
+  showAddBtn,
+}: {
+  workspaceId: string;
+  showAddBtn: boolean;
+}) {
+  console.log("why", { showAddBtn });
   return (
     <React.Fragment>
       <Title />
       <Suspense key={`assignees-${workspaceId}`} fallback={<p>loading ...</p>}>
-        <Assignees workspaceId={workspaceId} />
+        <Assignees workspaceId={workspaceId} showAddBtn={showAddBtn} />
       </Suspense>
       <Priority />
       <Suspense
@@ -38,7 +45,7 @@ function Body({ workspaceId }: { workspaceId: string }) {
         key={`labels-${workspaceId}`}
         fallback={<Skeleton className="h-10 w-40" />}
       >
-        <Labels workspaceId={workspaceId} />
+        <Labels workspaceId={workspaceId} showAddBtn={showAddBtn} />
       </Suspense>
       <Deadlines />
       <Description />
@@ -56,13 +63,13 @@ async function TaskDetailsDialogServer({
   workspaceId: string;
   taskId: string | undefined;
 }) {
-  // await wait(3000);
   const roleP = getWorkspacePrivilege(workspaceId);
   const data_ = handleGetTaskById(taskId);
   const [data, role] = (await Promise.all([data_, roleP])) as [
     TaskResponse,
     string
   ];
+  console.log({ data: JSON.parse(JSON.stringify(data)), role });
   return (
     <TaskDialogWrapper
       data={JSON.parse(JSON.stringify(data))}
@@ -72,7 +79,10 @@ async function TaskDetailsDialogServer({
       <DialogContent className="p-0 w-4/5 h-[80%]">
         <div className="w-full flex flex-row">
           <div className="w-1/2 p-4 space-y-2">
-            <Body workspaceId={workspaceId} />
+            <Body
+              workspaceId={workspaceId}
+              showAddBtn={role !== USER_ROLES.viewer}
+            />
           </div>
           <div className="w-1/2 h-full p-4 bg-[#FBFAF8]">
             <Tabs defaultValue="account" className="w-full">
@@ -125,7 +135,10 @@ async function TaskDetailsDialogServer({
           </TabsList>
           <TabsContent value="overview" className="p-4 h-full">
             <div className="space-y-2 w-full">
-              <Body workspaceId={workspaceId} />
+              <Body
+                workspaceId={workspaceId}
+                showAddBtn={role !== USER_ROLES.viewer}
+              />
             </div>
           </TabsContent>
           <TabsContent value="comments" className="h-full">

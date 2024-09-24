@@ -1,37 +1,39 @@
 "use client";
 import React, { useEffect } from "react";
 import AssignedTask from "@/app/(app)/dashboard/components/AssignedTask";
-import { getAllTasksAction } from "@/utils/actions/dashboard-actions";
-import { useInfiniteQuery } from "react-query";
-import { IDashboardTask } from "@/utils/@types/task";
 import { useInView } from "react-intersection-observer";
 import AssignedTaskSkeleton from "@/app/(app)/dashboard/components/skeletons/AssignedTaskSkeleton";
 import NoTasksFound from "@/app/(app)/dashboard/components/NoTasksFound";
+import {
+  FetchNextPageOptions,
+  InfiniteData,
+  InfiniteQueryObserverResult,
+} from "react-query";
+import { IDashboardTask } from "@/utils/@types/task";
 import { useSearchParams } from "next/navigation";
-
-async function fetchItems(pageParam: number, selectedWorkspaceId: string) {
-  const res = await getAllTasksAction(selectedWorkspaceId, pageParam, 10);
-  return JSON.parse(JSON.stringify(res)) as {
-    data: IDashboardTask[];
-    count: number;
+type TaskListProps = {
+  useCustomHook: () => {
+    isLoading: false | true;
+    fetchNextPage: (
+      options?: FetchNextPageOptions
+    ) => Promise<
+      InfiniteQueryObserverResult<
+        { data: IDashboardTask[]; count: number },
+        unknown
+      >
+    >;
+    isError: false | true;
+    data: undefined | InfiniteData<{ data: IDashboardTask[]; count: number }>;
+    isFetchingNextPage: boolean;
+    error: unknown;
   };
-}
-function CurrentTaskListInfiniteScroll({
-  selectedWorkspaceId,
-}: {
-  selectedWorkspaceId: string;
-}) {
+};
+function TaskListInfiniteScroll({ useCustomHook }: TaskListProps) {
   const searchParams = useSearchParams();
-  const { data, fetchNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery({
-      queryKey: [`query-${searchParams.get("workspaceId")}`],
-      queryFn: ({ pageParam = 1 }) =>
-        fetchItems(pageParam, searchParams.get("workspaceId") as string),
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length + 1;
-        return nextPage <= lastPage.count / 10 ? nextPage : undefined;
-      },
-    });
+
+  const selectedWorkspaceId = searchParams.get("workspaceId");
+  const { data, fetchNextPage, isFetchingNextPage, isLoading, isError, error } =
+    useCustomHook();
 
   const { ref, inView } = useInView();
 
@@ -65,9 +67,8 @@ function CurrentTaskListInfiniteScroll({
             <AssignedTaskSkeleton key={index} />
           ))}
       </div>
-      {/*{tasks.length === 0 && <NoTasksFound />}*/}
     </React.Fragment>
   );
 }
 
-export default CurrentTaskListInfiniteScroll;
+export default TaskListInfiniteScroll;

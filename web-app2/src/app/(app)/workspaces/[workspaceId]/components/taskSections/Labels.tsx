@@ -3,7 +3,13 @@ import AddItem from "@/app/(app)/workspaces/[workspaceId]/components/taskSection
 import LabelsPopover from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/LabelsPopover";
 import ShowLabels from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/ShowLabels";
 
-async function Labels({ workspaceId }: { workspaceId: string }) {
+async function Labels({
+  workspaceId,
+  showAddBtn = true,
+}: {
+  workspaceId: string;
+  showAddBtn: boolean;
+}) {
   return (
     <div className="w-full flex flex-wrap items-center gap-2">
       <div className="flex items-center gap-10">
@@ -12,9 +18,11 @@ async function Labels({ workspaceId }: { workspaceId: string }) {
           <ShowLabels />
         </div>
       </div>
-      <LabelsPopover workspaceId={workspaceId}>
-        <AddItem title="add" />
-      </LabelsPopover>
+      {showAddBtn && (
+        <LabelsPopover workspaceId={workspaceId}>
+          <AddItem title="add" />
+        </LabelsPopover>
+      )}
     </div>
   );
 }

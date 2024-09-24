@@ -2,7 +2,7 @@ import React from "react";
 import WorkspaceLabels from "@/app/(app)/dashboard/components/WorkspaceLabels";
 import CreateQuickTaskDialog from "@/components/Dialogs/CreateQuickTaskDialog";
 import { getUserAuthFromJWT } from "@/utils/helper";
-import CurrentTaskListInfiniteScroll from "@/app/(app)/dashboard/components/CurrentTaskListInfiniteScroll";
+import CurrentTaskListInfiniteScrollWrapper from "@/app/(app)/dashboard/components/CurrentTaskListInfiniteScrollWrapper";
 
 async function CurrentTaskList({
   selectedWorkspaceId,
@@ -20,9 +20,7 @@ async function CurrentTaskList({
         {communityId !== "" && <CreateQuickTaskDialog />}
       </div>
       <div className="space-y-2 my-3 h-[38rem] overflow-y-auto">
-        <CurrentTaskListInfiniteScroll
-          selectedWorkspaceId={selectedWorkspaceId}
-        />
+        <CurrentTaskListInfiniteScrollWrapper />
       </div>
     </div>
   );

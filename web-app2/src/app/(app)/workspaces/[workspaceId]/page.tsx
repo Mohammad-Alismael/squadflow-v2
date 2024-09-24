@@ -25,19 +25,6 @@ async function Page({
   params: { workspaceId: string };
   searchParams?: { [key: string]: string };
 }) {
-  const data_ = fetchWorkspace(params.workspaceId);
-  const role_ = getWorkspacePrivilege(params.workspaceId);
-  const tasks_ = getTasksForWorkspace(params.workspaceId);
-
-  console.time("PromiseAllTime");
-
-  const [data, role, tasks] = (await Promise.all([data_, role_, tasks_])) as [
-    IWorkspace,
-    string,
-    MetaTaskResponse[]
-  ];
-
-  console.timeEnd("PromiseAllTime");
   let currentTab = (searchParams && searchParams["tabs"]) ?? "kanban";
   if (
     currentTab !== "kanban" &&
@@ -46,6 +33,19 @@ async function Page({
   ) {
     currentTab = "kanban";
   }
+
+  const data_ = fetchWorkspace(params.workspaceId);
+  const role_ = getWorkspacePrivilege(params.workspaceId);
+
+  console.time("PromiseAllTime");
+
+  const [data, role] = (await Promise.all([data_, role_])) as [
+    IWorkspace,
+    string
+  ];
+
+  console.timeEnd("PromiseAllTime");
+
   return (
     <div className="h-full flex flex-col">
       <WorkspaceNavbar
@@ -57,7 +57,7 @@ async function Page({
           <WorkspaceTabs workspaceId={params.workspaceId} />
           {searchParams && (
             <div>
-              {searchParams["tabs"] === "kanban" && (
+              {currentTab === "kanban" && (
                 <WorkspaceHeader
                   className=""
                   role={role}
@@ -73,23 +73,26 @@ async function Page({
             </div>
           )}
         </div>
-        {searchParams && searchParams["tabs"] === "kanban" && (
+        {currentTab === "kanban" && (
           <div className="space-y-2.5">
-            <ColumnsWrapperServer
-              tasks={tasks}
-              columns={data?.columns ?? []}
-              workspaceId={params.workspaceId}
-            />
+            <Suspense fallback={<p>loading kanban ...</p>}>
+              <ColumnsWrapperServer
+                columns={data?.columns ?? []}
+                workspaceId={params.workspaceId}
+              />
+            </Suspense>
           </div>
         )}
-        {searchParams && searchParams["tabs"] === "chats" && (
+        {currentTab === "chats" && (
           <ChatContainer
             workspaceId={params.workspaceId}
             participants={data.participants}
           />
         )}
-        {searchParams && searchParams["tabs"] === "calendar" && (
-          <CalendarWrapper workspaceId={params.workspaceId} />
+        {currentTab === "calendar" && (
+          <Suspense fallback={<p>loading calendar ...</p>}>
+            <CalendarWrapper workspaceId={params.workspaceId} />
+          </Suspense>
         )}
       </Tabs>
 

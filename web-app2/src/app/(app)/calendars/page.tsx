@@ -1,7 +1,6 @@
 import React, { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import WorkspaceTabs from "@/app/(app)/calendars/components/WorkspaceTabs";
-import TaskDetailsDialogServer from "@/components/Dialogs/TaskDetailsDialogServer";
 import WorkspaceTabsSkeleton from "@/app/(app)/calendars/components/WorkspaceTabsSkeleton";
 import CalendarWrapper from "@/app/(app)/calendars/components/CalendarWrapper";
 
@@ -28,19 +27,10 @@ function Page({
         </Suspense>
         {searchParams && searchParams["workspace"] && (
           <Suspense fallback={<WorkspaceTabsSkeleton />}>
-            <CalendarWrapper
-              workspaceId={searchParams["workspace"]}
-              withRightComponent={true}
-            />
+            <CalendarWrapper workspaceId={searchParams["workspace"]} />
           </Suspense>
         )}
       </div>
-      {searchParams && searchParams["taskId"] && (
-        <TaskDetailsDialogServer
-          taskId={searchParams["taskId"]}
-          workspaceId={searchParams["workspace"]}
-        />
-      )}
     </div>
   );
 }

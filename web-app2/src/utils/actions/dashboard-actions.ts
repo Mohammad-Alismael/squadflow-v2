@@ -19,7 +19,6 @@ export const getAllTasksAction = async (
 ) => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   if (communityId === "") return [];
-  console.log({ selectedWorkspaceId });
   const res = await getAllTasksCreatedByUserOrParticipated(
     new ObjectId(userId),
     new ObjectId(communityId),
@@ -27,27 +26,37 @@ export const getAllTasksAction = async (
     page,
     limit
   );
-  console.log({ res });
   return res;
 };
 
-export const getAllTasksCreatedParticipatedAction = async () => {
+export const getAllTasksCreatedParticipatedAction = async (
+  selectedWorkspaceId?: string,
+  page = 1,
+  limit = 10
+) => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   if (communityId === "") return [];
-  console.log("getAllTasksCreatedParticipatedAction");
   const res = await getAllTasksCreatedParticipated(
     new ObjectId(userId),
-    new ObjectId(communityId)
+    new ObjectId(communityId),
+    selectedWorkspaceId ? new ObjectId(selectedWorkspaceId) : null,
+    page,
+    limit
   );
   return res;
 };
-export const getAllTasksDeadLineByTodayAction = async () => {
+export const getAllTasksDeadLineByTodayAction = async (
+  page = 1,
+  limit = 10
+) => {
   const { _id: userId, communityId } = await getUserAuthFromJWT();
   if (communityId === "") return [];
   console.log("getAllTasksDeadLineByTodayAction");
   const res = await getAllTasksDeadLineByToday(
     new ObjectId(userId),
-    new ObjectId(communityId)
+    new ObjectId(communityId),
+    page,
+    limit
   );
   return res;
 };

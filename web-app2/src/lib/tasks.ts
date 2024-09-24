@@ -121,6 +121,7 @@ async function getMetaTasksByWorkspaceId(workspaceId: ObjectId) {
     .populate({
       path: "participants",
       select: "_id username photoURL",
+      options: { limit: 5 },
     });
 }
 
@@ -202,10 +203,11 @@ const getAllTasksCreatedByUserOrParticipated = async (
         },
         select: "_id title",
       })
-      .select("_id workspace title labels dueDate participants priority")
+      .select("_id workspace title participants labels._id labels.color")
       .populate({
         path: "participants",
         select: "_id username email photoURL",
+        options: { limit: 5 },
       })
       .lean()
       .skip((page - 1) * limit) // Skip to the appropriate page
@@ -244,13 +246,21 @@ const getAllTasksCreatedByUserOrParticipatedCount = async (
 
 const getAllTasksCreatedParticipated = async (
   userId: ObjectId,
-  communityId: ObjectId
+  communityId: ObjectId,
+  workspaceId: ObjectId | null,
+  page: number = 1,
+  limit: number = 10
 ) => {
   await init();
   try {
-    const tasks = await Task.find({
-      participants: userId,
-    })
+    const query: any = {
+      $and: [{ participants: userId }],
+    };
+    if (workspaceId) {
+      query.$and.push({ workspace: workspaceId });
+    }
+    const totalTasks = await Task.countDocuments(query);
+    const tasks = (await Task.find(query)
       .populate({
         path: "workspace",
         match: {
@@ -258,23 +268,31 @@ const getAllTasksCreatedParticipated = async (
         },
         select: "_id title",
       })
+      .select("_id workspace title participants labels._id labels.color")
       .populate({
         path: "participants",
         select: "_id username email photoURL",
+        options: { limit: 5 },
       })
-      .exec();
+      .lean()
+      .skip((page - 1) * limit) // Skip to the appropriate page
+      .limit(limit)
+      .exec()) as IDashboardTask[];
+
     // Filter out tasks that do not have a populated workspace
     const filteredTasks = tasks.filter((task) => task.workspace !== null);
-    return filteredTasks;
+    return { data: filteredTasks, count: totalTasks };
   } catch (error) {
-    console.log(error);
-    throw new CustomError(error.message, HttpStatusCode.INTERNAL_SERVER_ERROR);
+    console.error("Error fetching tasks:", error.message);
+    throw new Error(error.message);
   }
 };
 
 const getAllTasksDeadLineByToday = async (
   userId: ObjectId,
-  communityId: ObjectId
+  communityId: ObjectId,
+  page: number = 1,
+  limit: number = 10
 ) => {
   await init();
   const today = new Date();
@@ -282,9 +300,11 @@ const getAllTasksDeadLineByToday = async (
     today.getMonth() + 1
   ).padStart(2, "0")}/${today.getFullYear()}`;
   try {
-    const tasks = await Task.find({
+    const query: any = {
       dueDate: formattedToday,
-    })
+    };
+    const totalTasks = await Task.countDocuments(query);
+    const tasks = (await Task.find(query)
       .populate({
         path: "workspace",
         match: {
@@ -292,17 +312,23 @@ const getAllTasksDeadLineByToday = async (
         },
         select: "_id title",
       })
+      .select("_id workspace title participants labels._id labels.color")
       .populate({
         path: "participants",
         select: "_id username email photoURL",
+        options: { limit: 5 },
       })
-      .exec();
+      .lean()
+      .skip((page - 1) * limit) // Skip to the appropriate page
+      .limit(limit)
+      .exec()) as IDashboardTask[];
+
     // Filter out tasks that do not have a populated workspace
     const filteredTasks = tasks.filter((task) => task.workspace !== null);
-    return filteredTasks;
+    return { data: filteredTasks, count: totalTasks };
   } catch (error) {
-    console.log(error);
-    throw new CustomError(error.message, HttpStatusCode.INTERNAL_SERVER_ERROR);
+    console.error("Error fetching tasks:", error.message);
+    throw new Error(error.message);
   }
 };
 

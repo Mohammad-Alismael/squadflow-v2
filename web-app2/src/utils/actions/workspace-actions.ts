@@ -238,7 +238,10 @@ export const getWorkspacePrivilege = cache(async (workspaceId: string) => {
     console.time("getWorkspacePrivilege from cache");
     const cacheRole = await client.get(`${workspaceId}_user_role_${userId}`);
     console.timeEnd("getWorkspacePrivilege from cache");
-    if (cacheRole) return cacheRole;
+    if (cacheRole) {
+      console.log({ cacheRole });
+      return cacheRole;
+    }
     console.time("getWorkspacePrivilege");
     const result = await Workspace.aggregate([
       { $match: { _id: new ObjectId(workspaceId) } },

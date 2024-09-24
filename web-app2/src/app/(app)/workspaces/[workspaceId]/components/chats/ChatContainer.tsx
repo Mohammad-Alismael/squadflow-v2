@@ -1,5 +1,4 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
 import ActiveParticipants from "@/app/(app)/workspaces/[workspaceId]/components/chats/ActiveParticipants";
 import { getUserAuthFromJWT } from "@/utils/helper";
 import MessagesContainer from "@/app/(app)/chats/components/MessagesContainer";

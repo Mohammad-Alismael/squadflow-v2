@@ -24,15 +24,18 @@ import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
 function Body({
   workspaceId,
   revertBackTo,
+  showAddBtn,
 }: {
   workspaceId: string;
   revertBackTo: string;
+  showAddBtn: boolean;
 }) {
+  console.log({ showAddBtn });
   return (
     <React.Fragment>
       <Title />
       <Suspense key={`assignees-${workspaceId}`} fallback={<p>loading ...</p>}>
-        <Assignees workspaceId={workspaceId} />
+        <Assignees workspaceId={workspaceId} showAddBtn={showAddBtn} />
       </Suspense>
       <Priority />
       <Suspense
@@ -45,7 +48,7 @@ function Body({
         key={`labels-${workspaceId}`}
         fallback={<Skeleton className="h-10 w-40" />}
       >
-        <Labels workspaceId={workspaceId} />
+        <Labels workspaceId={workspaceId} showAddBtn={showAddBtn} />
       </Suspense>
       <Deadlines />
       <Description />
@@ -92,6 +95,7 @@ async function Page({
             <Body
               workspaceId={params.workspaceId}
               revertBackTo={`workspaces/${params.workspaceId}`}
+              showAddBtn={role !== USER_ROLES.viewer}
             />
           </div>
           <div className="w-1/2 h-full p-4 bg-[#FBFAF8]">
@@ -148,6 +152,7 @@ async function Page({
               <Body
                 workspaceId={params.workspaceId}
                 revertBackTo={`workspaces/${params.workspaceId}`}
+                showAddBtn={role !== USER_ROLES.viewer}
               />
             </div>
           </TabsContent>

@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/popover";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { parseDate } from "@/utils/helper-date";
-import { DayPickerDefaultProps } from "react-day-picker";
 
 export function DatePicker() {
   const [date, setDate] = useState<Date | null>(null);
@@ -33,7 +32,6 @@ export function DatePicker() {
   };
 
   const convertDate = (currentDate: string | undefined) => {
-    console.log({ currentDate });
     if (!currentDate) return null;
     return parseDate(currentDate);
   };
