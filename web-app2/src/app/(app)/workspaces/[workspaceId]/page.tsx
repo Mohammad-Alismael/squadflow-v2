@@ -13,10 +13,7 @@ import { Tabs } from "@/components/ui/tabs";
 import WorkspaceTabs from "@/app/(app)/workspaces/[workspaceId]/components/WorkspaceTabs";
 import ChatContainer from "@/app/(app)/workspaces/[workspaceId]/components/chats/ChatContainer";
 import CalendarWrapper from "@/app/(app)/calendars/components/CalendarWrapper";
-import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
-import NavbarSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skeleton/NavbarSkeleton";
-import ColumnHeaderSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/ColumnHeaderSkeleton";
-import ColumnsContainerSkeleton from "@/app/(app)/workspaces/[workspaceId]/components/skeleton/ColumnsContainerSkeleton";
+import { MetaTaskResponse } from "@/utils/@types/task";
 
 async function Page({
   params,
@@ -36,11 +33,13 @@ async function Page({
 
   const data_ = fetchWorkspace(params.workspaceId);
   const role_ = getWorkspacePrivilege(params.workspaceId);
+  const tasks_ = getTasksForWorkspace(params.workspaceId);
 
   console.time("PromiseAllTime");
 
-  const [data, role] = (await Promise.all([data_, role_])) as [
+  const [data, tasks, role] = (await Promise.all([data_, tasks_, role_])) as [
     IWorkspace,
+    MetaTaskResponse[],
     string
   ];
 
@@ -78,6 +77,7 @@ async function Page({
             <Suspense fallback={<p>loading kanban ...</p>}>
               <ColumnsWrapperServer
                 columns={data?.columns ?? []}
+                tasks={tasks}
                 workspaceId={params.workspaceId}
               />
             </Suspense>

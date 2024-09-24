@@ -2,20 +2,15 @@
 import React, { startTransition, useOptimistic } from "react";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/Column";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import {
-  updateColumnIdForTaskId,
-  updateColumnsOrder,
-} from "@/app/(app)/workspaces/[workspaceId]/actions";
-import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
+import { updateColumnsOrder } from "@/app/(app)/workspaces/[workspaceId]/actions";
+import { MetaTaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
-import { useMediaQuery } from "@/utils/hooks/use-media-query";
 import {
   moveTask,
   swapColumns,
 } from "@/app/(app)/workspaces/[workspaceId]/helper";
-import { Button } from "@/components/ui/button";
 
 function ColumnsContainer({
   workspaceId,
@@ -30,7 +25,7 @@ function ColumnsContainer({
   const searchParams = useSearchParams();
   const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
   const [optimisticColumns, setOptimisticColumns] = useOptimistic(columns);
-
+  console.log("'ColumnsContainer' rendered");
   const handleOnDragEnd = async (result: any) => {
     const { source, destination, draggableId, type } = result;
     if (!destination) return;
@@ -49,8 +44,8 @@ function ColumnsContainer({
         console.log({ newOptimisticTasks });
         setOptimisticTasks(newOptimisticTasks);
       });
-      await updateColumnIdForTaskId(taskId, columnId);
-      toast({ title: "successfully moved task" });
+      // await updateColumnIdForTaskId(taskId, columnId);
+      // toast({ title: "successfully moved task" });
     }
 
     if (type === "column") {

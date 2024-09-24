@@ -25,14 +25,22 @@ export const swapColumns = (
   );
 };
 
+const findColumn = (tasks: MetaTaskResponse[], columnId: string) => {
+  const x = tasks.find((item) => item.columnId === columnId);
+  return !!x;
+};
 export const moveTask = (
   tasks: MetaTaskResponse[],
   taskId: string,
   columnId: string
 ) => {
-  return tasks.map((task: MetaTaskResponse) => {
-    if (task._id === taskId) {
+  const foundColumn = findColumn(tasks, columnId);
+  const updatedTasks = tasks.map((task: MetaTaskResponse) => {
+    if (task._id === taskId && foundColumn) {
       return { ...task, columnId: columnId };
-    } else return task;
+    }
+    return task;
   });
+
+  return updatedTasks;
 };
