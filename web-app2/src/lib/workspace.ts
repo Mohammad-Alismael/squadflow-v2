@@ -136,6 +136,26 @@ async function getWorkspacesByCommunityIdPopulatedWithUserId(
     community: communityId,
     "participants.user": userId, // Ensure the user is a participant
   })
+    .populate({
+      path: "participants.user",
+      select: "_id username email role photoURL",
+    })
+    .exec();
+  if (!workspaces) {
+    throw new Error("workspace not found");
+  }
+  return workspaces;
+}
+
+async function getMetaWorkspacesByCommunityIdPopulatedWithUserId(
+  communityId: string,
+  userId: string
+) {
+  await init();
+  const workspaces = await Workspace.find({
+    community: communityId,
+    "participants.user": userId, // Ensure the user is a participant
+  })
     .select("_id title participants")
     .populate({
       path: "participants.user",
@@ -262,4 +282,5 @@ export {
   getWorkspacesByCommunityIdPopulated,
   getWorkspaceByIdPopulated,
   getWorkspacesByCommunityIdPopulatedWithUserId,
+  getMetaWorkspacesByCommunityIdPopulatedWithUserId,
 };

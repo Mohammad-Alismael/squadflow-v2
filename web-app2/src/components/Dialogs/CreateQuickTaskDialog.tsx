@@ -15,7 +15,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import AssigneesClient from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/AssigneesClient";
 import LabelsClient from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsClient";
 import CreateQuickTaskWrapper from "@/components/Dialogs/CreateQuickTaskWrapper";
-import { USER_ROLES } from "@/utils/helper-client";
 
 const Body = () => {
   return (

@@ -4,6 +4,7 @@ import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFou
 import WorkspaceList from "@/app/(app)/workspaces/components/WorkspaceList";
 import { IWorkspace } from "@/utils/@types/workspace";
 import { fetchWorkspaces } from "@/app/(app)/workspaces/actions";
+import { fetchMetaWorkspaces } from "@/utils/actions/workspace-actions";
 
 const filterData = (sortType: string, data: IWorkspace[]) => {
   switch (sortType) {
@@ -44,7 +45,7 @@ async function WorkspacesContainer({
   viewType?: string;
   sortType?: string;
 }) {
-  const data: IWorkspace[] = await fetchWorkspaces();
+  const data: IWorkspace[] = await fetchMetaWorkspaces();
   return (
     <div className="h-[85vh] overflow-y-auto">
       {data.length === 0 && <NoWorkspacesFound />}

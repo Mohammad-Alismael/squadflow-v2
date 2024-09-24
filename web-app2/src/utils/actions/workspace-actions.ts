@@ -11,6 +11,7 @@ import {
 import { ObjectId } from "mongodb";
 import {
   deleteLabelFromWorkspace,
+  getMetaWorkspacesByCommunityIdPopulatedWithUserId,
   getWorkspaceById,
   getWorkspaceByIdPopulated,
   getWorkspaceParticipants,
@@ -52,8 +53,18 @@ export const fetchWorkspaces = cache(async () => {
   const userId = payload?._id as string;
   const communityId = payload?.communityId as string;
   if (communityId === "") return [];
-  console.log("fetching_workspaces");
   const workspaces = await getWorkspacesByCommunityIdPopulatedWithUserId(
+    communityId,
+    userId
+  );
+  return workspaces as IWorkspace[];
+});
+export const fetchMetaWorkspaces = cache(async () => {
+  const payload = await getUserAuthFromJWT();
+  const userId = payload?._id as string;
+  const communityId = payload?.communityId as string;
+  if (communityId === "") return [];
+  const workspaces = await getMetaWorkspacesByCommunityIdPopulatedWithUserId(
     communityId,
     userId
   );

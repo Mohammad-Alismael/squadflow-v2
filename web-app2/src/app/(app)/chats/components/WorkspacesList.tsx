@@ -1,15 +1,17 @@
 import React from "react";
 import Workspace from "@/app/(app)/chats/components/Workspace";
 import { SettingsIcon } from "lucide-react";
-import { fetchWorkspaces } from "@/utils/actions/workspace-actions";
+import {
+  fetchMetaWorkspaces,
+  fetchWorkspaces,
+} from "@/utils/actions/workspace-actions";
 
 async function WorkspacesList({
   selectedWorkspaceId,
 }: {
   selectedWorkspaceId: string;
 }) {
-  const data = await fetchWorkspaces();
-  console.log("Workspaces", { data });
+  const data = await fetchMetaWorkspaces();
   return (
     <>
       <div className="bg-white flex flex-row items-center justify-between p-4 border-r-2 border-gray-200 rounded-tl">
