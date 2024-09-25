@@ -2,7 +2,10 @@
 import React, { startTransition, useOptimistic } from "react";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/Column";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import { updateColumnsOrder } from "@/app/(app)/workspaces/[workspaceId]/actions";
+import {
+  updateColumnIdForTaskId,
+  updateColumnsOrder,
+} from "@/app/(app)/workspaces/[workspaceId]/actions";
 import { MetaTaskResponse } from "@/utils/@types/task";
 import { WorkspaceColumn } from "@/utils/@types/workspace";
 import { useToast } from "@/components/ui/use-toast";
@@ -21,11 +24,14 @@ function ColumnsContainer({
   columns: WorkspaceColumn[];
   tasks: MetaTaskResponse[];
 }) {
+  console.log("update columns", tasks);
   const { toast } = useToast();
   const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword") ?? "";
   const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
   const [optimisticColumns, setOptimisticColumns] = useOptimistic(columns);
   console.log("'ColumnsContainer' rendered");
+
   const handleOnDragEnd = async (result: any) => {
     const { source, destination, draggableId, type } = result;
     if (!destination) return;
@@ -41,11 +47,10 @@ function ColumnsContainer({
       // Wrap the state update with startTransition
       startTransition(() => {
         const newOptimisticTasks = moveTask(optimisticTasks, taskId, columnId);
-        console.log({ newOptimisticTasks });
         setOptimisticTasks(newOptimisticTasks);
       });
-      // await updateColumnIdForTaskId(taskId, columnId);
-      // toast({ title: "successfully moved task" });
+      await updateColumnIdForTaskId(taskId, columnId);
+      toast({ title: "successfully moved task" });
     }
 
     if (type === "column") {
@@ -85,11 +90,7 @@ function ColumnsContainer({
                         tasks={optimisticTasks?.filter(
                           (item: MetaTaskResponse) =>
                             item.columnId === column._id &&
-                            item.title.includes(
-                              searchParams.get("keyword")
-                                ? (searchParams.get("keyword") as string)
-                                : ""
-                            )
+                            item.title.includes(keyword)
                         )}
                       />
                     );

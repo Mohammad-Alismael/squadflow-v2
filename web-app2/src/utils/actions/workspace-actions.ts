@@ -154,14 +154,14 @@ export const getTasksForWorkspace = async (
   columnId?: string
 ) => {
   try {
-    console.time("getTasksForWorkspace");
+    console.time("getTasksForWorkspace -------------");
     const res = columnId
       ? await getTasksByWorkspaceIdAndColumnId(
           new ObjectId(workspaceId),
           new ObjectId(columnId)
         )
       : await getMetaTasksByWorkspaceId(new ObjectId(workspaceId));
-    console.timeEnd("getTasksForWorkspace");
+    console.timeEnd("getTasksForWorkspace -------------");
     return res;
   } catch (e) {
     console.log(e);
@@ -244,6 +244,7 @@ export const fetchWorkspaceParticipants = async (
 
 export const getWorkspacePrivilege = cache(async (workspaceId: string) => {
   try {
+    console.log("hey");
     const { _id: userId, communityId } = await getUserAuthFromJWT();
     const client = await getRedisClient();
     console.time("getWorkspacePrivilege from cache");

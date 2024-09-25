@@ -11,15 +11,11 @@ import {
 } from "react-big-calendar";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-const DragAndDropCalendar = withDragAndDrop(Calendar);
-
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFound";
 import { parseDate } from "@/utils/helper-date";
-import TaskEvent from "@/app/(app)/calendars/components/TaskEvent";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 
@@ -68,7 +64,7 @@ function FullPageCalendar({
     event: ({ event }: EventProps<TEvent>) => {
       return (
         <div className="bg-green-700 p-2 rounded-xl">
-          <span className="opacity-70">workspace</span>
+          {/*<span className="opacity-70">workspace</span>*/}
           <p>{event.title}</p>
         </div>
       );
@@ -103,7 +99,7 @@ function FullPageCalendar({
   }, [JSON.stringify(eventsProps)]);
 
   return (
-    <div>
+    <React.Fragment>
       {events.length === 0 && <NoWorkspacesFound className="h-full" />}
       {events.length !== 0 && (
         <>
@@ -152,7 +148,7 @@ function FullPageCalendar({
             // eventPropGetter={eventPropGetter}
             defaultView={Views.MONTH}
             views={[Views.MONTH]}
-            style={{ height: "86vh" }}
+            // style={{ height: "86vh" }}
             toolbar={false}
             components={components}
             date={date}
@@ -160,7 +156,7 @@ function FullPageCalendar({
           />
         </>
       )}
-    </div>
+    </React.Fragment>
   );
 }
 

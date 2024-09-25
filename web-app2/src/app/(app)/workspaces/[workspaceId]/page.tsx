@@ -38,13 +38,19 @@ async function Page({
   const loadChats = currentTab === WORKSPACE_TABS.CHATS;
   const loadCalendar = currentTab === WORKSPACE_TABS.CALENDAR;
 
-  const data_ = fetchWorkspace(params.workspaceId);
-  const tasks_ = getTasksForWorkspace(params.workspaceId);
+  let data_ = fetchWorkspace(params.workspaceId);
+  let tasks_: Promise<MetaTaskResponse[]> = Promise.resolve([]);
+
+  // Only assign the tasks_ promise if `loadKanban` and `!loadColumn` are true
+  if (loadKanban && !loadColumn) {
+    tasks_ = getTasksForWorkspace(params.workspaceId);
+  }
+
   console.time("PromiseAllTime");
-  console.log({ loadKanban, loadColumn });
+
   const [data, tasks] = (await Promise.all([
-    data_,
-    loadKanban && !loadColumn ? tasks_ : Promise.resolve([]),
+    data_, // Fetch workspace data
+    tasks_, // Conditionally fetch tasks
   ])) as [IWorkspace, MetaTaskResponse[]];
 
   console.timeEnd("PromiseAllTime");
@@ -81,13 +87,11 @@ async function Page({
         </div>
         {currentTab === WORKSPACE_TABS.KANBAN && tasks && (
           <div className="space-y-2.5">
-            <Suspense fallback={<p>loading kanban ...</p>}>
-              <ColumnsWrapperServer
-                columns={data?.columns ?? []}
-                tasks={tasks}
-                workspaceId={params.workspaceId}
-              />
-            </Suspense>
+            <ColumnsWrapperServer
+              columns={data?.columns ?? []}
+              tasks={tasks}
+              workspaceId={params.workspaceId}
+            />
           </div>
         )}
         {currentTab === WORKSPACE_TABS.CHATS && (

@@ -115,7 +115,7 @@ async function Page({
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="account" className="h-full">
-                <div className="relative flex flex-col items-center justify-between">
+                <div className="relative flex flex-col items-center justify-between h-full">
                   <PlainCommentsContainer />
                   {role !== USER_ROLES.viewer && <AddCommentBar />}
                 </div>

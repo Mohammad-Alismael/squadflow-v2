@@ -9,11 +9,9 @@ import { HttpStatusCode } from "@/utils/HttpStatusCode";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import Workspace from "@/models/workspace";
+import { getRedisClient } from "@/lib/redis-setup";
 
-export const updateColumnIdForTaskId = async (
-  taskId: string,
-  columnId: string
-) => {
+async function validateTaskIdAndColumnId(taskId: string, columnId: string) {
   const task = await getTaskId(new ObjectId(taskId));
   const workspaceId = task.workspace;
   const workspace = await getWorkspaceById(workspaceId);
@@ -26,25 +24,35 @@ export const updateColumnIdForTaskId = async (
       HttpStatusCode.INTERNAL_SERVER_ERROR
     );
   }
+}
+
+export const updateColumnIdForTaskId = async (
+  taskId: string,
+  columnId: string
+) => {
+  await validateTaskIdAndColumnId(taskId, columnId);
   const res = await updateColumnId(
     new ObjectId(taskId),
     new ObjectId(columnId)
   );
   console.log("update it successfully");
-  // revalidateTag("tasks");
+  revalidateTag("tasks");
 };
 
 export const updateColumnsOrder = async (
   workspaceId: string,
   newColumns: WorkspaceColumn[]
 ) => {
+  const client = await getRedisClient();
+
   try {
-    const result = await Workspace.updateMany(
+    const result = await Workspace.updateOne(
       { _id: workspaceId },
       {
-        $set: { columns: newColumns },
+        columns: newColumns,
       }
     );
+    await client.del(`workspace_${workspaceId}`);
     console.log("Columns updated successfully:", result);
   } catch (error) {
     throw new Error("Error updating columns");

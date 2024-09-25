@@ -10,12 +10,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { handleDeleteTask } from "@/app/(app)/workspaces/[workspaceId]/actions";
+import { useToast } from "@/components/ui/use-toast";
 
 function TaskCardMenu({ taskId }: { taskId: string }) {
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleChange = async () => {
     await handleDeleteTask(taskId);
+    toast({ title: "successfully deleted task" });
   };
 
   return (

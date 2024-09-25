@@ -30,7 +30,7 @@ function Column({
     const params = new URLSearchParams(searchParams);
     // Set the new value for "messageKeyword"
     params.set("columnId", data._id);
-    router.replace(`/workspaces/${workspaceId}?${params.toString()}`);
+    router.push(`/workspaces/${workspaceId}?${params.toString()}`);
     // router.replace(`/workspaces/${workspaceId}/${data._id}/add-task`);
     setOpen(true);
   };

@@ -6,7 +6,7 @@ async function CalendarWrapper({ workspaceId }: { workspaceId: string }) {
   const data = await fetchTasksForCalendar(workspaceId);
   const parsedData = data.filter((_) => _.dueDate);
   return (
-    <div className="bg-white h-full p-4">
+    <div className="bg-white h-[87vh] p-4 rounded-xl">
       <FullPageCalendar eventsProps={JSON.parse(JSON.stringify(parsedData))} />
     </div>
   );
