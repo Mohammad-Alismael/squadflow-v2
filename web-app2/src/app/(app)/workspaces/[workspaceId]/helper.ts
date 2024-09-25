@@ -1,4 +1,4 @@
-import { WorkspaceColumn } from "@/utils/@types/workspace";
+import { IWorkspace, WorkspaceColumn } from "@/utils/@types/workspace";
 import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
 
 export const swapColumns = (
@@ -43,4 +43,18 @@ export const moveTask = (
   });
 
   return updatedTasks;
+};
+
+export const checkColumnId = (
+  columns: WorkspaceColumn[] | undefined,
+  columnId: string | undefined
+) => {
+  if (!columnId || !columns || columns.length === 0) {
+    return false;
+  }
+
+  // Return true if a matching column is found, otherwise false
+  const result = columns.some((column) => column._id === columnId);
+  if (result) return true;
+  if (!result) return false;
 };

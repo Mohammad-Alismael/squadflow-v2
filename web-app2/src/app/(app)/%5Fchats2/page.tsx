@@ -1,18 +1,18 @@
 import React, { Suspense } from "react";
 import Navbar from "@/components/Navbar";
-import SendBar from "@/app/(app)/chats2/components/SendBar";
+import SendBar from "@/app/(app)/%5Fchats2/components/SendBar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyJWTToken } from "@/lib/helper/route.helper";
 const MessagesContainer = dynamic(
-  () => import("@/app/(app)/chats2/components/MessagesContainer"),
+  () => import("@/app/(app)/%5Fchats2/components/MessagesContainer"),
   {
     ssr: false,
   }
 );
-import WorkspacesList from "@/app/(app)/chats2/components/WorkspacesList";
-import WorkspaceDetailsBar from "@/app/(app)/chats2/components/workspaceDetailsBar";
-import WorkspacesListSkeleton from "@/app/(app)/chats2/components/WorkspacesListSkeleton";
+import WorkspacesList from "@/app/(app)/%5Fchats2/components/WorkspacesList";
+import WorkspaceDetailsBar from "@/app/(app)/%5Fchats2/components/workspaceDetailsBar";
+import WorkspacesListSkeleton from "@/app/(app)/%5Fchats2/components/WorkspacesListSkeleton";
 import dynamic from "next/dynamic";
 
 async function Page({

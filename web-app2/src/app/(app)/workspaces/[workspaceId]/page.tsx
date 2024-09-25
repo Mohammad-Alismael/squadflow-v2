@@ -14,6 +14,8 @@ import WorkspaceTabs from "@/app/(app)/workspaces/[workspaceId]/components/Works
 import ChatContainer from "@/app/(app)/workspaces/[workspaceId]/components/chats/ChatContainer";
 import CalendarWrapper from "@/app/(app)/calendars/components/CalendarWrapper";
 import { MetaTaskResponse } from "@/utils/@types/task";
+import { WORKSPACE_TABS } from "@/utils/helper-client";
+import { checkColumnId } from "@/app/(app)/workspaces/[workspaceId]/helper";
 
 async function Page({
   params,
@@ -22,29 +24,41 @@ async function Page({
   params: { workspaceId: string };
   searchParams?: { [key: string]: string };
 }) {
-  let currentTab = (searchParams && searchParams["tabs"]) ?? "kanban";
+  let currentTab =
+    (searchParams && searchParams["tabs"]) ?? WORKSPACE_TABS.KANBAN;
   if (
-    currentTab !== "kanban" &&
-    currentTab !== "chats" &&
-    currentTab !== "calendar"
+    currentTab !== WORKSPACE_TABS.KANBAN &&
+    currentTab !== WORKSPACE_TABS.CHATS &&
+    currentTab !== WORKSPACE_TABS.CALENDAR
   ) {
-    currentTab = "kanban";
+    currentTab = WORKSPACE_TABS.KANBAN;
   }
+  const loadKanban = currentTab == WORKSPACE_TABS.KANBAN;
+  const loadColumn = searchParams && searchParams["columnId"];
+  const loadChats = currentTab === WORKSPACE_TABS.CHATS;
+  const loadCalendar = currentTab === WORKSPACE_TABS.CALENDAR;
 
   const data_ = fetchWorkspace(params.workspaceId);
-  const role_ = getWorkspacePrivilege(params.workspaceId);
   const tasks_ = getTasksForWorkspace(params.workspaceId);
-
   console.time("PromiseAllTime");
-
-  const [data, tasks, role] = (await Promise.all([data_, tasks_, role_])) as [
-    IWorkspace,
-    MetaTaskResponse[],
-    string
-  ];
+  console.log({ loadKanban, loadColumn });
+  const [data, tasks] = (await Promise.all([
+    data_,
+    loadKanban && !loadColumn ? tasks_ : Promise.resolve([]),
+  ])) as [IWorkspace, MetaTaskResponse[]];
 
   console.timeEnd("PromiseAllTime");
+  const loadColumnDialog =
+    loadColumn && data?.columns && checkColumnId(data.columns, loadColumn);
 
+  if (loadColumnDialog)
+    return (
+      <CreateTaskDialog
+        key={searchParams["columnId"]}
+        columnId={searchParams["columnId"]}
+        workspaceId={params.workspaceId}
+      />
+    );
   return (
     <div className="h-full flex flex-col">
       <WorkspaceNavbar
@@ -56,23 +70,16 @@ async function Page({
           <WorkspaceTabs workspaceId={params.workspaceId} />
           {searchParams && (
             <div>
-              {currentTab === "kanban" && (
+              {currentTab === WORKSPACE_TABS.KANBAN && (
                 <WorkspaceHeader
                   className=""
-                  role={role}
                   workspaceId={params.workspaceId}
                 />
               )}
-              {/*{searchParams["tabs"] === "chats" && (*/}
-              {/*  <div className="">*/}
-              {/*    <SearchMessageInput />*/}
-              {/*  </div>*/}
-              {/*)}*/}
-              {/*{searchParams["tabs"] === "calendar" && <p>calendar</p>}*/}
             </div>
           )}
         </div>
-        {currentTab === "kanban" && (
+        {currentTab === WORKSPACE_TABS.KANBAN && tasks && (
           <div className="space-y-2.5">
             <Suspense fallback={<p>loading kanban ...</p>}>
               <ColumnsWrapperServer
@@ -83,27 +90,18 @@ async function Page({
             </Suspense>
           </div>
         )}
-        {currentTab === "chats" && (
+        {currentTab === WORKSPACE_TABS.CHATS && (
           <ChatContainer
             workspaceId={params.workspaceId}
             participants={data.participants}
           />
         )}
-        {currentTab === "calendar" && (
+        {currentTab === WORKSPACE_TABS.CALENDAR && (
           <Suspense fallback={<p>loading calendar ...</p>}>
             <CalendarWrapper workspaceId={params.workspaceId} />
           </Suspense>
         )}
       </Tabs>
-
-      {searchParams && searchParams["columnId"] && (
-        <CreateTaskDialog
-          key={searchParams["columnId"]}
-          columnId={searchParams["columnId"]}
-          role={role}
-          workspaceId={params.workspaceId}
-        />
-      )}
     </div>
   );
 }

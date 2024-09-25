@@ -1,8 +1,8 @@
 import React from "react";
 import { getWorkspaceByIdPopulated } from "@/lib/workspace";
-import SearchMessageInput from "@/app/(app)/chats2/components/SearchMessageInput";
+import SearchMessageInput from "@/app/(app)/%5Fchats2/components/SearchMessageInput";
 import { ObjectId } from "mongodb";
-import NavigateBack from "@/app/(app)/chats2/components/NavigateBack";
+import NavigateBack from "@/app/(app)/%5Fchats2/components/NavigateBack";
 import { IWorkspace } from "@/utils/@types/workspace";
 
 async function WorkspaceDetailsBar({ workspaceId }: { workspaceId: string }) {

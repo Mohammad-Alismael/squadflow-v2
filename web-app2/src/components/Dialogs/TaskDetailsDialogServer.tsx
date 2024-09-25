@@ -27,7 +27,6 @@ function Body({
   workspaceId: string;
   showAddBtn: boolean;
 }) {
-  console.log("why", { showAddBtn });
   return (
     <React.Fragment>
       <Title />

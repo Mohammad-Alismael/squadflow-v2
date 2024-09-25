@@ -4,6 +4,12 @@ export enum USER_ROLES {
   admin = "admin",
 }
 
+export enum WORKSPACE_TABS {
+  KANBAN = "kanban",
+  CHATS = "chats",
+  CALENDAR = "calendar",
+}
+
 export function getRoleValue(roleKey: USER_ROLES): string {
   return USER_ROLES[roleKey];
 }

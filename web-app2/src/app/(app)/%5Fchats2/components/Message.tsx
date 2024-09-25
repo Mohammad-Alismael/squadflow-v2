@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { useGetUserById } from "@/utils/hooks/user/useGetUserById";
-import { MessageType } from "@/app/(app)/chats2/components/MessagesContainer";
+import { MessageType } from "@/app/(app)/%5Fchats2/components/MessagesContainer";
 import { clsx } from "clsx";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import MessageSkeleton from "@/app/(app)/chats2/components/MessageSkeleton";
+import MessageSkeleton from "@/app/(app)/%5Fchats2/components/MessageSkeleton";
 
 function Message({ data }: { data: MessageType }) {
   return (

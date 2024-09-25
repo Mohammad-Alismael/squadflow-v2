@@ -35,7 +35,7 @@ function Label({ id, text }: { id: string; text: string }) {
     <div
       onClick={handleClick}
       className={clsx(
-        "h-8 inline-block px-3 border-2 border-green-800 rounded-full cursor-pointer",
+        "h-8 inline-flex justify-center items-center px-3 border-2 border-green-800 rounded-full cursor-pointer",
         selectedWorkspaceId === id && "bg-green-700"
       )}
     >

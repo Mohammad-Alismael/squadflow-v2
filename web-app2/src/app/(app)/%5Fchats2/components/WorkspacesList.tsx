@@ -1,5 +1,5 @@
 import React from "react";
-import Workspace from "@/app/(app)/chats2/components/Workspace";
+import Workspace from "@/app/(app)/%5Fchats2/components/Workspace";
 import { SettingsIcon } from "lucide-react";
 import { fetchWorkspaces } from "@/utils/actions/workspace-actions";
 

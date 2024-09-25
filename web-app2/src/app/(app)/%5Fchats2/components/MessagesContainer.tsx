@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import Message from "@/app/(app)/chats2/components/Message";
+import Message from "@/app/(app)/%5Fchats2/components/Message";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { io } from "socket.io-client";

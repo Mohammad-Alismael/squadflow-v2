@@ -15,8 +15,7 @@ export const links: linkType[] = [
     icon: "Calendar",
     link: "/calendars",
   },
-  { label: "Messaging (firebase & redis)", icon: "Users", link: "/chats" },
-  { label: "Messaging (my service)", icon: "Users", link: "/chats2" },
+  { label: "Messaging", icon: "Users", link: "/chats" },
   {
     label: "Settings",
     icon: "Settings",

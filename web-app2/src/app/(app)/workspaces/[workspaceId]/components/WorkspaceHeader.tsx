@@ -7,18 +7,20 @@ import TasksSearch from "@/app/(app)/workspaces/[workspaceId]/components/TasksSe
 
 import { USER_ROLES } from "@/utils/helper-client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
 
 WorkspaceHeader.propTypes = {};
 
 async function WorkspaceHeader({
   workspaceId,
-  role,
+  // role,
   className,
 }: {
   workspaceId: string;
-  role: string;
+  // role: string;
   className: string;
 }) {
+  const role = await getWorkspacePrivilege(workspaceId);
   return (
     <div
       className={clsx(

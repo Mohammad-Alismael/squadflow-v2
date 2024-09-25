@@ -15,18 +15,24 @@ import CreateTaskDialogWrapper from "@/components/Dialogs/CreateTaskDialogWrappe
 import PlainCommentsContainer from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/PlainCommentsContainer";
 import { USER_ROLES } from "@/utils/helper-client";
 import AddCommentBar from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/comments/AddCommentBar";
+import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
 const Body = ({
   workspaceId,
   columnId,
+  showAddBtn,
 }: {
   workspaceId: string;
   columnId: string;
+  showAddBtn: boolean;
 }) => {
   return (
     <React.Fragment>
       <Title />
       <Suspense key={`assignees-${workspaceId}`} fallback={<p>loading ...</p>}>
-        <Assignees workspaceId={workspaceId as string} />
+        <Assignees
+          workspaceId={workspaceId as string}
+          showAddBtn={showAddBtn}
+        />
       </Suspense>
       <Priority />
       <Suspense
@@ -39,7 +45,7 @@ const Body = ({
         key={`labels-${workspaceId}`}
         fallback={<Skeleton className="h-10 w-40" />}
       >
-        <Labels workspaceId={workspaceId as string} />
+        <Labels workspaceId={workspaceId as string} showAddBtn={showAddBtn} />
       </Suspense>
       <Deadlines />
       <Description />
@@ -47,21 +53,24 @@ const Body = ({
     </React.Fragment>
   );
 };
-function CreateTaskDialog({
+async function CreateTaskDialog({
   columnId,
-  role,
   workspaceId,
 }: {
   columnId: string;
-  role: string;
   workspaceId: string;
 }) {
+  const role = await getWorkspacePrivilege(workspaceId);
   return (
     <CreateTaskDialogWrapper workspaceId={workspaceId} columnId={columnId}>
       <DialogContent className="p-0 w-4/5 h-[80%]">
         <div className="w-full flex flex-row">
           <div className="w-1/2 p-4 space-y-2">
-            <Body workspaceId={workspaceId} columnId={columnId} />
+            <Body
+              workspaceId={workspaceId}
+              columnId={columnId}
+              showAddBtn={role !== USER_ROLES.viewer}
+            />
           </div>
           <div className="w-1/2 p-4 bg-[#FBFAF8]">
             <Tabs defaultValue="account" className="w-full h-[95%]">
@@ -114,7 +123,11 @@ function CreateTaskDialog({
           </TabsList>
           <TabsContent value="overview" className="p-2 h-full">
             <div className="space-y-2 w-full">
-              <Body workspaceId={workspaceId} columnId={columnId} />
+              <Body
+                workspaceId={workspaceId}
+                columnId={columnId}
+                showAddBtn={role !== USER_ROLES.viewer}
+              />
             </div>
           </TabsContent>
           <TabsContent value="comments" className="h-full">
