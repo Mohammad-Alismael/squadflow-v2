@@ -15,7 +15,7 @@ function CurrentTaskListSkeleton() {
       </div>
       <div className="space-y-2 my-3 max-h-[38rem] overflow-y-auto">
         {Array.from({ length: 5 }).map((_, index) => (
-          <AssignedTaskSkeleton />
+          <AssignedTaskSkeleton key={index} />
         ))}
       </div>
     </div>

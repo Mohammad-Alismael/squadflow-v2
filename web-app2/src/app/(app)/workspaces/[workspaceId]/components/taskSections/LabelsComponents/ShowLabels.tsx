@@ -12,7 +12,13 @@ function ShowLabels() {
     <>
       {!!label.length &&
         label.map((item) => {
-          return <Label key={item._id.toString()} data={item} />;
+          return (
+            <Label
+              key={item._id.toString()}
+              data={item}
+              showDeleteIcon={false}
+            />
+          );
         })}
     </>
   );

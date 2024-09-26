@@ -1,4 +1,4 @@
-import mongoose, { Schema, models } from "mongoose";
+import mongoose, { Schema, models, InferSchemaType } from "mongoose";
 import "./workspace";
 import "./user";
 const taskSchema = new Schema(
@@ -43,8 +43,6 @@ const taskSchema = new Schema(
   },
   {
     timestamps: true,
-    // toObject: { virtuals: true },
-    // toJSON: { virtuals: true },
   }
 );
 taskSchema.pre("save", function (next) {
@@ -53,18 +51,15 @@ taskSchema.pre("save", function (next) {
   }
   next();
 });
+type TaskDocument = InferSchemaType<typeof taskSchema>;
 
-taskSchema.post("insertMany", async function (docs) {
+taskSchema.post("insertMany", async function (docs: any) {
   for (const doc of docs) {
     // Ensure commentsCount is set correctly for each document
     doc.commentsCount = doc.comments.length || 0;
     await doc.save();
   }
 });
-
-// taskSchema.virtual("commentsCount").get(function () {
-//   return this.comments.length;
-// });
 
 const Task = models.Task || mongoose.model("Task", taskSchema);
 export default Task;

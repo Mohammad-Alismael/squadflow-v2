@@ -92,10 +92,11 @@ export interface IDashboardTask {
   _id?: string;
   workspace: { _id: Schema.Types.ObjectId; title: string };
   title: string;
-  columnId: string;
-  participants: PopulatedUser[];
-  labels: { color: string; title: string; _id: Schema.Types.ObjectId }[];
-  dueDate: string;
-  dueTime: string;
-  priority: string;
+  participants: {
+    _id: string;
+    username: string;
+    email: string;
+    photoURL: string;
+  }[];
+  labels: { _id: string; color: string }[];
 }

@@ -23,7 +23,7 @@ function WorkspaceTabs({ workspaceId }: { workspaceId: string }) {
     handleChange(event.target.innerText);
   };
   return (
-    <TabsList className="mb-2">
+    <TabsList className="">
       <TabsTrigger value="kanban" asChild>
         <span onClick={() => handleChange("kanban")}>kanban</span>
       </TabsTrigger>

@@ -14,13 +14,13 @@ function AssignedTask({ data }: { data: IDashboardTask }) {
               <span className="inline-block opacity-50 text-sm bg-gray-200 px-1 py-0.5 rounded-xl truncate max-w-[200px]">
                 {data.workspace.title}
               </span>
-              <p className="w-64 truncate">{data.title}</p>
+              <p className="w-52 sm:w-64 truncate">{data.title}</p>
               <div className="flex items-end justify-between">
                 {!!data.labels.length && <TaskLabels labels={data.labels} />}
               </div>
             </div>
             <div className="flex flex-row gap-1 items-center">
-              <div className="flex flex-row items-center gap-1">
+              <div className="hidden sm:flex flex-row items-center gap-1">
                 {data.participants.slice(0, 5).map((participant) => (
                   <Avatar key={participant._id} className="w-8 h-8">
                     <AvatarImage src={participant.photoURL} />
@@ -32,6 +32,9 @@ function AssignedTask({ data }: { data: IDashboardTask }) {
                     +{data.participants.length - 5}
                   </div>
                 )}
+              </div>
+              <div className="sm:hidden w-8 h-8 flex items-center justify-center bg-gray-300 text-gray-700 rounded-full">
+                {data.participants.length}
               </div>
             </div>
           </div>

@@ -23,7 +23,10 @@ async function Navbar({
         {children}
       </div>
       <div className="flex items-center justify-between gap-2">
-        <Bell size={30} className="p-1 bg-white rounded-xl h-[36px] w-[36px]" />
+        <Bell
+          size={30}
+          className="p-1 bg-white rounded-xl h-[36px] w-[36px] hidden sm:block"
+        />
         <Link href="/settings">
           <Avatar>
             <AvatarImage src={payload?.photoURL as string} />

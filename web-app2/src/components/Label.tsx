@@ -41,7 +41,7 @@ function Label({ id, text }: { id: string; text: string }) {
     >
       <p
         className={clsx(
-          "text-green-800 text-sm leading-none",
+          "text-green-800 text-sm leading-none whitespace-nowrap",
           selectedWorkspaceId === id && "text-white"
         )}
       >

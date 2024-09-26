@@ -72,7 +72,7 @@ async function Page({
         workspaceId={params.workspaceId}
       />
       <Tabs defaultValue={currentTab} className="w-full h-[90vh]">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div className="flex flex-col mb-3 md:flex-row justify-between items-start md:items-center">
           <WorkspaceTabs workspaceId={params.workspaceId} />
           {searchParams && (
             <div>

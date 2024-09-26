@@ -12,7 +12,7 @@ async function fetchItems(pageParam: number, selectedWorkspaceId: string) {
     count: number;
   };
 }
-const ussDeadlineTasksToday = () => {
+const useDeadlineTasksToday = () => {
   const searchParams = useSearchParams();
 
   const { data, fetchNextPage, isFetchingNextPage, isLoading, isError, error } =
@@ -36,4 +36,4 @@ const ussDeadlineTasksToday = () => {
   };
 };
 
-export default ussDeadlineTasksToday;
+export default useDeadlineTasksToday;

@@ -99,35 +99,35 @@ async function Page({
             />
           </div>
           <div className="w-1/2 h-full p-4 bg-[#FBFAF8]">
-            <Tabs defaultValue="account" className="w-full">
+            <Tabs defaultValue="comments" className="w-full">
               <TabsList className="w-full">
                 <TabsTrigger
-                  value="account"
+                  value="comments"
                   className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
                 >
                   comments
                 </TabsTrigger>
                 <TabsTrigger
-                  value="password"
+                  value="activity"
                   className="w-1/2 capitalize data-[state=active]:bg-[#63AA7E]"
                 >
                   activity
                 </TabsTrigger>
               </TabsList>
-              <TabsContent value="account" className="h-full">
-                <div className="relative flex flex-col items-center justify-between h-full">
+              <TabsContent value="comments" className="h-full bg-red-300">
+                <div className="relative flex flex-col items-center justify-between h-full bg-green-300">
                   <PlainCommentsContainer />
                   {role !== USER_ROLES.viewer && <AddCommentBar />}
                 </div>
               </TabsContent>
-              <TabsContent value="password">coming soon</TabsContent>
+              <TabsContent value="activity">coming soon</TabsContent>
             </Tabs>
           </div>
         </div>
       </DialogContent>
       <DialogContent className="p-0 w-4/5">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="">
+          <TabsList className="w-full">
             <TabsTrigger
               value="overview"
               className="w-1/3 capitalize data-[state=active]:bg-[#63AA7E]"

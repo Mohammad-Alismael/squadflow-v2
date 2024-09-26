@@ -13,18 +13,16 @@ WorkspaceHeader.propTypes = {};
 
 async function WorkspaceHeader({
   workspaceId,
-  // role,
   className,
 }: {
   workspaceId: string;
-  // role: string;
   className: string;
 }) {
   const role = await getWorkspacePrivilege(workspaceId);
   return (
     <div
       className={clsx(
-        "w-full flex gap-2 items-center justify-between pb-3 md:pb-0",
+        "w-full flex gap-x-2 items-start justify-between",
         className
       )}
     >
@@ -33,15 +31,15 @@ async function WorkspaceHeader({
         {role !== USER_ROLES.viewer && (
           <Suspense fallback={<Skeleton className="w-[180px] h-8" />}>
             <ModifyColumnsDialog workspaceId={workspaceId}>
-              <Button className="capitalize bg-green-800" size="sm">
+              <Button className="capitalize bg-green-800 h-[2.25rem]" size="sm">
                 modify columns
               </Button>
             </ModifyColumnsDialog>
           </Suspense>
         )}
-        {role === USER_ROLES.admin && (
-          <WorkspaceMenu workspaceId={workspaceId} />
-        )}
+        {/*{role === USER_ROLES.admin && (*/}
+        {/*  <WorkspaceMenu workspaceId={workspaceId} />*/}
+        {/*)}*/}
       </div>
     </div>
   );

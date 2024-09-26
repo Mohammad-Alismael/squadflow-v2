@@ -20,7 +20,7 @@ function TasksSearch({ workspaceId }: { workspaceId: string }) {
         onChange={(e) => handleChange(e.target.value)}
         type="text"
         placeholder="search for task title ..."
-        // className="w-1/4"
+        className="h-[2.3rem]"
       />
     </div>
   );

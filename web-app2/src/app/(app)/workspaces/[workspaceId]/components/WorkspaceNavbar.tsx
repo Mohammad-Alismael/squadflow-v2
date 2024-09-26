@@ -12,7 +12,9 @@ async function WorkspaceNavbar({
   return (
     <Navbar>
       <div className="">
-        <p className="text-2xl capitalize font-bold">{title}</p>
+        <p className="text-2xl capitalize font-bold truncate w-56 sm:w-auto">
+          {title}
+        </p>
         <div className="flex flex-row gap-2">
           <ParticipantsHeader workspaceId={workspaceId} />
         </div>

@@ -13,7 +13,7 @@ async function CurrentTaskList({
   return (
     <div className="flex flex-col h-full px-3 py-2.5 bg-white rounded-xl">
       <div className="flex flex-row items-center justify-between">
-        <div className="w-[90%] flex flex-col gap-2 items-start flex-shrink-0">
+        <div className="w-3/4 sm:w-4/5 flex flex-col gap-2 items-start flex-shrink-0">
           <h4 className="capitalize font-bold">all tasks</h4>
           <WorkspaceLabels />
         </div>

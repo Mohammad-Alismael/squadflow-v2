@@ -17,7 +17,7 @@ function TaskDialogWrapper({
   data: TaskResponse;
   children: React.ReactNode[];
 }) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 769px)");
   const resetCustomState = useTaskPropertiesStore(
     (state) => state.resetCustomState
   );
