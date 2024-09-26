@@ -51,7 +51,6 @@ taskSchema.pre("save", function (next) {
   }
   next();
 });
-type TaskDocument = InferSchemaType<typeof taskSchema>;
 
 taskSchema.post("insertMany", async function (docs: any) {
   for (const doc of docs) {
