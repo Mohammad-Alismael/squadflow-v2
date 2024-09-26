@@ -8,6 +8,7 @@ ShowLabels.propTypes = {};
 
 function ShowLabels() {
   const label = useTaskPropertiesStore((state) => state.labels, shallow);
+  // addig comment
   return (
     <>
       {!!label.length &&
