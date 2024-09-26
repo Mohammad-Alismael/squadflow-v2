@@ -47,6 +47,7 @@
     "k6": "^0.0.0",
     "lucide-react": "^0.378.0",
     "mongodb": "^6.4.0",
+    "mongodb-memory-server": "^10.0.1",
     "mongoose": "^8.2.1",
     "next": "14.1.1",
     "next-auth": "^4.24.7",
