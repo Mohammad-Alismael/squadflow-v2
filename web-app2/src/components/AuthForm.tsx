@@ -76,7 +76,7 @@ export default function AuthForm() {
               <CardTitle>Account</CardTitle>
               <CardDescription>
                 Make changes to your account here. Click save when you&apos;re
-                done.
+                done. Username: Delores91, Password: fRpYZ8WgPDeflrC
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">

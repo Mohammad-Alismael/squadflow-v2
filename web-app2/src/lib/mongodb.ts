@@ -15,7 +15,7 @@ export async function connectMongoDB() {
     } else {
       const promise = mongoose.connect(process.env.MONGODB_URI, {
         autoIndex: true,
-        dbName: "users10",
+        dbName: "users2500",
       });
 
       global.mongoose = {
