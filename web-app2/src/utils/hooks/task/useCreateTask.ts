@@ -4,13 +4,14 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useTaskPropertiesStore } from "@/utils/store/taskPropertiesStore";
 import { handleCreateTask } from "@/utils/actions/workspace-actions";
-import { getErrorMessage } from "@/utils/helper-client";
+import { getErrorMessage, WORKSPACE_TABS } from "@/utils/helper-client";
 import { useDialog } from "@/utils/store/DialogStore";
 
 export const useCreateTask = (
   workspaceId: string,
   redirectToWorkspace: boolean = true
 ) => {
+  console.log({ workspaceId, redirectToWorkspace });
   const queryClient = useQueryClient();
   const router = useRouter();
   const setOpen = useDialog((state) => state.open);
@@ -23,15 +24,18 @@ export const useCreateTask = (
       toast({
         title: `successfully created task`,
       });
-      redirectToWorkspace && router.replace(`/workspaces/${workspaceId}`);
+      // redirectToWorkspace &&
+      //   router.replace(
+      //     `/workspaces/${workspaceId}?tabs=${WORKSPACE_TABS.KANBAN}`
+      //   );
+      redirectToWorkspace && router.back();
       revalidateURL(workspaceId as string);
       await queryClient.invalidateQueries([
         workspaceId,
         `tasks-${workspaceId}`,
       ]);
       await queryClient.refetchQueries([workspaceId]);
-      revalidateURL(workspaceId as string);
-      reset();
+      // reset();
     },
     onError: (error) => {
       toast({ title: getErrorMessage(error) });

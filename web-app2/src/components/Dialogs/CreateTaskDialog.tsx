@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import { DialogContent } from "@/components/ui/dialog";
-
 import Title from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Title";
 import Priority from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Priority";
 import Column from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/Column";

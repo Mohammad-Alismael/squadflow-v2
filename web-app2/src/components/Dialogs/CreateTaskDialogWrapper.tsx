@@ -8,6 +8,7 @@ import { redirectServer } from "@/app/(app)/workspaces/[workspaceId]/actions";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
 import { useDialog } from "@/utils/store/DialogStore";
 import { shallow } from "zustand/shallow";
+import { WORKSPACE_TABS } from "@/utils/helper-client";
 
 function CreateTaskDialogWrapper({
   workspaceId,

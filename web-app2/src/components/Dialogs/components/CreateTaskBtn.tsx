@@ -24,7 +24,7 @@ import { useQueryClient } from "react-query";
 import { redirectServer } from "@/app/(app)/workspaces/[workspaceId]/actions";
 import { useDialog } from "@/utils/store/DialogStore";
 
-function UpdateTaskBtn({
+function CreateTaskBtn({
   columnId,
   workspaceId,
 }: {
@@ -40,7 +40,7 @@ function UpdateTaskBtn({
     error,
     isError,
     isSuccess,
-  } = useCreateTask(workspaceId as string);
+  } = useCreateTask(workspaceId as string, true);
 
   const handleCreateTask = async () => {
     const {
@@ -84,4 +84,4 @@ function UpdateTaskBtn({
     );
 }
 
-export default UpdateTaskBtn;
+export default CreateTaskBtn;

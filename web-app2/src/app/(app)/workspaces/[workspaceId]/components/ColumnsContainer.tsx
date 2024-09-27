@@ -24,14 +24,11 @@ function ColumnsContainer({
   columns: WorkspaceColumn[];
   tasks: MetaTaskResponse[];
 }) {
-  console.log("update columns", tasks);
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword") ?? "";
   const [optimisticTasks, setOptimisticTasks] = useOptimistic(tasks);
   const [optimisticColumns, setOptimisticColumns] = useOptimistic(columns);
-  console.log("'ColumnsContainer' rendered");
-
   const handleOnDragEnd = async (result: any) => {
     const { source, destination, draggableId, type } = result;
     if (!destination) return;

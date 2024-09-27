@@ -17,20 +17,15 @@ import Description from "@/app/(app)/workspaces/[workspaceId]/components/taskSec
 import UpdateTaskBtn from "@/components/Dialogs/components/UpdateTaskBtn";
 import { getTaskIdPopulated } from "@/lib/tasks";
 import { ObjectId } from "mongodb";
-import { getUserAuthFromJWT } from "@/utils/helper";
-import Workspace from "@/models/workspace";
 import { getWorkspacePrivilege } from "@/utils/actions/workspace-actions";
 
 function Body({
   workspaceId,
-  revertBackTo,
   showAddBtn,
 }: {
   workspaceId: string;
-  revertBackTo: string;
   showAddBtn: boolean;
 }) {
-  console.log({ showAddBtn });
   return (
     <React.Fragment>
       <Title />
@@ -94,7 +89,6 @@ async function Page({
           <div className="w-1/2 p-4 space-y-2">
             <Body
               workspaceId={params.workspaceId}
-              revertBackTo={`workspaces/${params.workspaceId}`}
               showAddBtn={role !== USER_ROLES.viewer}
             />
           </div>
@@ -114,8 +108,8 @@ async function Page({
                   activity
                 </TabsTrigger>
               </TabsList>
-              <TabsContent value="comments" className="h-full bg-red-300">
-                <div className="relative flex flex-col items-center justify-between h-full bg-green-300">
+              <TabsContent value="comments" className="h-full">
+                <div className="relative flex flex-col items-center justify-between h-full">
                   <PlainCommentsContainer />
                   {role !== USER_ROLES.viewer && <AddCommentBar />}
                 </div>
@@ -151,7 +145,6 @@ async function Page({
             <div className="space-y-2 w-full">
               <Body
                 workspaceId={params.workspaceId}
-                revertBackTo={`workspaces/${params.workspaceId}`}
                 showAddBtn={role !== USER_ROLES.viewer}
               />
             </div>

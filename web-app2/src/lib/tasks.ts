@@ -47,7 +47,7 @@ const createTask = async ({
     });
 
     // Return the created task
-    console.log("new task created", task);
+    console.log("new task created", task?._id);
     return task?._id;
   } catch (error) {
     // Handle error
