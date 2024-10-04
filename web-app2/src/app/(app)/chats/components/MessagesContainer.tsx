@@ -22,7 +22,7 @@ export type MessageTypeWithUserData = MessageType & {
   };
 };
 
-function extracted(conversations: { [x: string]: any }) {
+function extractMessagesFromConversations(conversations: { [x: string]: any }) {
   const mIds = Object.keys(conversations);
   const list: any[] | ((prevState: MessageType[]) => MessageType[]) = [];
   mIds.forEach((id) => {
@@ -46,33 +46,53 @@ function MessagesContainer({
     workspaceIdProps || (searchParams.get("workspaceId") as string);
   const keyword = searchParams.get("messageKeyword") ?? ("" as string);
   const [data, setData] = useState<MessageTypeWithUserData[]>([]);
+
   useEffect(() => {
     const dbRef = ref(getDatabase());
     const convRef = child(dbRef, `communities/${communityId}/${workspaceId}`);
+
+    // Set loading state at the beginning
     setData([]);
     setIsLoading(true);
-    const foo = async (items: MessageType[]) => {
-      const res = await addUserDataToMessages(items);
-      setData(res);
+
+    const addUserDataAndSetMessages = async (items: MessageType[]) => {
+      try {
+        const res = await addUserDataToMessages(items);
+        setData(res);
+      } catch (error) {
+        console.error("Error adding user data to messages:", error);
+      }
     };
-    return onValue(
+
+    const unsubscribe = onValue(
       convRef,
       async (snapshot) => {
-        if (snapshot.exists()) {
-          const conversations = snapshot.val();
-          const list = extracted(conversations);
-          foo(list)
-            .then(console.log)
-            .finally(() => {
-              setIsLoading(false);
-            });
+        try {
+          if (snapshot.exists()) {
+            const conversations = snapshot.val();
+            const list = extractMessagesFromConversations(conversations);
+
+            await addUserDataAndSetMessages(list);
+          }
+        } catch (error) {
+          console.error("Error processing snapshot:", error);
+        } finally {
+          // Always set loading to false after processing
+          setIsLoading(false);
         }
       },
       (error) => {
-        console.error(error);
+        // Log the error and set loading to false if an error occurs in the listener
+        console.error("Firebase onValue error:", error);
+        setIsLoading(false);
       }
     );
+
+    return () => {
+      unsubscribe(); // Clean up the Firebase listener when the component unmounts
+    };
   }, [workspaceId, communityId]);
+
   const endOfMessagesRef = useRef(null);
 
   const containerRef = useRef(null);
