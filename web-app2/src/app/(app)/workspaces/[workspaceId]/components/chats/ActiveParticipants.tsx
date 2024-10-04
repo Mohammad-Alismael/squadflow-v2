@@ -51,7 +51,6 @@ function ActiveParticipants({
     };
 
     initializeChat();
-    console.log("connected");
 
     return () => {
       cleanUpListener();

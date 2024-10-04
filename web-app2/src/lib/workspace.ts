@@ -156,7 +156,7 @@ async function getMetaWorkspacesByCommunityIdPopulatedWithUserId(
     community: communityId,
     "participants.user": userId, // Ensure the user is a participant
   })
-    .select("_id title participants")
+    .select("_id title participants createdAt")
     .populate({
       path: "participants.user",
       select: "_id username email role photoURL",
