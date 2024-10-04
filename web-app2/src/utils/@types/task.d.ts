@@ -100,3 +100,10 @@ export interface IDashboardTask {
   }[];
   labels: { _id: string; color: string }[];
 }
+
+export interface ICalendarTask {
+  title: string;
+  workspace: { _id: string; title: string };
+  _id: string;
+  dueDate: string;
+}

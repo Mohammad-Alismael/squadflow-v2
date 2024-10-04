@@ -36,6 +36,7 @@ import {
 } from "@/app/api/tasks/[taskId]/helper";
 import { ITaskState } from "@/utils/store/taskPropertiesStore";
 import {
+  ICalendarTask,
   ICommentCreate,
   ITask,
   ITaskAction,
@@ -172,7 +173,7 @@ export const getTasksForWorkspace = async (
 export const fetchTasksForCalendar = async (workspaceId: string) => {
   return (await getTasksByWorkspaceIdForCalendar(
     new ObjectId(workspaceId)
-  )) as { title: string; workspace: string; _id: string; dueDate: string }[];
+  )) as ICalendarTask[];
 };
 const handleGetWorkspaceParticipantsCache = async (
   workspaceId: string,

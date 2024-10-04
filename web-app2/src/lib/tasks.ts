@@ -127,9 +127,12 @@ async function getMetaTasksByWorkspaceId(workspaceId: ObjectId) {
 
 async function getTasksByWorkspaceIdForCalendar(workspaceId: ObjectId) {
   await init();
-  return Task.find({ workspace: workspaceId }).select(
-    "_id title workspace dueDate"
-  );
+  return Task.find({ workspace: workspaceId })
+    .populate({
+      path: "workspace",
+      select: "title",
+    })
+    .select("_id title workspace dueDate");
 }
 
 async function getTasksByWorkspaceIdAndColumnId(

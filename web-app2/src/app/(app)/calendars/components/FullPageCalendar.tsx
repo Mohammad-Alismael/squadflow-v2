@@ -18,27 +18,23 @@ import NoWorkspacesFound from "@/app/(app)/workspaces/components/NoWorkspacesFou
 import { parseDate } from "@/utils/helper-date";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
+import { ICalendarTask } from "@/utils/@types/task";
 
 const localizer = dayjsLocalizer(dayjs);
 type TEvent = {
   title: string;
   taskId: string;
   workspaceId: string;
+  workspaceName: string;
   start: string | Date;
   end: string | Date;
-};
-type E = {
-  _id: string;
-  workspace: string;
-  title: string;
-  dueDate: string;
 };
 
 function FullPageCalendar({
   eventsProps,
   rightComponent,
 }: {
-  eventsProps: E[];
+  eventsProps: ICalendarTask[];
   rightComponent?: React.ReactNode;
 }) {
   const searchParams = useSearchParams();
@@ -64,7 +60,7 @@ function FullPageCalendar({
     event: ({ event }: EventProps<TEvent>) => {
       return (
         <div className="bg-green-700 p-2 rounded-xl">
-          {/*<span className="opacity-70">workspace</span>*/}
+          <span className="opacity-70">{event.workspaceName}</span>
           <p>{event.title}</p>
         </div>
       );
@@ -91,7 +87,8 @@ function FullPageCalendar({
     const newEvents = eventsProps.map((item) => ({
       title: item.title,
       taskId: item._id,
-      workspaceId: item.workspace,
+      workspaceId: item.workspace._id,
+      workspaceName: item.workspace.title,
       start: item.dueDate ? parseDate(item.dueDate) : "",
       end: item.dueDate ? parseDate(item.dueDate) : "",
     }));
@@ -153,6 +150,7 @@ function FullPageCalendar({
             components={components}
             date={date}
             onNavigate={setDate}
+            showAllEvents={true}
           />
         </>
       )}
