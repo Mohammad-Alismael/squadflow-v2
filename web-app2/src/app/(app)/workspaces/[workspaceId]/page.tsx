@@ -16,6 +16,7 @@ import CalendarWrapper from "@/app/(app)/calendars/components/CalendarWrapper";
 import { MetaTaskResponse } from "@/utils/@types/task";
 import { WORKSPACE_TABS } from "@/utils/helper-client";
 import { checkColumnId } from "@/app/(app)/workspaces/[workspaceId]/helper";
+import ColumnsContainerSkeleton from "./components/skeleton/ColumnsContainerSkeleton";
 
 async function Page({
   params,
@@ -62,7 +63,7 @@ async function Page({
         </div>
         {loadKanban && (
           <div className="space-y-2.5">
-            <Suspense key="kanban" fallback={<p>loading kanban ...</p>}>
+            <Suspense key="kanban" fallback={<ColumnsContainerSkeleton />}>
               <ColumnsWrapperServer workspaceId={params.workspaceId} />
             </Suspense>
           </div>

@@ -61,6 +61,7 @@ export const fetchWorkspaces = cache(async () => {
   return workspaces as IWorkspace[];
 });
 export const fetchMetaWorkspaces = cache(async () => {
+  console.log("calling fetchMetaWorkspaces...");
   const payload = await getUserAuthFromJWT();
   const userId = payload?._id as string;
   const communityId = payload?.communityId as string;
@@ -245,7 +246,6 @@ export const fetchWorkspaceParticipants = async (
 
 export const getWorkspacePrivilege = cache(async (workspaceId: string) => {
   try {
-    console.log("hey");
     const { _id: userId, communityId } = await getUserAuthFromJWT();
     const client = await getRedisClient();
     console.time("getWorkspacePrivilege from cache");

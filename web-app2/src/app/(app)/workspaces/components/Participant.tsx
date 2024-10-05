@@ -35,9 +35,6 @@ function Participant({
     !showDelete && addParticipant({ user: user._id, role: role_ });
     showDelete && removeParticipant(user._id);
   };
-  const handlePressOnIcon = () => {
-    removeParticipant(user._id);
-  };
   return (
     <div
       className={clsx(
@@ -71,19 +68,13 @@ function Participant({
         </Select>
         <button
           onClick={handleSelectClick}
-          className="w-full md:w-auto bg-green-500 text-white rounded-md py-1 px-3 hover:bg-blue-600 transition-colors focus:outline-none focus:ring focus:ring-blue-300"
+          className={clsx(
+            "w-full md:w-auto text-white rounded-md py-1 px-3 hover:bg-blue-600 transition-colors focus:outline-none focus:ring focus:ring-blue-300",
+            showDelete ? "bg-red-500" : "bg-green-500"
+          )}
         >
-          {showDelete ? "Unselect" : "Select"}
+          {showDelete ? "Remove" : "Select"}
         </button>
-        {showDelete && (
-          <button
-            onClick={handlePressOnIcon}
-            className="bg-gray-200 rounded-full p-2 hover:bg-gray-300 transition-colors"
-            aria-label="Delete"
-          >
-            <TrashIcon className="h-4 w-4 text-gray-700" />
-          </button>
-        )}
       </div>
     </div>
   );

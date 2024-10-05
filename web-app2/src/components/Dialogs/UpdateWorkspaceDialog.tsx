@@ -31,11 +31,13 @@ import { formSchema } from "@/components/Dialogs/scehmas/workspaceSchema";
 import { useQueryClient } from "react-query";
 import ParticipantsComponentSkeleton from "@/components/Dialogs/components/ParticipantsComponentSkeleton";
 import { handleUpdateWorkspace } from "@/utils/actions/workspace-actions";
+import { useToast } from "@/components/ui/use-toast";
 
 function UpdateWorkspaceDialog() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const workspaceId = searchParams.get("workspaceId") as string;
   const { data: workspace, isLoading: isLoadingWorkspace } =
     useGetWorkspaceById(workspaceId);
@@ -63,6 +65,7 @@ function UpdateWorkspaceDialog() {
       await queryClient.invalidateQueries([workspaceId]);
       await queryClient.refetchQueries([workspaceId]);
       revalidateWorkspacePath();
+      toast({ title: "successfully updated workspace details" });
     } catch (error) {
       console.log(error);
       form.setError("participants", { type: "custom", message: error.message });
