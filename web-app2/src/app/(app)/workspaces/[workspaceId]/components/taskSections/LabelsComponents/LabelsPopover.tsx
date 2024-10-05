@@ -9,14 +9,14 @@ import AddItem from "@/app/(app)/workspaces/[workspaceId]/components/taskSection
 import AddLabelPopover from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/AddLabelPopover";
 import ShowLabelsClient from "@/app/(app)/workspaces/[workspaceId]/components/taskSections/LabelsComponents/ShowLabelsClient";
 
-LabelsPopover.propTypes = {};
-
 function LabelsPopover({
   children,
   workspaceId,
+  showAddLabelDialog = false,
 }: {
   children: ReactNode;
   workspaceId: string;
+  showAddLabelDialog: boolean;
 }) {
   return (
     <Popover>
@@ -25,9 +25,11 @@ function LabelsPopover({
         <div className="space-y-2">
           <h4 className="capitalize font-bold">workspace labels</h4>
           <ShowLabelsClient workspaceId={workspaceId} />
-          <AddLabelPopover>
-            <AddItem title="add label" />
-          </AddLabelPopover>
+          {showAddLabelDialog && (
+            <AddLabelPopover>
+              <AddItem title="add label" />
+            </AddLabelPopover>
+          )}
         </div>
       </PopoverContent>
     </Popover>

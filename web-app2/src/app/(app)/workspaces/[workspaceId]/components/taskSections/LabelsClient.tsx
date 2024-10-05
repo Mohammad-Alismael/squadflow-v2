@@ -8,9 +8,8 @@ import { useShallow } from "zustand/react/shallow";
 import { WorkspaceLabel } from "@/utils/@types/workspace";
 
 function LabelsClient() {
-  const { labels, projectId } = useTaskPropertiesStore(
+  const { projectId } = useTaskPropertiesStore(
     useShallow((state) => ({
-      labels: state.workspaceLabels,
       projectId: state.projectId,
     }))
   );
@@ -19,10 +18,10 @@ function LabelsClient() {
       <div className="flex items-center gap-10">
         <h3 className="font-bold">labels</h3>
         <div className="flex items-center gap-2">
-          <ShowLabels />
+          <ShowLabels showDeleteIcon={false} />
         </div>
       </div>
-      <LabelsPopover workspaceId={projectId}>
+      <LabelsPopover workspaceId={projectId} showAddLabelDialog={false}>
         <AddItem title="add" />
       </LabelsPopover>
     </div>

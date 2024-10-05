@@ -15,11 +15,11 @@ async function Labels({
       <div className="flex items-center gap-10">
         <h3 className="font-bold">labels</h3>
         <div className="flex flex-wrap items-center gap-2">
-          <ShowLabels />
+          <ShowLabels showDeleteIcon={showAddBtn} />
         </div>
       </div>
       {showAddBtn && (
-        <LabelsPopover workspaceId={workspaceId}>
+        <LabelsPopover workspaceId={workspaceId} showAddLabelDialog={true}>
           <AddItem title="add" />
         </LabelsPopover>
       )}

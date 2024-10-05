@@ -10,7 +10,7 @@ import { useQueryClient } from "react-query";
 
 function Label({
   data,
-  showDeleteIcon = false,
+  showDeleteIcon,
 }: {
   data: WorkspaceLabel;
   showDeleteIcon: boolean;
@@ -18,7 +18,6 @@ function Label({
   const { addLabel, removeLabel } = useTaskPropertiesStore();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const router = useRouter();
   const labels = useTaskPropertiesStore((state) => state.labels);
   const handleClick = () => {
     addLabel(data);
@@ -29,8 +28,9 @@ function Label({
   const handlePressOnIcon = async () => {
     const list = window.location.pathname.split("/");
     try {
-      await deleteWorkspaceLabel(list[2], data._id.toString());
-      await queryClient.invalidateQueries([`labels-${list[2]}`]);
+      const workspaceId = list[2];
+      await deleteWorkspaceLabel(workspaceId, data._id.toString());
+      await queryClient.invalidateQueries([`labels-${workspaceId}`]);
       toast({ title: "successfully deleted a label" });
     } catch (error) {
       toast({ title: error });

@@ -11,7 +11,6 @@ export const useCreateTask = (
   workspaceId: string,
   redirectToWorkspace: boolean = true
 ) => {
-  console.log({ workspaceId, redirectToWorkspace });
   const queryClient = useQueryClient();
   const router = useRouter();
   const setOpen = useDialog((state) => state.open);
