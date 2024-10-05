@@ -37,9 +37,6 @@ async function WorkspaceHeader({
             </ModifyColumnsDialog>
           </Suspense>
         )}
-        {/*{role === USER_ROLES.admin && (*/}
-        {/*  <WorkspaceMenu workspaceId={workspaceId} />*/}
-        {/*)}*/}
       </div>
     </div>
   );

@@ -4,16 +4,13 @@ import { getUserAuthFromJWT } from "@/utils/helper";
 import MessagesContainer from "@/app/(app)/chats/components/MessagesContainer";
 import SendBar from "@/app/(app)/chats/components/SendBar";
 import { IWorkspace } from "@/utils/@types/workspace";
+import { fetchWorkspace } from "@/utils/actions/workspace-actions";
 
-async function ChatContainer({
-  workspaceId,
-  participants,
-}: {
-  workspaceId: string;
-  participants: IWorkspace["participants"];
-}) {
+async function ChatContainer({ workspaceId }: { workspaceId: string }) {
   const payload = await getUserAuthFromJWT();
-
+  let data = await fetchWorkspace(workspaceId);
+  const participants = JSON.parse(JSON.stringify(data))
+    .participants as IWorkspace["participants"];
   return (
     <div className="h-[93.5%] w-full bg-red-300">
       <div className="flex flex-col w-full md:w-3/4 h-full float-left overflow-y-auto border-[1px] border-gray-150">

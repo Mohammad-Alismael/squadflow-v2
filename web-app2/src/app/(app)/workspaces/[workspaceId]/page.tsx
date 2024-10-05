@@ -38,45 +38,20 @@ async function Page({
   const loadChats = currentTab === WORKSPACE_TABS.CHATS;
   const loadCalendar = currentTab === WORKSPACE_TABS.CALENDAR;
 
-  let data_ = fetchWorkspace(params.workspaceId);
-  let tasks_: Promise<MetaTaskResponse[]> = Promise.resolve([]);
-
-  // Only assign the tasks_ promise if `loadKanban` and `!loadColumn` are true
-  if (loadKanban && !loadColumn) {
-    tasks_ = getTasksForWorkspace(params.workspaceId);
-  }
-
-  console.time("PromiseAllTime");
-
-  const [data, tasks] = (await Promise.all([
-    data_, // Fetch workspace data
-    tasks_, // Conditionally fetch tasks
-  ])) as [IWorkspace, MetaTaskResponse[]];
-
-  console.timeEnd("PromiseAllTime");
-  const loadColumnDialog =
-    loadColumn && data?.columns && checkColumnId(data.columns, loadColumn);
-
-  if (loadColumnDialog)
-    return (
-      <CreateTaskDialog
-        key={searchParams["columnId"]}
-        columnId={searchParams["columnId"]}
-        workspaceId={params.workspaceId}
-      />
+  if (loadColumn)
+    return LoadingCreateTaskDialog(
+      searchParams["columnId"],
+      params.workspaceId
     );
   return (
     <div className="h-full flex flex-col">
-      <WorkspaceNavbar
-        title={data?.title ?? ""}
-        workspaceId={params.workspaceId}
-      />
+      <WorkspaceNavbar workspaceId={params.workspaceId} />
       <Tabs defaultValue={currentTab} className="w-full h-[90vh]">
         <div className="flex flex-col mb-3 md:flex-row justify-between items-start md:items-center">
           <WorkspaceTabs workspaceId={params.workspaceId} />
           {searchParams && (
             <div>
-              {currentTab === WORKSPACE_TABS.KANBAN && (
+              {loadKanban && (
                 <WorkspaceHeader
                   className=""
                   workspaceId={params.workspaceId}
@@ -85,29 +60,36 @@ async function Page({
             </div>
           )}
         </div>
-        {currentTab === WORKSPACE_TABS.KANBAN && tasks && (
+        {loadKanban && (
           <div className="space-y-2.5">
-            <ColumnsWrapperServer
-              columns={data?.columns ?? []}
-              tasks={tasks}
-              workspaceId={params.workspaceId}
-            />
+            <Suspense key="kanban" fallback={<p>loading kanban ...</p>}>
+              <ColumnsWrapperServer workspaceId={params.workspaceId} />
+            </Suspense>
           </div>
         )}
-        {currentTab === WORKSPACE_TABS.CHATS && (
-          <ChatContainer
-            workspaceId={params.workspaceId}
-            participants={data.participants}
-          />
-        )}
-        {currentTab === WORKSPACE_TABS.CALENDAR && (
-          <Suspense fallback={<p>loading calendar ...</p>}>
+        {loadChats && <ChatContainer workspaceId={params.workspaceId} />}
+        {loadCalendar && (
+          <Suspense key="calendar" fallback={<p>loading calendar ...</p>}>
             <CalendarWrapper workspaceId={params.workspaceId} />
           </Suspense>
         )}
       </Tabs>
     </div>
   );
+}
+
+async function LoadingCreateTaskDialog(columnId: string, workspaceId: string) {
+  let data = await fetchWorkspace(workspaceId);
+  const canDialogBeOpened =
+    data?.columns && checkColumnId(data.columns, columnId);
+  if (canDialogBeOpened)
+    return (
+      <CreateTaskDialog
+        key={columnId}
+        columnId={columnId}
+        workspaceId={workspaceId}
+      />
+    );
 }
 
 export default Page;
