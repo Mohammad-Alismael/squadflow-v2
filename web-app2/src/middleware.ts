@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { handleJwtValidation } from "@/utils/helperServer";
 
 export async function middleware(request: NextRequest) {
-  console.log("middleware running on", request.url);
   if (request.nextUrl.pathname.startsWith("/auth")) {
     const res = await handleJwtValidation();
     if (res) return NextResponse.redirect(new URL("/dashboard", request.url));
@@ -18,7 +17,7 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/api/auth/")) {
     return NextResponse.next();
   }
-  if (request.nextUrl.pathname.includes("sentry")) {
+  if (request.nextUrl.pathname.includes("features")) {
     return NextResponse.next();
   }
   if (request.nextUrl.pathname.startsWith("/logout")) {

@@ -1,0 +1,158 @@
+{
+  "features": [
+    {
+      "dashboard": [
+        {
+          "title": "View All Tasks Across Workspaces",
+          "description": "Access a comprehensive list of all tasks from the workspaces you've joined, enabling a quick overview of your workload across projects.",
+          "icon": "Grid"
+        },
+        {
+          "title": "See Tasks with Upcoming Deadlines",
+          "description": "Stay on top of important deadlines by viewing tasks that are due today, ensuring no task slips through the cracks.",
+          "icon": "Calendar"
+        },
+        {
+          "title": "View Tasks Assigned to You",
+          "description": "Focus on tasks that require your attention by viewing a dedicated list of tasks assigned to you by other team members.",
+          "icon": "CheckSquare"
+        },
+        {
+          "title": "Quick Task Creation",
+          "description": "Create tasks instantly with minimal effort, allowing you to capture ideas or action items on the go without interrupting your workflow.",
+          "icon": "PlusSquare"
+        }
+      ]
+    },
+    {
+      "workspace": [
+        {
+          "title": "Create New Workspaces",
+          "description": "Start a new workspace for any project, team, or initiative, giving you a fresh environment to organize and manage tasks.",
+          "icon": "Grid"
+        },
+        {
+          "title": "Update Workspace Details",
+          "description": "Keep your workspace up to date by modifying the workspace title, description, or other essential details as your project evolves.",
+          "icon": "Settings"
+        },
+        {
+          "title": "Delete Workspaces",
+          "description": "Remove workspaces that are no longer needed, keeping your workspace list clean and manageable.",
+          "icon": "Trash2"
+        },
+        {
+          "title": "Manage User Privileges",
+          "description": "Assign roles and permissions to users within your workspace, ensuring the right people have access to the right tasks.",
+          "icon": "Users"
+        },
+        {
+          "title": "View Participant Workspaces Only",
+          "description": "Streamline your focus by viewing only the workspaces where you are an active participant, avoiding clutter from irrelevant projects.",
+          "icon": "Eye"
+        },
+        {
+          "title": "Create and Update Tasks",
+          "description": "Add new tasks or update existing ones with detailed information like title, assignee, due date, priority, and more, keeping the team aligned.",
+          "icon": "Clipboard"
+        },
+        {
+          "title": "Delete or Duplicate Tasks",
+          "description": "Manage tasks efficiently by deleting unnecessary ones or duplicating them for recurring actions or similar tasks.",
+          "icon": "Copy"
+        },
+        {
+          "title": "Customize Task Attributes",
+          "description": "Tasks can be as detailed as you need, with attributes such as title, assignee, due date, priority, labels, comments, and description, giving you full control.",
+          "icon": "Tag"
+        },
+        {
+          "title": "Drag-and-Drop Task Management",
+          "description": "Easily move tasks between columns or rearrange their order with a simple drag-and-drop interface, keeping your board organized.",
+          "icon": "Clipboard"
+        },
+        {
+          "title": "Create and Modify Columns",
+          "description": "Set up your Kanban board with custom columns to fit your workflow, and modify column names as your project progresses.",
+          "icon": "Columns"
+        },
+        {
+          "title": "Delete All Tasks in a Column",
+          "description": "Quickly clean up your workspace by deleting all tasks from a specific column with a single action, perfect for end-of-sprint cleanups.",
+          "icon": "Trash2"
+        },
+        {
+          "title": "Search Tasks Within Workspace",
+          "description": "Quickly find specific tasks within a workspace using a powerful search feature, streamlining task management and improving efficiency.",
+          "icon": "Search"
+        },
+        {
+          "title": "Modify Task Positions",
+          "description": "Adjust the position of tasks within columns to prioritize work and maintain focus on the most critical items.",
+          "icon": "ArrowUpDown"
+        },
+        {
+          "title": "Unified Kanban, Chat, and Calendar View",
+          "description": "Get a holistic view of your project by accessing the Kanban board, chat, and calendar all on the same page, reducing the need for context switching.",
+          "icon": "LayoutGrid"
+        },
+        {
+          "title": "Live Participant View in Chat",
+          "description": "See which team members are currently active and available in the chat section, facilitating real-time communication and collaboration.",
+          "icon": "MessageCircle"
+        }
+      ]
+    },
+    {
+      "calendar": [
+        {
+          "title": "View All Workspace Tasks in Calendar",
+          "description": "Visualize all tasks from your workspaces in a calendar format, making it easier to track deadlines, milestones, and important dates.",
+          "icon": "Calendar"
+        }
+      ]
+    },
+    {
+      "chats": [
+        {
+          "title": "Group Chat with Workspace Participants",
+          "description": "Collaborate efficiently by engaging in real-time group chats with your workspace members, keeping communication streamlined and project-related.",
+          "icon": "MessageCircle"
+        },
+        {
+          "title": "Chat Search Bar",
+          "description": "Easily search through chat messages with a dedicated search bar, allowing you to find specific conversations or topics quickly.",
+          "icon": "Search"
+        }
+      ]
+    },
+    {
+      "settings": [
+        {
+          "title": "Update User Profile",
+          "description": "Easily update your profile with a new image, username, or password, ensuring your account is always up to date.",
+          "icon": "User"
+        },
+        {
+          "title": "Change Password",
+          "description": "Secure your account by updating your password regularly, with a simple and intuitive password change process.",
+          "icon": "Lock"
+        }
+      ]
+    },
+    {
+      "community": [
+        {
+          "title": "Create and Manage Communities",
+          "description": "Build and join communities within your workspace for more focused collaboration, with options to create, join, or leave communities.",
+          "icon": "Users"
+        },
+        {
+          "title": "Set Admin Upon Leaving a Community",
+          "description": "Ensure smooth transitions by setting a new admin when leaving a community, maintaining continuity and leadership within the group.",
+          "icon": "UserCheck"
+        }
+      ]
+    }
+  ]
+}

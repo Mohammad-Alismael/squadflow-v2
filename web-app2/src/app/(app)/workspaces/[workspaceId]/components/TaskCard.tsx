@@ -1,8 +1,8 @@
-import { MoreVertical, Calendar, MessageCircle } from "react-feather";
+import { Calendar, MessageCircle } from "react-feather";
 import React from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
-import { MetaTaskResponse, TaskResponse } from "@/utils/@types/task";
+import { MetaTaskResponse } from "@/utils/@types/task";
 import TaskLabels from "@/app/(app)/workspaces/[workspaceId]/components/TaskLabels";
 import TaskParticipants from "@/app/(app)/workspaces/[workspaceId]/components/TaskParticipants";
 import { Draggable } from "@hello-pangea/dnd";
