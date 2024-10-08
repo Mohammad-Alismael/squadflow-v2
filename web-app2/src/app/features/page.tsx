@@ -18,7 +18,9 @@ export default async function Page({
       <div className="rounded-lg shadow-lg p-4 transition-shadow duration-200 ease-in-out bg-white space-y-4">
         {features["features"].map((feature: any) => {
           const title = Object.keys(feature)[0];
-          return <FeatureList title={title} features={feature[title]} />;
+          return (
+            <FeatureList key={title} title={title} features={feature[title]} />
+          );
         })}
       </div>
     </div>

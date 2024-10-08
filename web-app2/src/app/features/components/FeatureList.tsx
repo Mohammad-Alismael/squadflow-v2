@@ -20,7 +20,7 @@ function FeatureList({
       <h4 className="font-bold text-2xl capitalize pb-2">{title}</h4>
       <div className="grid grid-cols-2 gap-10 px-2">
         {features.map((feature) => (
-          <Feature data={feature} />
+          <Feature key={feature.title} data={feature} />
         ))}
       </div>
     </div>
