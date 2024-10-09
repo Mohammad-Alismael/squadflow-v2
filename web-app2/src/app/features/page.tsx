@@ -13,7 +13,7 @@ export default async function Page({
   searchParams?: { [key: string]: string };
 }) {
   return (
-    <div className="flex justify-between space-x-4 p-4">
+    <div className="flex justify-between sm:space-x-4 p-4">
       <SectionNavigator />
       <div className="rounded-lg shadow-lg p-4 transition-shadow duration-200 ease-in-out bg-white space-y-4">
         {features["features"].map((feature: any) => {
