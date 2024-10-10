@@ -25,13 +25,19 @@ function WorkspaceTabs({ workspaceId }: { workspaceId: string }) {
   return (
     <TabsList className="">
       <TabsTrigger value="kanban" asChild>
-        <span onClick={() => handleChange("kanban")}>kanban</span>
+        <span onClick={() => handleChange("kanban")} className="capitalize">
+          kanban
+        </span>
       </TabsTrigger>
       <TabsTrigger value="chats" asChild>
-        <span onClick={() => handleChange("chats")}>chats</span>
+        <span onClick={() => handleChange("chats")} className="capitalize">
+          chats
+        </span>
       </TabsTrigger>
       <TabsTrigger value="calendar" asChild>
-        <span onClick={() => handleChange("calendar")}>calendar</span>
+        <span onClick={() => handleChange("calendar")} className="capitalize">
+          calendar
+        </span>
       </TabsTrigger>
     </TabsList>
   );

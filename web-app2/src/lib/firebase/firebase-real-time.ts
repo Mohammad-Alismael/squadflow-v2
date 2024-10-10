@@ -23,11 +23,15 @@ export const writeMessage = async (
   const db = getDatabase(app);
   const mesRef = ref(db, `communities/${communityId}/${workspaceId}`);
   const newMesRef = push(mesRef);
-  await set(newMesRef, {
-    created_by: userId,
-    text: message,
-    timestamp: new Date().getTime(),
-  });
+  try {
+    await set(newMesRef, {
+      created_by: userId,
+      text: message,
+      timestamp: new Date().getTime(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const joinLiveChat = async (
